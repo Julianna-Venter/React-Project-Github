@@ -1,5 +1,6 @@
 // Render Prop
 import { ErrorMessage, Field, Form, Formik, FormikValues } from "formik";
+import "./userForm.css";
 
 const UserForm = () => (
   <div>
@@ -16,28 +17,33 @@ const UserForm = () => (
         return errors;
       }}
       onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          //when the form is submitted, the values are displayed in an alert
-          alert(JSON.stringify(values, null, 2));
-          setSubmitting(false);
-        }, 400);
+        //when the form is submitted, the values are displayed in an alert
+        //write the values to json file if rememberMe is checked, and then that is the list of saved users that you will display on the saved menu
+
+        alert(JSON.stringify(values, null, 2));
+        setSubmitting(false);
       }}
     >
       {({ isSubmitting }) => (
-        <Form>
+        <Form className="userForm">
           <Field
             type="text"
             name="username"
             placeholder="Enter your username"
+            className="userInput"
           />
-          <ErrorMessage name="username" component="div" />
+          <ErrorMessage
+            name="username"
+            component="div"
+            className="errorLable"
+          />
 
           <label>
-            <Field type="checkbox" name="rememberMe" />
-            Remember Me
+            <Field type="checkbox" name="rememberMe" className="rememberMe" />
+            Remember This User
           </label>
 
-          <button type="submit" disabled={isSubmitting}>
+          <button type="submit" disabled={isSubmitting} className="submitBtn">
             Submit
           </button>
         </Form>

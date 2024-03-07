@@ -1,0 +1,27 @@
+.userForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .userInput {
+    height: 2.5rem;
+    width: 80%;
+    background-color: #dcdcdc;
+    border-radius: 10px;
+    border: solid 5px #dcdcdc;
+  }
+
+  .rememberMe {
+    margin-right: 1rem;
+  }
+
+  .submitBtn {
+    height: 2.5rem;
+    background-color: #8f7df4;
+    border-radius: 10px;
+    border: solid 5px #8f7df4;
+    padding: 0 10px;
+  }
+}
