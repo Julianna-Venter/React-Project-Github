@@ -8,7 +8,6 @@ function UserForm() {
     { value: "Username", label: "Username 1" },
     { value: "Example", label: "Example 2" },
     { value: "Here", label: "Here 3" },
-    // Add more options as needed
   ];
 
   const [selectedValue, setSelectedValue] = useState<any>(null);
@@ -55,7 +54,7 @@ function UserForm() {
               <CustomSelect
                 onChange={(value) => {
                   setSelectedValue(value);
-                  setFieldValue("username", value ? value.value : ""); // Assuming "value" should be set as the username
+                  setFieldValue("username", value ? value.value : "");
                 }}
                 options={options}
                 value={selectedValue || ""}
