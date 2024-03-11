@@ -67,14 +67,16 @@ function UserForm() {
                 <Field
                   type="checkbox"
                   name="rememberMe"
-                  className="mr-4 bg-dark_off_white"
+                  className="mr-4 ml-0.5 bg-dark_off_white"
                 />
                 Remember This User
               </label>
               <button
                 type="submit"
-                disabled={isSubmitting}
-                className="h-10 rounded-md px-2.5 bg-primary_blue text-off_white self-end"
+                disabled={!selectedValue || isSubmitting}
+                className={`h-10 rounded-md px-2.5 ${
+                  !selectedValue ? "bg-gray-400" : "bg-primary_blue"
+                } text-off_white self-end`}
               >
                 Submit
               </button>
