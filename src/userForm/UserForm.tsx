@@ -1,16 +1,16 @@
 // Render Prop
 import { Field, Form, Formik, FormikValues } from "formik";
 import { useState } from "react";
-import CustomSelect from "./CustomSelect";
+import CustomSelect, { Option } from "./CustomSelect";
 
 function UserForm() {
-  const options = [
+  const options: Option[] = [
     { value: "Username", label: "Username 1" },
     { value: "Example", label: "Example 2" },
     { value: "Here", label: "Here 3" },
   ];
 
-  const [selectedValue, setSelectedValue] = useState<any>(null);
+  const [selectedValue, setSelectedValue] = useState<Option | null>(null);
 
   return (
     <div
@@ -59,7 +59,7 @@ function UserForm() {
                   setFieldValue("username", value ? value.value : "");
                 }}
                 options={options}
-                value={selectedValue || ""}
+                value={selectedValue || null}
                 className="w-full"
                 placeholder="Enter a Username"
               />

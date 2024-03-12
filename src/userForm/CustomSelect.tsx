@@ -1,14 +1,14 @@
 import Select from "react-select";
 
-interface Option {
-  value: any;
+export interface Option {
+  value: string;
   label: string;
 }
 
 interface Props {
-  onChange: (value: any) => void;
+  onChange: (value: Option | null) => void;
   options: Option[];
-  value: any;
+  value: Option | null;
   className?: string;
   placeholder?: string;
 }
@@ -20,9 +20,9 @@ const CustomSelect: React.FC<Props> = ({
   className,
   placeholder,
 }) => {
-  const defaultValue = (options: Option[], value: any) => {
+  const defaultValue = (options: Option[], value: Option | null) => {
     return options
-      ? options.find((option) => option.value === value)
+      ? options.find((option) => option.value === (value?.value || ""))
       : undefined;
   };
 
