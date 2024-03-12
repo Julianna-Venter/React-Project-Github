@@ -4,6 +4,7 @@ import { useState } from "react";
 import CustomSelect, { Option } from "./CustomSelect";
 
 function UserForm() {
+  //this is just mock data to be populated later
   const options: Option[] = [
     { value: "Username", label: "Username 1" },
     { value: "Example", label: "Example 2" },
