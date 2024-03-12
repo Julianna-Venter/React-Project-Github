@@ -41,7 +41,7 @@ function UserForm() {
             if (!values.username) {
               errors.username = "Required";
             } else if (!/^[A-Za-z0-9_]{3,15}$/i.test(values.username)) {
-              errors.username = "Invalid email address";
+              errors.username = "Invalid username address";
             }
             return errors;
           }}
