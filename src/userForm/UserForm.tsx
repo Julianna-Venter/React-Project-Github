@@ -15,19 +15,21 @@ function UserForm() {
   return (
     <div
       id="pageContainer"
-      className="h-screen w-full flex flex-col justify-center items-center"
+      className="h-screen w-full flex flex-col justify-center items-center overflow-hidden overscroll-none"
     >
-      <div className="w-[600px] h-[550px] bg-primary_blue absolute -z-20 rotate-45 rounded-badge left-[-18.5rem] top-[-15rem] flex-0"></div>
-      <div className="w-[300px] h-[150px] border-solid border-12 border-secondary_orange absolute rounded-badge -z-10 left-[6rem] top-[-8rem] rotate-45 flex-0"></div>
-      <div className="w-[600px] h-[550px] bg-primary_blue absolute -z-20 rotate-45 rounded-badge right-[-15rem] bottom-[-25rem] flex-0"></div>
-      <div className="w-[300px] h-[150px] border-solid border-12 border-secondary_orange absolute rounded-badge -z-10 right-[-14rem] bottom-[4rem] rotate-45 flex-0"></div>
+      <div className="h-screen w-screen overflow-hidden absolute -z-20">
+        <div className="w-[600px] h-[550px] bg-primary_blue absolute -z-20 rotate-45 rounded-badge left-[-18.5rem] top-[-15rem] flex-0"></div>
+        <div className="w-[300px] h-[150px] border-solid border-12 border-secondary_orange absolute rounded-badge -z-10 left-[6rem] top-[-8rem] rotate-45 flex-0"></div>
+        <div className="w-[600px] h-[550px] bg-primary_blue absolute -z-20 rotate-45 rounded-badge right-[-15rem] bottom-[-25rem] flex-0"></div>
+        <div className="w-[300px] h-[150px] border-solid border-12 border-secondary_orange absolute rounded-badge -z-10 right-[-14rem] bottom-[4rem] rotate-45 flex-0"></div>
+      </div>
       <div
-        className="flex flex-col bg-off_white w-4/5 h-2/5 rounded-2xl shadow-3xl px-8 py-7 justify-around"
+        className="flex flex-col bg-off_white w-4/5 h-2/5 rounded-2xl shadow-3xl px-8 py-7 justify-around overflow-hidden lg:w-3/5"
         id="formContainer"
       >
         <div className="flex flex-col gap-1.5">
-          <h1 className="text-dark_text text-2xl">Find a User</h1>
-          <h2 className="text-ligher_text text-sm">
+          <h1 className="text-dark_text text-2xl lg:text-3xl">Find a User</h1>
+          <h2 className="text-ligher_text text-sm lg:text-base">
             Enter the Github username of the account you would like to view.
           </h2>
         </div>
@@ -66,7 +68,7 @@ function UserForm() {
                 <Field
                   type="checkbox"
                   name="rememberMe"
-                  className="mr-4 ml-0.5 bg-dark_off_white"
+                  className="mr-4 ml-0.5 bg-dark_off_white lg:mb-8"
                 />
                 Remember This User
               </label>
