@@ -9,8 +9,8 @@ interface Props {
   onChange: (value: Option | null) => void;
   options: Option[];
   value: Option | null;
-  className?: string;
-  placeholder?: string;
+  className: string;
+  placeholder: string;
 }
 
 const CustomSelect: React.FC<Props> = ({

@@ -56,6 +56,7 @@ function UserForm() {
               <CustomSelect
                 onChange={(value) => {
                   setSelectedValue(value);
+
                   setFieldValue("username", value ? value.value : "");
                 }}
                 options={options}
