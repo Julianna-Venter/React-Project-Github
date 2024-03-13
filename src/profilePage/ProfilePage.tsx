@@ -1,6 +1,7 @@
 import Calendar from "react-github-contribution-calendar";
 import BackgroundAssets from "../commonComponents/BackgroundAssets";
 import QuickStats from "./QuickStats";
+import RepoCard from "./RepoCard";
 import StatsCarousel from "./StatsCarousel";
 import StatsRadial from "./StatsRadial";
 import {
@@ -132,7 +133,6 @@ function ProfilePage() {
               This is the description I am a developer and this is my github.
             </p>
           </div>
-
           <StatsCarousel />
           <StatsRadial />
           <Calendar
@@ -143,6 +143,9 @@ function ProfilePage() {
             panelAttributes={panelAttributes}
             panelColors={panelColors}
           />
+          <RepoCard />
+          <RepoCard />
+          <RepoCard />
         </div>
       </div>
     </div>
