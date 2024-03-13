@@ -20,10 +20,4 @@ export let monthLabelAttributes = {
   },
 };
 
-export let panelColors = [
-  "#EEEEEE",
-  "#F78A23",
-  "#F87D09",
-  "#AC5808",
-  "#7B3F06",
-];
+export let panelColors = ["#DDD", "#F78A23", "#F87D09", "#AC5808", "#7B3F06"];

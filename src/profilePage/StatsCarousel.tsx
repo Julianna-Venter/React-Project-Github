@@ -3,26 +3,20 @@ function StatsCarousel() {
     <div id="carousel" className="carousel flex gap-4 text-dark_text">
       <div className="carousel-item">
         <div className="">
-          <span>Inbox</span>
-          <div className="badge badge-secondary ml-1">+99</div>
+          <span>Followers</span>
+          <div className="badge badge-secondary ml-1">12</div>
         </div>
       </div>
       <div className="carousel-item">
         <div className="">
-          Inbox
-          <div className="badge badge-secondary ml-1">+99</div>
+          <span>Following</span>
+          <div className="badge badge-secondary ml-1">331</div>
         </div>
       </div>
       <div className="carousel-item">
         <div className="">
-          <span>Inbox</span>
-          <div className="badge badge-secondary ml-1">+99</div>
-        </div>
-      </div>
-      <div className="carousel-item">
-        <div className="">
-          <span>Inbox</span>
-          <div className="badge badge-secondary ml-1">+99</div>
+          <span>Organizations</span>
+          <div className="badge badge-secondary ml-1">3</div>
         </div>
       </div>
     </div>
