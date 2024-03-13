@@ -143,9 +143,9 @@ function ProfilePage() {
             panelAttributes={panelAttributes}
             panelColors={panelColors}
           />
-          <RepoCard />
-          <RepoCard />
-          <RepoCard />
+          <RepoCard repoName={"This-Is-Repo-1"} />
+          <RepoCard repoName={"Another-One"} />
+          <RepoCard repoName={"This-is-it"} />
         </div>
       </div>
     </div>
