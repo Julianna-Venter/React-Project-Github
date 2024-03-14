@@ -19,7 +19,7 @@ function ProfilePage() {
       <BackgroundAssets />
       <nav
         id="Navbar"
-        className=" bg-off_white w-full h-[60px] rounded-2xl shadow-3xl flex items-center p-2.5 justify-between"
+        className=" bg-off_white w-full h-[3.5rem] rounded-2xl shadow-3xl flex items-center p-2.5 justify-between"
       >
         <div
           id="menuIcon"
