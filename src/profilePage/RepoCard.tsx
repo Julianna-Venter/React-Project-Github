@@ -4,7 +4,7 @@ interface RepoCardProps {
 
 const RepoCard: React.FC<RepoCardProps> = ({ repoName }) => {
   return (
-    <div className="w-full h-[150px] bg-off_white rounded-xl shadow-4xl p-3 flex flex-col justify-center text-dark_text">
+    <div className="w-full h-[9.375rem] bg-off_white rounded-xl shadow-4xl p-3 flex flex-col justify-center text-dark_text">
       <div className="flex justify-between items-center mb-1">
         <div className="flex justify-center items-center">
           <svg

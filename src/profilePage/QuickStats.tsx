@@ -11,7 +11,7 @@ function QuickStats() {
         <div className="w-full h-full flex justify-center items-center"></div>
       </div>
 
-      <div className="w-14 h-14 ml-[50px] rounded-full overflow-hidden bg-primary_blue/30">
+      <div className="w-14 h-14 ml-[3.125rem] rounded-full overflow-hidden bg-primary_blue/30">
         <div className="w-full h-full flex justify-center items-center">
           <div className="flex flex-col justify-center items-center">
             <span className="text-lg">59</span>
@@ -20,7 +20,7 @@ function QuickStats() {
         </div>
       </div>
 
-      <div className="w-16 h-16 ml-[68px] rounded-full overflow-hidden bg-primary_blue/30">
+      <div className="w-16 h-16 ml-[4.25rem] rounded-full overflow-hidden bg-primary_blue/30">
         <div className="w-full h-full flex justify-center items-center">
           <div className="flex flex-col justify-center items-center">
             <span className="text-lg">6</span>
@@ -29,7 +29,7 @@ function QuickStats() {
         </div>
       </div>
 
-      <div className="w-14 h-14 ml-[50px] rounded-full overflow-hidden bg-primary_blue/30">
+      <div className="w-14 h-14 ml-[3.125rem] rounded-full overflow-hidden bg-primary_blue/30">
         <div className="w-full h-full flex justify-center items-center">
           <div className="flex flex-col justify-center items-center">
             <span className="text-lg">2</span>
