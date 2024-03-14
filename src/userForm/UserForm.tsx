@@ -1,6 +1,7 @@
 // Render Prop
 import { Field, Form, Formik, FormikValues } from "formik";
 import { useState } from "react";
+import BackgroundAssets from "../commonComponents/BackgroundAssets";
 import CustomSelect, { Option } from "./CustomSelect";
 
 function UserForm() {
@@ -18,12 +19,7 @@ function UserForm() {
       id="pageContainer"
       className="h-screen w-full flex flex-col justify-center items-center overflow-hidden overscroll-none"
     >
-      <div className="h-screen w-screen overflow-hidden absolute -z-20">
-        <div className="w-[600px] h-[550px] bg-primary_blue absolute -z-20 rotate-45 rounded-badge left-[-18.5rem] top-[-15rem] flex-0"></div>
-        <div className="w-[300px] h-[150px] border-solid border-12 border-secondary_orange absolute rounded-badge -z-10 left-[6rem] top-[-8rem] rotate-45 flex-0"></div>
-        <div className="w-[600px] h-[550px] bg-primary_blue absolute -z-20 rotate-45 rounded-badge right-[-15rem] bottom-[-25rem] flex-0"></div>
-        <div className="w-[300px] h-[150px] border-solid border-12 border-secondary_orange absolute rounded-badge -z-10 right-[-14rem] bottom-[4rem] rotate-45 flex-0"></div>
-      </div>
+      <BackgroundAssets />
       <div
         className="flex flex-col bg-off_white w-4/5 h-2/5 rounded-2xl shadow-3xl px-8 py-7 justify-around overflow-hidden lg:w-3/5"
         id="formContainer"

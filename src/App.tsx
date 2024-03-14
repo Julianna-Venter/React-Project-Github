@@ -1,10 +1,11 @@
-import "./App.css";
-import UserForm from "./userForm/UserForm";
+import ProfilePage from "./profilePage/ProfilePage";
+// import UserForm from "./userForm/UserForm";
 
 function App() {
   return (
     <>
-      <UserForm />
+      {/* <UserForm /> */}
+      <ProfilePage />
     </>
   );
 }
