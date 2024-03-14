@@ -1,4 +1,5 @@
 // Render Prop
+import { Link } from "@tanstack/react-router";
 import { Field, Form, Formik, FormikValues } from "formik";
 import { useState } from "react";
 import Drawer from "../Navigation/Drawer";
@@ -70,15 +71,16 @@ function UserForm() {
                   />
                   Remember This User
                 </label>
-                <button
+                <Link
                   type="submit"
                   disabled={!selectedValue || isSubmitting}
-                  className={`h-10 rounded-md px-2.5 ${
+                  className={`h-10 rounded-md px-3.5 ${
                     !selectedValue ? "bg-gray-400" : "bg-primary_blue"
-                  } text-off_white self-end`}
+                  } text-off_white self-end btn`}
+                  to="/profile"
                 >
                   Submit
-                </button>
+                </Link>
               </Form>
             )}
           </Formik>
