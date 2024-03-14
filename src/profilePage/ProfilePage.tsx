@@ -113,10 +113,10 @@ function ProfilePage() {
       >
         <div
           id="headerContainer"
-          className="w-full self-start flex justify-center items-center gap-5"
+          className="w-full pb-10 pt-8 self-start flex justify-center items-center gap-5 relative"
         >
-          <div className="avatar absolute mr-40">
-            <div className="w-40 h-40 rounded-full shadow-3xl">
+          <div className="avatar absolute mr-20">
+            <div className="w-480 h-48 rounded-full shadow-3xl">
               <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
             </div>
           </div>
