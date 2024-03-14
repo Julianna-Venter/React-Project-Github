@@ -11,7 +11,7 @@ import {
   until,
   values,
   weekLabelAttributes,
-} from "./calendarHeatmap";
+} from "../MockData/calendarHeatmap";
 
 function ProfilePage() {
   return (
