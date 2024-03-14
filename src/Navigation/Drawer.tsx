@@ -1,3 +1,7 @@
+import { cibGithub, cilSearch } from "@coreui/icons";
+import CIcon from "@coreui/icons-react";
+import { Link } from "@tanstack/react-router";
+
 interface DrawerProps {
   username: string;
 }
@@ -110,15 +114,48 @@ const Drawer: React.FC<DrawerProps> = ({ username }) => {
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu p-4 w-80 min-h-full bg-off_white text-base-content">
-          {/* Sidebar content here */}
-          <li>
-            <a>Sidebar Item 1</a>
-          </li>
-          <li>
-            <a>Sidebar Item 2</a>
-          </li>
-        </ul>
+
+        <div
+          id="sideDrawer"
+          className="menu p-4 w-80 min-h-full bg-off_white text-slate-700 relative"
+        >
+          <div className="h-[3rem] flex justify-center mb-2">
+            <CIcon icon={cibGithub} />
+          </div>
+          <ul>
+            <li>
+              <details open>
+                <summary className="font-bold text-slate-800">
+                  Bookmarked
+                </summary>
+                <ul>
+                  <li>
+                    <Link to="/">julianna-venter</Link>
+                  </li>
+                </ul>
+              </details>
+            </li>
+            <li>
+              <details open>
+                <summary className="font-bold text-slate-800">Users</summary>
+                <ul>
+                  <li>
+                    <Link to="/">yanevdw</Link>
+                  </li>
+                  <li>
+                    <Link to="/">meggie-h</Link>
+                  </li>
+                </ul>
+              </details>
+            </li>
+          </ul>
+          <Link
+            to="/"
+            className="w-16 h-16 bg-dark_off_white rounded-full p-3 absolute bottom-4 right-4 hover:bg-primary_blue"
+          >
+            <CIcon icon={cilSearch} className="hover:text-white" />
+          </Link>
+        </div>
       </div>
     </div>
   );
