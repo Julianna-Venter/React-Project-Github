@@ -18,7 +18,7 @@ function ProfilePage() {
     <div className="h-screen w-full flex flex-col justify-center items-center p-5 gap-5">
       <Drawer username={"julianna-venter"} />
       <div
-        className="w-full h-full flex flex-col backdrop-blur-lg bg-off_white/30 rounded-2xl shadow-3xl px-8 py-7 flex-grow overflow-y-scroll no-scrollbar -z-10"
+        className="w-full h-full flex flex-col backdrop-blur-lg bg-off_white/30 rounded-2xl shadow-3xl px-8 py-7 flex-grow overflow-y-scroll no-scrollbar"
         id="profileContainer"
       >
         <div

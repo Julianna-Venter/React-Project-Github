@@ -104,7 +104,7 @@ const Drawer: React.FC<DrawerProps> = ({ username }) => {
         </svg> </div>*/}
         </nav>
       </div>
-      <div className="drawer-side">
+      <div className="drawer-side z-20">
         <label
           htmlFor="my-drawer-2"
           aria-label="close sidebar"
