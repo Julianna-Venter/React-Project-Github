@@ -86,7 +86,7 @@ function ProfilePage() {
             />
           </svg>
         </div>
-
+        {/* this is just for future use  */}
         {/* solid bookmark */}
         {/*<div
           id="bookmarkIcon"
