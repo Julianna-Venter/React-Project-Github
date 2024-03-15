@@ -1,14 +1,14 @@
 const colorPalette = {
   orange: {
-    bg: "secondary_orange/40",
-    border: "secondary_orange/10",
+    bg: "secondary-orange/40",
+    border: "secondary-orange/10",
     code: "text-amber-900",
     percentage: 70,
     language: "HTML",
   },
   blue: {
-    bg: "primary_blue/20",
-    border: "primary_blue/10",
+    bg: "primary-blue/20",
+    border: "primary-blue/10",
     code: "text-blue-950",
     percentage: 45,
     language: "TS",

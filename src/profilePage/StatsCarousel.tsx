@@ -1,6 +1,6 @@
 function StatsCarousel() {
   return (
-    <div id="carousel" className="carousel flex gap-4 text-dark_text">
+    <div id="carousel" className="carousel flex gap-4 text-dark-text">
       <div className="carousel-item">
         <div className="">
           <span>Followers</span>

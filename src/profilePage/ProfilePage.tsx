@@ -18,7 +18,7 @@ function ProfilePage() {
     <div className="h-screen w-full flex flex-col justify-center items-center p-5 gap-5">
       <Drawer username={"julianna-venter"} />
       <div
-        className="w-full h-full flex flex-col backdrop-blur-lg bg-off_white/30 rounded-2xl shadow-3xl px-8 py-7 flex-grow overflow-y-scroll no-scrollbar"
+        className="w-full h-full flex flex-col backdrop-blur-lg bg-off-white/30 rounded-2xl shadow-3xl px-8 py-7 flex-grow overflow-y-scroll no-scrollbar"
         id="profileContainer"
       >
         <div
@@ -35,11 +35,11 @@ function ProfilePage() {
 
         <div className="detailsContainer w-full flex flex-col gap-5 mt-4">
           <div className="flex flex-col">
-            <label className="font-bold text-dark_text text-xl">
+            <label className="font-bold text-dark-text text-xl">
               Julianna Venter
             </label>
-            <label className="text-ligher_text text-lg">julianna-venter</label>
-            <p className="text-dark_text text-sm mt-2">
+            <label className="text-lighter-text text-lg">julianna-venter</label>
+            <p className="text-dark-text text-sm mt-2">
               This is the description I am a developer and this is my github.
             </p>
           </div>

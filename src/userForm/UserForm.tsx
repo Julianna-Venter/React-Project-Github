@@ -22,12 +22,12 @@ function UserForm() {
         className="h-screen w-full flex flex-col justify-center items-center overflow-hidden overscroll-none absolute"
       >
         <div
-          className="flex flex-col bg-off_white w-4/5 h-2/5 rounded-2xl shadow-3xl px-8 py-7 justify-around overflow-hidden lg:w-3/5"
+          className="flex flex-col bg-off-white w-4/5 h-2/5 rounded-2xl shadow-3xl px-8 py-7 justify-around overflow-hidden lg:w-3/5"
           id="formContainer"
         >
           <div className="flex flex-col gap-1.5">
-            <h1 className="text-dark_text text-2xl lg:text-3xl">Find a User</h1>
-            <h2 className="text-ligher_text text-sm lg:text-base">
+            <h1 className="text-dark-text text-2xl lg:text-3xl">Find a User</h1>
+            <h2 className="text-lighter-text text-sm lg:text-base">
               Enter the Github username of the account you would like to view.
             </h2>
           </div>
@@ -37,7 +37,7 @@ function UserForm() {
               const errors: Partial<FormikValues> = {};
               if (!values.username) {
                 errors.username = "Required";
-              } else if (!/^[A-Za-z0-9_]{3,15}$/i.test(values.username)) {
+              } else if (!/^[A-Za-z0-9-]{3,15}$/i.test(values.username)) {
                 errors.username = "Invalid username address";
               }
               return errors;
@@ -63,11 +63,11 @@ function UserForm() {
                   placeholder="Enter a Username"
                 />
 
-                <label className="text-dark_text text-sm">
+                <label className="text-dark-text text-sm">
                   <Field
                     type="checkbox"
                     name="rememberMe"
-                    className="mr-4 ml-0.5 bg-dark_off_white lg:mb-8"
+                    className="mr-4 ml-0.5 bg-dark-off-white lg:mb-8"
                   />
                   Remember This User
                 </label>
@@ -75,8 +75,8 @@ function UserForm() {
                   type="submit"
                   disabled={!selectedValue || isSubmitting}
                   className={`h-10 rounded-md px-3.5 ${
-                    !selectedValue ? "bg-gray-400" : "bg-primary_blue"
-                  } text-off_white self-end btn`}
+                    !selectedValue ? "bg-gray-400" : "bg-primary-blue"
+                  } text-off-white self-end btn`}
                   to="/profile"
                 >
                   Submit
