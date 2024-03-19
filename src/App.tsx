@@ -1,11 +1,20 @@
-import ProfilePage from "./profilePage/ProfilePage";
-// import UserForm from "./userForm/UserForm";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
+import BackgroundAssets from "./CommonComponents/BackgroundAssets";
+import { routeTree } from "./routeTree.gen";
+
+const router = createRouter({ routeTree });
+
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
 
 function App() {
   return (
     <>
-      {/* <UserForm /> */}
-      <ProfilePage />
+      <BackgroundAssets />
+      <RouterProvider router={router} />
     </>
   );
 }

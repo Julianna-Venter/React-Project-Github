@@ -4,7 +4,7 @@ interface RepoCardProps {
 
 const RepoCard: React.FC<RepoCardProps> = ({ repoName }) => {
   return (
-    <div className="w-full h-[150px] bg-off_white rounded-xl shadow-4xl p-3 flex flex-col justify-center text-dark_text">
+    <div className="w-full h-[9.375rem] bg-off-white rounded-xl shadow-4xl p-3 flex flex-col justify-center text-dark-text">
       <div className="flex justify-between items-center mb-1">
         <div className="flex justify-center items-center">
           <svg
@@ -21,7 +21,7 @@ const RepoCard: React.FC<RepoCardProps> = ({ repoName }) => {
           </svg>
           <label>{repoName}</label>
         </div>
-        <div className="badge bg-off_white flex gap-2">
+        <div className="badge bg-off-white flex gap-2">
           <span>Public</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -81,14 +81,14 @@ const RepoCard: React.FC<RepoCardProps> = ({ repoName }) => {
       </div>
 
       <div id="usageBar">
-        <div className="w-full bg-dark_off_white rounded-full h-1.5 flex overflow-hidden">
-          <div className="bg-primary_blue  h-1.5 w-[70%]"></div>
-          <div className="bg-secondary_orange  h-1.5 w-[20%]"></div>
+        <div className="w-full bg-dark-off-white rounded-full h-1.5 flex overflow-hidden">
+          <div className="bg-primary-blue  h-1.5 w-[70%]"></div>
+          <div className="bg-secondary-orange  h-1.5 w-[20%]"></div>
         </div>
       </div>
       <div id="langauges">
         <div className="flex justify-center items-center gap-1 m-1">
-          <div className=" bg-primary_blue h-2 w-2 rounded-full"></div>
+          <div className=" bg-primary-blue h-2 w-2 rounded-full"></div>
           <label>html</label>
         </div>
       </div>
