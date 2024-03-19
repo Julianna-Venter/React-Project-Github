@@ -14,6 +14,6 @@
 - Vite
 - React
 - Typescript
-- Zustand + TanStack Query
+- Zustand + TanStack React Query
 - Tanstack Routing
 - Tailwind + DaisyUI
