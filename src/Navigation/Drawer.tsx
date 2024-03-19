@@ -2,11 +2,7 @@ import { cibGithub, cilSearch } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import { Link } from "@tanstack/react-router";
 
-interface DrawerProps {
-  username: string;
-}
-
-const Drawer: React.FC<DrawerProps> = ({ username }) => {
+const Drawer = ({ username }: { username: string }) => {
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
@@ -15,7 +11,7 @@ const Drawer: React.FC<DrawerProps> = ({ username }) => {
 
         <nav
           id="Navbar"
-          className=" bg-off_white w-full h-[3.5rem] rounded-2xl shadow-3xl flex items-center p-2.5 justify-between"
+          className=" bg-off-white w-full h-[3.5rem] rounded-2xl shadow-3xl flex items-center p-2.5 justify-between"
         >
           <label htmlFor="my-drawer-2" className="btn btn-ghost lg:hidden p-0">
             <div
@@ -26,7 +22,7 @@ const Drawer: React.FC<DrawerProps> = ({ username }) => {
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-dark_text"
+                className="h-8 w-8 text-dark-text"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -42,7 +38,7 @@ const Drawer: React.FC<DrawerProps> = ({ username }) => {
           </label>
           <div
             id="labelsContainer"
-            className="flex justify-center items-center gap-2 text-dark_text text-lg"
+            className="flex justify-center items-center gap-2 text-dark-text text-lg"
           >
             <label className="font-semibold">Users</label>
             {username && (
@@ -52,7 +48,7 @@ const Drawer: React.FC<DrawerProps> = ({ username }) => {
                 viewBox="0 0 24 24"
                 strokeWidth={2.8}
                 stroke="currentColor"
-                className="w-4 h-4 text-ligher_text"
+                className="w-4 h-4 text-lighter-text"
               >
                 <path
                   strokeLinecap="round"
@@ -77,7 +73,7 @@ const Drawer: React.FC<DrawerProps> = ({ username }) => {
               viewBox="0 0 24 24"
               strokeWidth={2.5}
               stroke="currentColor"
-              className="w-6 h-6 text-dark_text"
+              className="w-6 h-6 text-dark-text"
             >
               <path
                 strokeLinecap="round"
@@ -117,7 +113,7 @@ const Drawer: React.FC<DrawerProps> = ({ username }) => {
 
         <div
           id="sideDrawer"
-          className="menu p-4 w-80 min-h-full bg-off_white text-slate-700 relative"
+          className="menu p-4 w-80 min-h-full bg-off-white text-slate-700 relative"
         >
           <div className="h-[3rem] flex justify-center mb-2">
             <CIcon icon={cibGithub} />
@@ -151,7 +147,7 @@ const Drawer: React.FC<DrawerProps> = ({ username }) => {
           </ul>
           <Link
             to="/"
-            className="w-16 h-16 bg-dark_off_white rounded-full p-3 absolute bottom-4 right-4 hover:bg-primary_blue"
+            className="w-16 h-16 bg-dark-off-white rounded-full p-3 absolute bottom-4 right-4 hover:bg-primary-blue"
           >
             <CIcon icon={cilSearch} className="hover:text-white" />
           </Link>
