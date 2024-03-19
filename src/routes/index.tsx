@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import UserForm from "../UserForm/Components/UserForm";
+import UserForm from "../userForm/UserForm";
 
 export const Route = createFileRoute("/")({
   component: () => <UserForm />,
