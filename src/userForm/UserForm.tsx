@@ -1,5 +1,6 @@
 // Render Prop
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import Select, { SingleValue } from "react-select";
@@ -137,15 +138,17 @@ function UserForm() {
                   />
                   Remember This User
                 </label>
-                <button
-                  type="submit"
-                  disabled={!selectedOption || isSubmitting}
-                  className={`h-10 rounded-md px-3.5 ${
-                    !selectedOption ? "bg-gray-400" : "bg-primary-blue"
-                  } text-off-white self-end btn`}
-                >
-                  Submit
-                </button>
+                <Link to="/profile">
+                  <button
+                    type="submit"
+                    disabled={!selectedOption || isSubmitting}
+                    className={`h-10 rounded-md px-3.5 ${
+                      !selectedOption ? "bg-gray-400" : "bg-primary-blue"
+                    } text-off-white self-end btn`}
+                  >
+                    Submit
+                  </button>
+                </Link>
               </Form>
             )}
           </Formik>
