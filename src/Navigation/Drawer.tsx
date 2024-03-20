@@ -4,14 +4,14 @@ import { Link } from "@tanstack/react-router";
 
 const Drawer = ({ username }: { username: string }) => {
   return (
-    <div className="drawer lg:drawer-open">
+    <div className="drawer lg:drawer-open lg:-z-20">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col items-center justify-center">
+      <div className="drawer-content flex flex-col items-center justify-center lg:relative">
         {/* Page content here */}
 
         <nav
           id="Navbar"
-          className=" bg-off-white w-full h-[3.5rem] rounded-2xl shadow-3xl flex items-center p-2.5 justify-between"
+          className=" bg-off-white w-full h-[3.5rem] rounded-2xl shadow-3xl flex items-center p-2.5 justify-between lg:absolute lg:top-0 lg:w-11/12 lg:mt-5"
         >
           <label htmlFor="my-drawer-2" className="btn btn-ghost lg:hidden p-0">
             <div
