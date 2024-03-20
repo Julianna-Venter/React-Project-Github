@@ -1,6 +1,6 @@
 // Render Prop
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import Select, { SingleValue } from "react-select";
@@ -13,6 +13,7 @@ interface Option {
 }
 
 function UserForm() {
+  const navigate = useNavigate({ from: "/profile" });
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
   const [options, setOptions] = useState<Option[]>([]);
   const [selectedOption, setSelectedOption] =
@@ -49,7 +50,7 @@ function UserForm() {
     if (searchTerm) {
       try {
         const res = await octokit.request(
-          `GET https://api.github.com/search/users?q=${searchTerm?.trim()}`
+          `GET https://api.github.com/search/users?q=${searchTerm?.trim()}&per_page=100`
         );
         let data: any;
         if (res.status === 200) {
@@ -116,6 +117,8 @@ function UserForm() {
               console.log("Username:", selectedOption?.value);
               console.log("Remember Me:", values?.rememberMe);
               // Reset the form
+              navigate({ to: "/profile" });
+              //navigate({ to: '/posts/$postId', params: { postId } })
               setSubmitting(false);
             }}
           >
@@ -138,17 +141,15 @@ function UserForm() {
                   />
                   Remember This User
                 </label>
-                <Link to="/profile">
-                  <button
-                    type="submit"
-                    disabled={!selectedOption || isSubmitting}
-                    className={`h-10 rounded-md px-3.5 ${
-                      !selectedOption ? "bg-gray-400" : "bg-primary-blue"
-                    } text-off-white self-end btn`}
-                  >
-                    Submit
-                  </button>
-                </Link>
+                <button
+                  type="submit"
+                  disabled={!selectedOption || isSubmitting}
+                  className={`h-10 rounded-md px-3.5 ${
+                    !selectedOption ? "bg-gray-400" : "bg-primary-blue"
+                  } text-off-white self-end btn`}
+                >
+                  Submit
+                </button>
               </Form>
             )}
           </Formik>
