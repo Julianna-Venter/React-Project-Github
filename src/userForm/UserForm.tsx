@@ -5,12 +5,8 @@ import { Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import Select, { SingleValue } from "react-select";
 import { octokit } from "../../environment/apiKey";
+import { Option } from "../Models/interfaces";
 import Drawer from "../Navigation/Drawer";
-
-interface Option {
-  value: string;
-  label: string;
-}
 
 function UserForm() {
   const navigate = useNavigate({ from: "/profile" });
@@ -102,17 +98,19 @@ function UserForm() {
   };
 
   return (
-    <>
+    <div className="h-screen w-full flex flex-col justify-center items-center p-5 gap-5 lg:p-0">
+      <Drawer username={""} />
+
       <div
         id="pageContainer"
         className="h-screen w-full flex flex-col justify-center items-center absolute lg:fixed lg:pl-[320px]"
       >
         <div
-          className="flex flex-col bg-off-white w-4/5 h-2/5 rounded-2xl shadow-3xl px-8 py-7 justify-around lg:w-2/5"
+          className="flex flex-col bg-off-white w-4/5 h-2/5 rounded-2xl shadow-3xl px-8 py-7 justify-around lg:w-3/5"
           id="formContainer"
         >
           <div className="flex flex-col gap-1.5">
-            <h1 className="text-dark-text text-2xl lg:text-3xl">Find a User</h1>
+            <h1 className="text-dark-text text-2xl lg:text-2xl">Find a User</h1>
             <h2 className="text-ligher-text text-sm lg:text-base">
               Enter the Github username of the account you would like to view.
             </h2>
@@ -131,7 +129,7 @@ function UserForm() {
           >
             {({ isSubmitting }) => (
               <Form className="w-full flex flex-col justify-center items-start gap-5">
-                <div className="w-full z-50">
+                <div className="w-full">
                   <Select
                     value={selectedOption}
                     onChange={handleSelectChange}
@@ -162,10 +160,7 @@ function UserForm() {
           </Formik>
         </div>
       </div>
-      <div className="p-5 lg:p-0">
-        <Drawer username={""} />
-      </div>
-    </>
+    </div>
   );
 }
 
