@@ -118,11 +118,9 @@ function UserForm() {
           <Formik
             initialValues={{ username: "", rememberMe: false }}
             onSubmit={(values, { setSubmitting }) => {
-              console.log("Submitting form...");
-              console.log("Username:", selectedOption?.value);
-              console.log("Remember Me:", values?.rememberMe);
               // Reset the form
               navigate({ to: "/profile" });
+              //for future use
               //navigate({ to: '/posts/$postId', params: { postId } })
               setSubmitting(false);
             }}
