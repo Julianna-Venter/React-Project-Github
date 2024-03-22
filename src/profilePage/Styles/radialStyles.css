@@ -1,12 +1,12 @@
-/* Add this CSS in your stylesheet */
+/* This if for styling the DaisyUI component */
 @media screen and (max-width: 1024px) {
   .carousel-item {
-    --size: 5.5rem; /* Adjust the size for mobile screens */
+    --size: 5.5rem;
   }
 }
 
 @media screen and (min-width: 1024px) {
   .carousel-item {
-    --size: 7rem; /* Adjust the size for large screens */
+    --size: 7rem;
   }
 }
