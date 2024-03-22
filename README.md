@@ -14,5 +14,6 @@
 - Vite
 - React
 - Typescript
-- Redux Toolkit / Zustand + TanStack Query (TBD)
-- Tailwind & DaisyUI
+- Zustand + TanStack React Query
+- Tanstack Routing
+- Tailwind + DaisyUI

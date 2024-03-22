@@ -13,9 +13,9 @@ export let weekLabelAttributes = {
 };
 export let monthLabelAttributes = {
   style: {
-    "text-decoration": "none",
-    "font-size": 10,
-    "alignment-baseline": "central",
+    textDecoration: "none",
+    fontSize: 10,
+    alignmentBaseline: "central",
     fill: "#AAA",
   },
 };
