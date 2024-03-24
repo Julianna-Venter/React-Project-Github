@@ -1,8 +1,155 @@
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { octokit } from "../../environment/apiKey";
+import { hexColors } from "../Models/data";
+import {
+  BranchInfo,
+  Commit,
+  CommitItem,
+  LanguageData,
+  Parent,
+  RepoItem,
+} from "../Models/interfaces";
+
 interface RepoCardProps {
   repoName: string;
+  repoInfo: RepoItem;
+  sendUpLangauges: (languages: LanguageData) => void;
+  sendUpCommits: (commits: CommitItem[]) => void;
 }
 
-const RepoCard: React.FC<RepoCardProps> = ({ repoName }) => {
+const RepoCard: React.FC<RepoCardProps> = ({
+  repoName,
+  repoInfo,
+  sendUpLangauges,
+  sendUpCommits,
+}) => {
+  const [branches, setBranches] = useState<BranchInfo[]>([]);
+  const [branchNumber, setBranchNumber] = useState<number>();
+  const [languages, setLanguages] = useState<LanguageData>({});
+  const [commits, setCommits] = useState<LanguageData[]>([]);
+
+  useEffect(() => {
+    getBranches();
+    getLanguages();
+    getCommits();
+  }, []);
+
+  //only used branches length here, but will use rest of the response in a future update
+  const getBranches = async () => {
+    if (repoInfo) {
+      try {
+        const res = await octokit.request(
+          `GET https://api.github.com/repos/${repoInfo.full_name}/branches`
+        );
+
+        if (res.status === 200) {
+          let branches = res.data.length;
+          const data = res.data;
+          const newBranches = data.map(
+            (repo: { name: string; protected: boolean }) => ({
+              name: repo.name,
+              protected: repo.protected,
+            })
+          );
+          setBranches(newBranches);
+          setBranchNumber(branches);
+          return newBranches;
+        } else {
+          console.error("Request failed with status:", res.status);
+          setBranches([]);
+          return [];
+        }
+      } catch (error) {
+        console.error("Error fetching repositories:", error);
+        setBranches([]);
+        return [];
+      }
+    }
+  };
+
+  const getCommits = async () => {
+    if (repoInfo) {
+      try {
+        const res = await octokit.request(
+          `GET https://api.github.com/repos/${repoInfo.full_name}/commits`
+        );
+
+        if (res.status === 200) {
+          const data = res.data;
+          const newCommits = data.map(
+            (commit: { sha: string; commit: Commit; parents: Parent[] }) => ({
+              sha: commit.sha,
+              commit: commit.commit,
+              parents: commit.parents,
+            })
+          );
+          setCommits(newCommits);
+          sendUpCommits(newCommits);
+          return newCommits;
+        } else {
+          console.error("Request failed with status:", res.status);
+          setCommits([]);
+          return [];
+        }
+      } catch (error) {
+        console.error("Error fetching repositories:", error);
+        setCommits([]);
+        return [];
+      }
+    }
+  };
+
+  //langauges are already ordered by size in the response
+  //in the element, it is sliced to only show the top 8 to co-incide with the colors
+  const getLanguages = async () => {
+    if (repoInfo) {
+      try {
+        const res = await octokit.request(
+          `GET https://api.github.com/repos/${repoInfo.full_name}/languages`
+        );
+        if (res.status === 200) {
+          const languages = res.data;
+          setLanguages(languages);
+          sendUpLangauges(languages);
+          return languages;
+        } else {
+          console.error("Request failed with status:", res.status);
+          setLanguages({});
+
+          return [];
+        }
+      } catch (error) {
+        console.error("Error fetching languages:", error);
+        setLanguages({});
+        return [];
+      }
+    }
+  };
+
+  //converting the amount of languages to a percentage
+  function getPercentage(num: number): string {
+    const total = Object.values(languages).reduce((a, b) => a + b, 0);
+    return ((num / total) * 100).toFixed(2);
+  }
+
+  //tanstack/react-query hook to fetch the users
+  useQuery({
+    queryKey: ["branches"],
+    queryFn: getBranches,
+    enabled: false,
+  });
+  useQuery({
+    queryKey: ["languages"],
+    queryFn: getLanguages,
+    enabled: false,
+  });
+  useQuery({
+    queryKey: ["commits"],
+    queryFn: getCommits,
+    enabled: false,
+  });
+
   return (
     <div className="w-full h-[9.375rem] bg-off-white rounded-xl shadow-4xl p-3 flex flex-col justify-center text-dark-text">
       <div className="flex justify-between items-center mb-1">
@@ -22,7 +169,7 @@ const RepoCard: React.FC<RepoCardProps> = ({ repoName }) => {
           <label>{repoName}</label>
         </div>
         <div className="badge bg-off-white flex gap-2">
-          <span>Public</span>
+          <span>{repoInfo.private ? <p>Private</p> : <p>Public</p>}</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -47,7 +194,7 @@ const RepoCard: React.FC<RepoCardProps> = ({ repoName }) => {
 
       <div className="flex justify-between items-center mb-5">
         <div id="branches" className="flex justify-center items-center gap-1">
-          <span>3</span>
+          <span>{branchNumber}</span>
           <svg
             aria-hidden="true"
             focusable="false"
@@ -62,7 +209,7 @@ const RepoCard: React.FC<RepoCardProps> = ({ repoName }) => {
           </svg>
         </div>
         <div id="stars" className="flex justify-center items-center gap-1">
-          <span>0</span>
+          <span>{repoInfo.stargazers_count}</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -81,15 +228,52 @@ const RepoCard: React.FC<RepoCardProps> = ({ repoName }) => {
       </div>
 
       <div id="usageBar">
-        <div className="w-full bg-dark-off-white rounded-full h-1.5 flex overflow-hidden">
-          <div className="bg-primary-blue  h-1.5 w-[70%]"></div>
-          <div className="bg-secondary-orange  h-1.5 w-[20%]"></div>
+        <div className="w-full bg-dark-off-white rounded-full h-1.5 flex overflow-hidden flex">
+          {Object.entries(languages)
+            .slice(0, 8)
+            .map(([language, count], index) => {
+              const color = hexColors[index].color;
+              return (
+                <div
+                  key={`${repoInfo.id}_${language}_${index}`}
+                  className="h-1.5"
+                  style={{
+                    width: `${getPercentage(count)}%`,
+                    backgroundColor: color,
+                  }}
+                ></div>
+              );
+            })}
         </div>
       </div>
+
       <div id="langauges">
-        <div className="flex justify-center items-center gap-1 m-1">
-          <div className=" bg-primary-blue h-2 w-2 rounded-full"></div>
-          <label>html</label>
+        <div className="flex justify-start items-center gap-x-8 gap-y-2 m-2 flex-wrap">
+          {Object.entries(languages)
+            .slice(0, 8)
+            .map(([language, count], index) => {
+              const color = hexColors[index].color;
+
+              return (
+                <div
+                  key={repoInfo.id + language}
+                  className="flex items-center gap-1.5"
+                >
+                  <div
+                    className="h-2 w-2 rounded-full"
+                    style={{
+                      backgroundColor: color,
+                    }}
+                  ></div>
+                  <span className="text-xs flex gap-1.5">
+                    <p>{language} </p>
+                    <p className="text-lighter-text text-[1em]">
+                      {getPercentage(count)}%
+                    </p>
+                  </span>
+                </div>
+              );
+            })}
         </div>
       </div>
     </div>
