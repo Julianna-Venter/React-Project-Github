@@ -93,6 +93,7 @@ function ProfilePage() {
             git_commits_url: repo.git_commits_url,
             created_at: repo.created_at,
             updated_at: repo.updated_at,
+            pushed_at: repo.pushed_at,
             language: repo.language,
             forks_count: repo.forks_count,
             open_issues_count: repo.open_issues_count,

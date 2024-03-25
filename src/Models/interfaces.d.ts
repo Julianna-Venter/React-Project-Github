@@ -26,6 +26,7 @@ export interface RepoItem {
   git_commits_url: string;
   created_at: string;
   updated_at: string;
+  pushed_at: string;
   language: string;
   forks_count: number;
   open_issues_count: number;

@@ -43,9 +43,9 @@ const StatsRadial: React.FC<RadialProps> = ({ result, dataReady }) => {
                 >
                   <label className="text-md h-1/2 flex items-center">
                     {getPercentage(count)}
-                    <p className="text-xs opacity-80 font-bold">%</p>
+                    <p className="text-xs opacity-80 font-bold ml-0.5">%</p>
                   </label>
-                  <label className=" text-xs">{language}</label>
+                  <label className="text-xs px-5">{language}</label>
                 </div>
               </div>
             </div>

@@ -152,7 +152,7 @@ const RepoCard: React.FC<RepoCardProps> = ({
   });
 
   return (
-    <div className="w-full h-[9.375rem] bg-off-white rounded-xl shadow-4xl p-3 flex flex-col justify-center text-dark-text">
+    <div className="w-full h-fit bg-off-white rounded-xl shadow-4xl p-3 flex flex-col justify-center text-dark-text">
       <div className="flex justify-between items-center mb-1">
         <div className="flex justify-center items-center">
           <svg
@@ -229,7 +229,7 @@ const RepoCard: React.FC<RepoCardProps> = ({
       </div>
 
       <div id="usageBar">
-        <div className="w-full bg-dark-off-white rounded-full h-1.5 flex overflow-hidden flex">
+        <div className="w-full bg-dark-off-white rounded-full h-1.5 flex overflow-hidden">
           {Object.entries(languages)
             .slice(0, 8)
             .map(([language, count], index) => {
@@ -276,6 +276,12 @@ const RepoCard: React.FC<RepoCardProps> = ({
               );
             })}
         </div>
+      </div>
+      <div className="text-xs mt-2 self-end">
+        <span className="text-dark-text">Last Updated: </span>
+        <span className="text-lighter-text">
+          {repoInfo.pushed_at.substring(0, 10)}
+        </span>
       </div>
     </div>
   );
