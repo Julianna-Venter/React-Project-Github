@@ -4,12 +4,11 @@ import { octokit } from "../../environment/apiKey";
 import { hexColors } from "../Models/data";
 import {
   BranchInfo,
-  Commit,
   CommitItem,
   LanguageData,
-  Parent,
   RepoItem,
 } from "../Models/interfaces";
+import { getCommits, getLanguages, getBranches } from "./Api/profileApi";
 
 interface RepoCardProps {
   repoName: string;
@@ -30,102 +29,10 @@ const RepoCard: React.FC<RepoCardProps> = ({
   const [commits, setCommits] = useState<LanguageData[]>([]);
 
   useEffect(() => {
-    getBranches();
-    getLanguages();
-    getCommits();
+    getBranches(repoInfo, setBranches, setBranchNumber);
+    getLanguages(repoInfo, setLanguages, sendUpLangauges);
+    getCommits(repoInfo, setCommits, sendUpCommits);
   }, []);
-
-  //only used branches length here, but will use rest of the response in a future update
-  const getBranches = async () => {
-    if (repoInfo) {
-      try {
-        const res = await octokit.request(
-          `GET https://api.github.com/repos/${repoInfo.full_name}/branches`
-        );
-
-        if (res.status === 200) {
-          let branches = res.data.length;
-          const data = res.data;
-          const newBranches = data.map(
-            (repo: { name: string; protected: boolean }) => ({
-              name: repo.name,
-              protected: repo.protected,
-            })
-          );
-          setBranches(newBranches);
-          setBranchNumber(branches);
-          return newBranches;
-        } else {
-          console.error("Request failed with status:", res.status);
-          setBranches([]);
-          return [];
-        }
-      } catch (error) {
-        console.error("Error fetching repositories:", error);
-        setBranches([]);
-        return [];
-      }
-    }
-  };
-
-  const getCommits = async () => {
-    if (repoInfo) {
-      try {
-        const res = await octokit.request(
-          `GET https://api.github.com/repos/${repoInfo.full_name}/commits`
-        );
-
-        if (res.status === 200) {
-          const data = res.data;
-          const newCommits = data.map(
-            (commit: { sha: string; commit: Commit; parents: Parent[] }) => ({
-              sha: commit.sha,
-              commit: commit.commit,
-              parents: commit.parents,
-            })
-          );
-          setCommits(newCommits);
-          sendUpCommits(newCommits);
-          return newCommits;
-        } else {
-          console.error("Request failed with status:", res.status);
-          setCommits([]);
-          return [];
-        }
-      } catch (error) {
-        console.error("Error fetching repositories:", error);
-        setCommits([]);
-        return [];
-      }
-    }
-  };
-
-  //langauges are already ordered by size in the response
-  //in the element, it is sliced to only show the top 8 to co-incide with the colors
-  const getLanguages = async () => {
-    if (repoInfo) {
-      try {
-        const res = await octokit.request(
-          `GET https://api.github.com/repos/${repoInfo.full_name}/languages`
-        );
-        if (res.status === 200) {
-          const languages = res.data;
-          setLanguages(languages);
-          sendUpLangauges(languages);
-          return languages;
-        } else {
-          console.error("Request failed with status:", res.status);
-          setLanguages({});
-
-          return [];
-        }
-      } catch (error) {
-        console.error("Error fetching languages:", error);
-        setLanguages({});
-        return [];
-      }
-    }
-  };
 
   //converting the amount of languages to a percentage
   function getPercentage(num: number): string {
@@ -135,19 +42,19 @@ const RepoCard: React.FC<RepoCardProps> = ({
 
   useQuery({
     queryKey: ["branches"],
-    queryFn: getBranches,
+    queryFn: () => getBranches(repoInfo, setBranches, setBranchNumber),
     enabled: false,
   });
 
   useQuery({
     queryKey: ["languages"],
-    queryFn: getLanguages,
+    queryFn: () => getLanguages(repoInfo, setLanguages, sendUpLangauges),
     enabled: false,
   });
 
   useQuery({
     queryKey: ["commits"],
-    queryFn: getCommits,
+    queryFn: () => getCommits(repoInfo, setCommits, sendUpCommits),
     enabled: false,
   });
 

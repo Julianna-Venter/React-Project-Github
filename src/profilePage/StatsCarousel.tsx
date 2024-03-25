@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { octokit } from "../../environment/apiKey";
+import { getOrgs } from "./Api/profileApi";
 
 const StatsCarousel = ({
   followers,
@@ -14,38 +14,16 @@ const StatsCarousel = ({
   const [orgs, setOrgs] = useState<number>();
 
   useEffect(() => {
-    getOrgs();
+    getOrgs(url, setOrgs);
   });
-
-  const getOrgs = async () => {
-    if (url) {
-      try {
-        const res = await octokit.request(`GET ${url}`);
-
-        if (res.status === 200) {
-          let organizations = res.data.length;
-          if (organizations != 0) {
-            organizations -= 1;
-          }
-          setOrgs(organizations);
-          return organizations;
-        } else {
-          console.error("Request failed with status:", res.status);
-          return;
-        }
-      } catch (error) {
-        console.error("Error occurred:", error);
-        return;
-      }
-    }
-  };
 
   //tanstack/react-query hook to fetch the users
   useQuery({
     queryKey: ["Organizations"],
-    queryFn: getOrgs,
+    queryFn: () => getOrgs(url, setOrgs),
     enabled: false,
   });
+
   return (
     <div id="carousel" className="carousel flex gap-4 text-dark-text">
       <div className="carousel-item">

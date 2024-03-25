@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { octokit } from "../../environment/apiKey";
+import { getStats } from "./Api/profileApi";
 
 const QuickStats = ({
   repoNumber,
@@ -14,37 +14,12 @@ const QuickStats = ({
   const [stars, setStars] = useState<number>();
 
   useEffect(() => {
-    getStats();
+    getStats(username, setStars);
   });
-
-  const getStats = async () => {
-    if (username) {
-      try {
-        const res = await octokit.request(
-          `GET https://api.github.com/users/${username}/starred`
-        );
-
-        if (res.status === 200) {
-          let stars = res.data.length;
-          if (stars != 0) {
-            stars -= 1;
-          }
-          setStars(stars);
-          return stars;
-        } else {
-          console.error("Request failed with status:", res.status);
-          return;
-        }
-      } catch (error) {
-        console.error("Error occurred:", error);
-        return;
-      }
-    }
-  };
 
   useQuery({
     queryKey: ["Stats"],
-    queryFn: getStats,
+    queryFn: () => getStats(username, setStars),
     enabled: false,
   });
 

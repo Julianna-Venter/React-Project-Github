@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import Calendar from "react-github-contribution-calendar";
-import { octokit } from "../../environment/apiKey";
 import {
   monthLabelAttributes,
   panelAttributes,
@@ -18,6 +17,7 @@ import {
 } from "../Models/interfaces";
 import Drawer from "../Navigation/Drawer";
 import { Route } from "../routes";
+import { getProfile, getRepos } from "./Api/profileApi";
 import QuickStats from "./QuickStats";
 import RepoCard from "./RepoCard";
 import StatsCarousel from "./StatsCarousel";
@@ -41,91 +41,20 @@ function ProfilePage() {
   const profileName = profileId;
 
   useEffect(() => {
-    getProfile();
-    getRepos();
+    getProfile(profileName, setProfile);
+    getRepos(profileName, setRepos, setRepoNumber);
   }, []);
-
-  const getProfile = async () => {
-    if (profileName) {
-      const res = await octokit.request(
-        `GET https://api.github.com/users/${profileName}`
-      );
-
-      if (res.status === 200) {
-        const profile = {
-          name: res.data.name,
-          bio: res.data.bio,
-          login: res.data.login,
-          avatar_url: res.data.avatar_url,
-          followers: res.data.followers,
-          following: res.data.following,
-          organizations_url: res.data.organizations_url,
-        };
-        setProfile(profile);
-        return profile;
-      } else {
-        console.error("Request failed with status:", res.status);
-        return;
-      }
-    }
-  };
-
-  const getRepos = async () => {
-    if (profileName) {
-      try {
-        const res = await octokit.request(
-          `GET https://api.github.com/users/${profileName}/repos?sort=updated`
-        );
-
-        if (res.status === 200) {
-          let repos = res.data.length;
-          const data = res.data;
-          const newRepos = data.map((repo: RepoItem) => ({
-            id: repo.id,
-            name: repo.name,
-            full_name: repo.full_name,
-            private: repo.private,
-            description: repo.description,
-            collaborators_url: repo.collaborators_url,
-            branches_url: repo.branches_url,
-            contributors_url: repo.contributors_url,
-            commits_url: repo.commits_url,
-            git_commits_url: repo.git_commits_url,
-            created_at: repo.created_at,
-            updated_at: repo.updated_at,
-            pushed_at: repo.pushed_at,
-            language: repo.language,
-            forks_count: repo.forks_count,
-            open_issues_count: repo.open_issues_count,
-            default_branch: repo.default_branch,
-            stargazers_count: repo.stargazers_count,
-          }));
-          setRepos(newRepos);
-          setRepoNumber(repos);
-          return newRepos;
-        } else {
-          console.error("Request failed with status:", res.status);
-          setRepos([]);
-          return [];
-        }
-      } catch (error) {
-        console.error("Error fetching repositories:", error);
-        setRepos([]);
-        return [];
-      }
-    }
-  };
 
   //tanstack/react-query hook to fetch the users
   useQuery({
     queryKey: [profileName?.trim()],
-    queryFn: getProfile,
+    queryFn: () => getProfile(profileName, setProfile),
     enabled: false,
   });
 
   useQuery({
     queryKey: ["Repos"],
-    queryFn: getRepos,
+    queryFn: () => getRepos(profileName, setRepos, setRepoNumber),
     enabled: false,
   });
 
