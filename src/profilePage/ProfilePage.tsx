@@ -22,7 +22,7 @@ import RepoCard from "./RepoCard";
 import StatsCarousel from "./StatsCarousel";
 import StatsRadial from "./StatsRadial";
 
-const profileName = "yanevdw";
+const profileName = "theadley";
 
 function ProfilePage() {
   const [profile, setProfile] = useState<ProfileItem | null>(null);
@@ -148,10 +148,13 @@ function ProfilePage() {
     setDataReady(true);
   }
 
+  const currentDate = new Date();
+  const previousDate = new Date(currentDate);
+  previousDate.setDate(currentDate.getDate() - 359);
+
   function giveMeCommits(commits: CommitItem[]) {
     const totalCommits = commits.length;
 
-    // Update the commitsNumber state
     setCommitsNumber((prevCommitsNumber) =>
       prevCommitsNumber ? prevCommitsNumber + totalCommits : totalCommits
     );
@@ -161,15 +164,25 @@ function ProfilePage() {
 
       commits.forEach((commitItem) => {
         const { date } = commitItem.commit.author;
-        const formattedDate = new Date(date).toISOString().substring(0, 10);
+        const commitDate = new Date(date);
+        const formattedCommitDate = commitDate.toISOString().substring(0, 10);
+        const formattedPreviousDate = previousDate
+          .toISOString()
+          .substring(0, 10);
 
-        // Increment the count for the date or initialize it to 1 if it doesn't exist
-        updatedCommits[formattedDate] =
-          (updatedCommits[formattedDate] || 0) + 1;
+        var commitDateCompare = new Date(formattedCommitDate);
+        var oldDateCompare = new Date(formattedPreviousDate);
+
+        // Check if the commit date is on or after previousDate
+        if (commitDateCompare >= oldDateCompare) {
+          updatedCommits[formattedCommitDate] =
+            (updatedCommits[formattedCommitDate] || 0) + 1;
+        }
       });
 
       return updatedCommits;
     });
+
     setCommitsReady(true);
   }
 
