@@ -4,13 +4,19 @@ export let until = currentDate.toISOString().substring(0, 10);
 export const panelAttributes = { rx: 3, ry: 3 };
 export let weekLabelAttributes = {
   rotate: 0,
+  style: {
+    textDecoration: "none",
+    fontSize: 10,
+    alignmentBaseline: "central",
+    fill: "#566",
+  },
 };
 export let monthLabelAttributes = {
   style: {
     textDecoration: "none",
     fontSize: 10,
     alignmentBaseline: "central",
-    fill: "#AAA",
+    fill: "#566",
   },
 };
 

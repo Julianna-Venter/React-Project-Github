@@ -119,9 +119,12 @@ function UserForm() {
             initialValues={{ username: "", rememberMe: false }}
             onSubmit={(values, { setSubmitting }) => {
               // Reset the form
-              navigate({ to: "/profile" });
+              // navigate({ to: "/profile" });
               //for future use
-              //navigate({ to: '/posts/$postId', params: { postId } })
+
+              let profileId = selectedOption?.value;
+
+              navigate({ to: "/profile/$profileId", params: { profileId } });
               setSubmitting(false);
             }}
           >

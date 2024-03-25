@@ -17,12 +17,19 @@ import {
   RepoItem,
 } from "../Models/interfaces";
 import Drawer from "../Navigation/Drawer";
+import { Route } from "../routes";
 import QuickStats from "./QuickStats";
 import RepoCard from "./RepoCard";
 import StatsCarousel from "./StatsCarousel";
 import StatsRadial from "./StatsRadial";
 
-const profileName = "theadley";
+// const profileId = Route.useParams();
+// const profileName = profileId;
+// const profileName = "Julianna-Venter";
+
+interface RouteParams {
+  profileId: string; // Assuming profileId is a string
+}
 
 function ProfilePage() {
   const [profile, setProfile] = useState<ProfileItem | null>(null);
@@ -33,6 +40,9 @@ function ProfilePage() {
   const [result, setResult] = useState<LanguageData>({});
   const [commitsReady, setCommitsReady] = useState(false);
   const [commits, setCommits] = useState<CommitData>({});
+
+  const { profileId } = Route.useParams<RouteParams>();
+  const profileName = profileId;
 
   useEffect(() => {
     getProfile();
@@ -232,16 +242,33 @@ function ProfilePage() {
           </div>
           <div className="detailsContainer w-full flex flex-col gap-5 mt-4 lg:w-5/6">
             <StatsRadial result={result} dataReady={dataReady} />
-            <div className="lg:pl-5">
+            <div className="lg:pl-5 flex flex-col m-5">
               {commitsReady ? (
-                <Calendar
-                  values={commits}
-                  until={until}
-                  weekLabelAttributes={weekLabelAttributes}
-                  monthLabelAttributes={monthLabelAttributes}
-                  panelAttributes={panelAttributes}
-                  panelColors={panelColors}
-                />
+                <>
+                  <Calendar
+                    values={commits}
+                    until={until}
+                    weekLabelAttributes={weekLabelAttributes}
+                    monthLabelAttributes={monthLabelAttributes}
+                    panelAttributes={panelAttributes}
+                    panelColors={panelColors}
+                  />
+                  <div className="flex gap-5 items-center text-dark-text text-sm self-center">
+                    <span>Less</span>
+                    <div className="flex gap-2">
+                      {panelColors.map((color, index) => (
+                        <div
+                          key={index}
+                          className="w-2.5 h-2.5 rounded-sm"
+                          style={{
+                            backgroundColor: color,
+                          }}
+                        ></div>
+                      ))}
+                    </div>
+                    <span>More</span>
+                  </div>
+                </>
               ) : (
                 <div>Loading...</div>
               )}
