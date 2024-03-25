@@ -118,10 +118,6 @@ function UserForm() {
           <Formik
             initialValues={{ username: "", rememberMe: false }}
             onSubmit={(values, { setSubmitting }) => {
-              // Reset the form
-              // navigate({ to: "/profile" });
-              //for future use
-
               let profileId = selectedOption?.value;
 
               navigate({ to: "/profile/$profileId", params: { profileId } });

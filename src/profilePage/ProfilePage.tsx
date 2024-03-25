@@ -23,12 +23,8 @@ import RepoCard from "./RepoCard";
 import StatsCarousel from "./StatsCarousel";
 import StatsRadial from "./StatsRadial";
 
-// const profileId = Route.useParams();
-// const profileName = profileId;
-// const profileName = "Julianna-Venter";
-
 interface RouteParams {
-  profileId: string; // Assuming profileId is a string
+  profileId: string;
 }
 
 function ProfilePage() {
