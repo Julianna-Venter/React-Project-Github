@@ -42,7 +42,6 @@ const QuickStats = ({
     }
   };
 
-  //tanstack/react-query hook to fetch the users
   useQuery({
     queryKey: ["Stats"],
     queryFn: getStats,

@@ -133,17 +133,18 @@ const RepoCard: React.FC<RepoCardProps> = ({
     return ((num / total) * 100).toFixed(2);
   }
 
-  //tanstack/react-query hook to fetch the users
   useQuery({
     queryKey: ["branches"],
     queryFn: getBranches,
     enabled: false,
   });
+
   useQuery({
     queryKey: ["languages"],
     queryFn: getLanguages,
     enabled: false,
   });
+
   useQuery({
     queryKey: ["commits"],
     queryFn: getCommits,
