@@ -155,8 +155,7 @@ function ProfilePage() {
   }
 
   const currentDate = new Date();
-  const previousDate = new Date(currentDate);
-  previousDate.setDate(currentDate.getDate() - 359);
+  const previousDate = new Date(currentDate.getDate() - 359);
 
   function giveMeCommits(commits: CommitItem[]) {
     const totalCommits = commits.length;
