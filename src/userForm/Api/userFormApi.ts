@@ -1,6 +1,5 @@
 //fetch the users from the github api
 
-import { SetStateAction } from "react";
 import { octokit } from "../../../environment/apiKey";
 import { Option } from "../../Models/interfaces";
 
@@ -13,19 +12,20 @@ export const getUsers = async (
       const res = await octokit.request(
         `GET https://api.github.com/search/users?q=${searchTerm?.trim()}&per_page=100`
       );
-      let data: any;
+
       if (res.status === 200) {
-        data = res.data;
+        const data = res.data;
+        const newOptions =
+          data?.items?.map((user: { login: string }) => ({
+            value: user.login,
+            label: user.login,
+          })) ?? [];
+        return newOptions;
       } else {
         // Handle errors appropriately
         console.error("Request failed with status:", res.status);
+        return [];
       }
-      const newOptions =
-        data?.items?.map((user: { login: string }) => ({
-          value: user.login,
-          label: user.login,
-        })) ?? [];
-      return newOptions;
     } catch (error) {
       console.error("Error fetching usernames:", error);
       return [];

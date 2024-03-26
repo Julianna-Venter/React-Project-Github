@@ -20,11 +20,7 @@ const RepoCard: React.FC<RepoCardProps> = ({
   sendUpCommits,
 }) => {
   const [branchNumber, setBranchNumber] = useState<number>();
-  // const [languages, setLanguages] = useState<LanguageData>({});
-  // const queryClient = useQueryClient();
 
-  // When you want to invalidate the query (e.g., after some action)
-  // queryClient.invalidateQueries({ queryKey: ["languages"] });
   const { data: branchData } = useQuery({
     queryKey: ["branches", repoInfo.id],
     queryFn: () => getBranches(repoInfo, setBranchNumber),

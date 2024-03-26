@@ -10,10 +10,6 @@ const QuickStats = ({
   username: string | undefined;
   commits: number | undefined;
 }) => {
-  // useEffect(() => {
-  //   getStats(username, setStars);
-  // });
-
   const { data: statsData } = useQuery({
     queryKey: ["Stats", username],
     queryFn: () => getStats(username),
