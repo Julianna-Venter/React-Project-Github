@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 import { getStats } from "./Api/profileApi";
 
 const QuickStats = ({
@@ -11,16 +10,13 @@ const QuickStats = ({
   username: string | undefined;
   commits: number | undefined;
 }) => {
-  const [stars, setStars] = useState<number>();
+  // useEffect(() => {
+  //   getStats(username, setStars);
+  // });
 
-  useEffect(() => {
-    getStats(username, setStars);
-  });
-
-  useQuery({
-    queryKey: ["Stats"],
-    queryFn: () => getStats(username, setStars),
-    enabled: false,
+  const { data: statsData } = useQuery({
+    queryKey: ["Stats", username],
+    queryFn: () => getStats(username),
   });
 
   return (
@@ -61,7 +57,7 @@ const QuickStats = ({
         <div className="w-full h-full flex justify-center items-center">
           <div className="flex flex-col justify-center items-center">
             <span className="text-lg lg:text-xl leading-none font-semibold">
-              {stars}
+              {statsData}
             </span>
             <span className="text-xs lg:text-sm">Stars</span>
           </div>

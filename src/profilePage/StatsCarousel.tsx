@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 import { getOrgs } from "./Api/profileApi";
 
 const StatsCarousel = ({
@@ -11,17 +10,10 @@ const StatsCarousel = ({
   following: number | undefined;
   url: string | undefined;
 }) => {
-  const [orgs, setOrgs] = useState<number>();
-
-  useEffect(() => {
-    getOrgs(url, setOrgs);
-  });
-
   //tanstack/react-query hook to fetch the users
-  useQuery({
+  const { data: orgsData } = useQuery({
     queryKey: ["Organizations"],
-    queryFn: () => getOrgs(url, setOrgs),
-    enabled: false,
+    queryFn: () => getOrgs(url),
   });
 
   return (
@@ -38,11 +30,11 @@ const StatsCarousel = ({
           <div className="badge badge-secondary ml-1">{following}</div>
         </div>
       </div>
-      {orgs != 0 && (
+      {orgsData != 0 && (
         <div className="carousel-item">
           <div className="">
             <span>Organizations</span>
-            <div className="badge badge-secondary ml-1">{orgs}</div>
+            <div className="badge badge-secondary ml-1">{orgsData}</div>
           </div>
         </div>
       )}

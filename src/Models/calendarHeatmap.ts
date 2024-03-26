@@ -1,8 +1,8 @@
 const currentDate = new Date();
-export let until = currentDate.toISOString().substring(0, 10);
+export const until = currentDate.toISOString().substring(0, 10);
 
 export const panelAttributes = { rx: 3, ry: 3 };
-export let weekLabelAttributes = {
+export const weekLabelAttributes = {
   rotate: 0,
   style: {
     textDecoration: "none",

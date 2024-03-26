@@ -1,9 +1,7 @@
-import { SetStateAction } from "react";
 import { octokit } from "../../../environment/apiKey";
 import {
   BranchInfo,
   Commit,
-  CommitData,
   CommitItem,
   LanguageData,
   Parent,
@@ -13,11 +11,9 @@ import {
 
 export const getCommits = async (
   repoInfo: RepoItem,
-  setCommits: {
-    (value: SetStateAction<CommitData[]>): void;
-  },
+
   sendUpCommits: { (commits: CommitItem[]): void }
-) => {
+): Promise<CommitItem[]> => {
   if (repoInfo) {
     try {
       const res = await octokit.request(
@@ -33,19 +29,21 @@ export const getCommits = async (
             parents: commit.parents,
           })
         );
-        setCommits(newCommits);
+
         sendUpCommits(newCommits);
         return newCommits;
       } else {
         console.error("Request failed with status:", res.status);
-        setCommits([]);
+
         return [];
       }
     } catch (error) {
       console.error("Error fetching repositories:", error);
-      setCommits([]);
+
       return [];
     }
+  } else {
+    return [];
   }
 };
 
@@ -53,11 +51,8 @@ export const getCommits = async (
 //in the element, it is sliced to only show the top 8 to co-incide with the colors
 export const getLanguages = async (
   repoInfo: RepoItem,
-  setLanguages: {
-    (value: SetStateAction<LanguageData>): void;
-  },
   sendUpLangauges: { (languages: LanguageData): void }
-) => {
+): Promise<LanguageData | null> => {
   if (repoInfo) {
     try {
       const res = await octokit.request(
@@ -65,31 +60,30 @@ export const getLanguages = async (
       );
       if (res.status === 200) {
         const languages = res.data;
-        setLanguages(languages);
+
         sendUpLangauges(languages);
+
         return languages;
       } else {
         console.error("Request failed with status:", res.status);
-        setLanguages({});
 
-        return [];
+        return null;
       }
     } catch (error) {
       console.error("Error fetching languages:", error);
-      setLanguages({});
-      return [];
+
+      return null;
     }
+  } else {
+    return null;
   }
 };
 
 //only used branches length here, but will use rest of the response in a future update
 export const getBranches = async (
   repoInfo: RepoItem,
-  setBranches: {
-    (value: SetStateAction<BranchInfo[]>): void;
-  },
   setBranchNumber: { (branchNumber: number): void }
-) => {
+): Promise<BranchInfo[]> => {
   if (repoInfo) {
     try {
       const res = await octokit.request(
@@ -105,28 +99,25 @@ export const getBranches = async (
             protected: repo.protected,
           })
         );
-        setBranches(newBranches);
+
         setBranchNumber(branches);
         return newBranches;
       } else {
         console.error("Request failed with status:", res.status);
-        setBranches([]);
+
         return [];
       }
     } catch (error) {
       console.error("Error fetching repositories:", error);
-      setBranches([]);
+
       return [];
     }
+  } else {
+    return [];
   }
 };
 
-export const getOrgs = async (
-  url: string | undefined,
-  setOrgs: {
-    (value: SetStateAction<number | undefined>): void;
-  }
-) => {
+export const getOrgs = async (url: string | undefined): Promise<number> => {
   if (url) {
     try {
       const res = await octokit.request(`GET ${url}`);
@@ -136,23 +127,23 @@ export const getOrgs = async (
         if (organizations != 0) {
           organizations -= 1;
         }
-        setOrgs(organizations);
         return organizations;
       } else {
         console.error("Request failed with status:", res.status);
-        return;
+        return 0;
       }
     } catch (error) {
       console.error("Error occurred:", error);
-      return;
+      return 0;
     }
+  } else {
+    return 0;
   }
 };
 
 export const getStats = async (
-  username: string | undefined,
-  setStars: { (branchNumber: number): void }
-) => {
+  username: string | undefined
+): Promise<number> => {
   if (username) {
     try {
       const res = await octokit.request(
@@ -161,29 +152,24 @@ export const getStats = async (
 
       if (res.status === 200) {
         let stars = res.data.length;
-        if (stars != 0) {
-          stars -= 1;
-        }
-        setStars(stars);
         return stars;
       } else {
         console.error("Request failed with status:", res.status);
-        return;
+        return 0;
       }
     } catch (error) {
       console.error("Error occurred:", error);
-      return;
+      return 0;
     }
+  } else {
+    return 0;
   }
 };
 
 export const getRepos = async (
   profileName: string,
-  setRepos: {
-    (value: SetStateAction<RepoItem[]>): void;
-  },
   setRepoNumber: { (branchNumber: number): void }
-) => {
+): Promise<RepoItem[]> => {
   if (profileName) {
     try {
       const res = await octokit.request(
@@ -191,7 +177,7 @@ export const getRepos = async (
       );
 
       if (res.status === 200) {
-        let repos = res.data.length;
+        const repos = res.data.length;
         const data = res.data;
         const newRepos = data.map((repo: RepoItem) => ({
           id: repo.id,
@@ -213,48 +199,40 @@ export const getRepos = async (
           default_branch: repo.default_branch,
           stargazers_count: repo.stargazers_count,
         }));
-        setRepos(newRepos);
+
         setRepoNumber(repos);
         return newRepos;
       } else {
         console.error("Request failed with status:", res.status);
-        setRepos([]);
         return [];
       }
     } catch (error) {
       console.error("Error fetching repositories:", error);
-      setRepos([]);
       return [];
     }
+  } else {
+    return [];
   }
 };
 
-export const getProfile = async (
-  profileName: string,
-  setProfile: {
-    (value: SetStateAction<ProfileItem | null>): void;
-  }
-) => {
-  if (profileName) {
-    const res = await octokit.request(
-      `GET https://api.github.com/users/${profileName}`
-    );
+export const getProfile = async (profileName: string): Promise<ProfileItem> => {
+  const res = await octokit.request(
+    `GET https://api.github.com/users/${profileName}`
+  );
 
-    if (res.status === 200) {
-      const profile = {
-        name: res.data.name,
-        bio: res.data.bio,
-        login: res.data.login,
-        avatar_url: res.data.avatar_url,
-        followers: res.data.followers,
-        following: res.data.following,
-        organizations_url: res.data.organizations_url,
-      };
-      setProfile(profile);
-      return profile;
-    } else {
-      console.error("Request failed with status:", res.status);
-      return;
-    }
+  if (res.status === 200) {
+    const profile = {
+      name: res.data.name,
+      bio: res.data.bio,
+      login: res.data.login,
+      avatar_url: res.data.avatar_url,
+      followers: res.data.followers,
+      following: res.data.following,
+      organizations_url: res.data.organizations_url,
+    };
+    return profile;
+  } else {
+    console.error("Request failed with status:", res.status);
+    return {} as ProfileItem;
   }
 };

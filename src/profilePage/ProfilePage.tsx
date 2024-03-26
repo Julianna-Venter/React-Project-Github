@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Calendar from "react-github-contribution-calendar";
 import {
   monthLabelAttributes,
@@ -12,7 +12,6 @@ import {
   CommitData,
   CommitItem,
   LanguageData,
-  ProfileItem,
   RepoItem,
 } from "../Models/interfaces";
 import Drawer from "../Navigation/Drawer";
@@ -28,8 +27,6 @@ interface RouteParams {
 }
 
 function ProfilePage() {
-  const [profile, setProfile] = useState<ProfileItem | null>(null);
-  const [repos, setRepos] = useState<RepoItem[]>([]);
   const [repoNumber, setRepoNumber] = useState<number>(0);
   const [commitsNumber, setCommitsNumber] = useState<number>(0);
   const [dataReady, setDataReady] = useState(false);
@@ -40,22 +37,15 @@ function ProfilePage() {
   const { profileId } = Route.useParams<RouteParams>();
   const profileName = profileId;
 
-  useEffect(() => {
-    getProfile(profileName, setProfile);
-    getRepos(profileName, setRepos, setRepoNumber);
-  }, []);
-
   //tanstack/react-query hook to fetch the users
-  useQuery({
+  const { data: profileData } = useQuery({
     queryKey: [profileName?.trim()],
-    queryFn: () => getProfile(profileName, setProfile),
-    enabled: false,
+    queryFn: () => getProfile(profileName),
   });
 
-  useQuery({
-    queryKey: ["Repos"],
-    queryFn: () => getRepos(profileName, setRepos, setRepoNumber),
-    enabled: false,
+  const { data: repoData } = useQuery({
+    queryKey: ["Repos", profileName],
+    queryFn: () => getRepos(profileName, setRepoNumber),
   });
 
   function giveMeLanguages(languages: LanguageData) {
@@ -84,9 +74,6 @@ function ProfilePage() {
     setDataReady(true);
   }
 
-  const currentDate = new Date();
-  const previousDate = new Date(currentDate.getDate() - 359);
-
   function giveMeCommits(commits: CommitItem[]) {
     const totalCommits = commits.length;
 
@@ -101,18 +88,9 @@ function ProfilePage() {
         const { date } = commitItem.commit.author;
         const commitDate = new Date(date);
         const formattedCommitDate = commitDate.toISOString().substring(0, 10);
-        const formattedPreviousDate = previousDate
-          .toISOString()
-          .substring(0, 10);
 
-        var commitDateCompare = new Date(formattedCommitDate);
-        var oldDateCompare = new Date(formattedPreviousDate);
-
-        // Check if the commit date is on or after previousDate
-        if (commitDateCompare >= oldDateCompare) {
-          updatedCommits[formattedCommitDate] =
-            (updatedCommits[formattedCommitDate] || 0) + 1;
-        }
+        updatedCommits[formattedCommitDate] =
+          (updatedCommits[formattedCommitDate] || 0) + 1;
       });
 
       return updatedCommits;
@@ -139,11 +117,18 @@ function ProfilePage() {
             <div className="w-full pb-10 pt-8 self-start flex justify-center items-center gap-5 relative lg:w-fit lg:justify-start">
               <div className="avatar absolute mr-20 lg:mr-0">
                 <div className="w-48 h-48 rounded-full shadow-3xl lg:w-60 lg:h-60">
-                  <img src={profile?.avatar_url} alt="Profile Avatar" />
+                  {profileData?.avatar_url ? (
+                    <img src={profileData?.avatar_url} alt="Profile Avatar" />
+                  ) : (
+                    <img
+                      src="https://i0.wp.com/sunrisedaycamp.org/wp-content/uploads/2020/10/placeholder.png?ssl=1"
+                      alt="Profile Avatar"
+                    />
+                  )}
                 </div>
               </div>
               <QuickStats
-                username={profile?.login}
+                username={profileData?.login}
                 repoNumber={repoNumber}
                 commits={commitsNumber}
               />
@@ -151,23 +136,25 @@ function ProfilePage() {
             <div className="flex flex-col gap-5">
               <div className="flex flex-col">
                 <label className="font-bold text-dark-text text-xl">
-                  {profile?.name}
+                  {profileData?.name}
                 </label>
                 <label className="text-lighter-text text-lg">
-                  {profile?.login}
+                  {profileData?.login}
                 </label>
-                <p className="text-dark-text text-sm mt-2">{profile?.bio}</p>
+                <p className="text-dark-text text-sm mt-2">
+                  {profileData?.bio}
+                </p>
               </div>
               <StatsCarousel
-                followers={profile?.followers}
-                following={profile?.following}
-                url={profile?.organizations_url}
+                followers={profileData?.followers}
+                following={profileData?.following}
+                url={profileData?.organizations_url}
               />
             </div>
           </div>
           <div className="detailsContainer w-full flex flex-col gap-5 mt-4 lg:w-5/6">
             <StatsRadial result={result} dataReady={dataReady} />
-            <div className="lg:pl-5 flex flex-col m-5">
+            <div className="flex flex-col m-5 lg:px-20">
               {commitsReady ? (
                 <>
                   <Calendar
@@ -181,9 +168,9 @@ function ProfilePage() {
                   <div className="flex gap-5 items-center text-dark-text text-sm self-center">
                     <span>Less</span>
                     <div className="flex gap-2">
-                      {panelColors.map((color, index) => (
+                      {panelColors.map((color) => (
                         <div
-                          key={index}
+                          key={color}
                           className="w-2.5 h-2.5 rounded-sm"
                           style={{
                             backgroundColor: color,
@@ -200,15 +187,16 @@ function ProfilePage() {
             </div>
 
             <div className="flex flex-col gap-5 lg:px-20">
-              {repos.slice(0, 3).map((repo) => (
-                <RepoCard
-                  key={repo.name}
-                  repoName={repo.name}
-                  repoInfo={repo}
-                  sendUpLangauges={giveMeLanguages}
-                  sendUpCommits={giveMeCommits}
-                />
-              ))}
+              {repoData &&
+                Object.values(repoData).map((repo: RepoItem) => (
+                  <RepoCard
+                    key={repo.id}
+                    repoName={repo.name}
+                    repoInfo={repo}
+                    sendUpLanguages={giveMeLanguages}
+                    sendUpCommits={giveMeCommits}
+                  />
+                ))}
             </div>
           </div>
         </div>

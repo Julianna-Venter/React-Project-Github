@@ -1,62 +1,54 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { octokit } from "../../environment/apiKey";
+import { useState } from "react";
 import { hexColors } from "../Models/data";
-import {
-  BranchInfo,
-  CommitItem,
-  LanguageData,
-  RepoItem,
-} from "../Models/interfaces";
-import { getCommits, getLanguages, getBranches } from "./Api/profileApi";
+import { CommitItem, LanguageData, RepoItem } from "../Models/interfaces";
+import { getBranches, getCommits, getLanguages } from "./Api/profileApi";
+
+import { v4 as uuidv4 } from "uuid";
 
 interface RepoCardProps {
   repoName: string;
   repoInfo: RepoItem;
-  sendUpLangauges: (languages: LanguageData) => void;
+  sendUpLanguages: (languages: LanguageData) => void;
   sendUpCommits: (commits: CommitItem[]) => void;
 }
 
 const RepoCard: React.FC<RepoCardProps> = ({
   repoName,
   repoInfo,
-  sendUpLangauges,
+  sendUpLanguages,
   sendUpCommits,
 }) => {
-  const [branches, setBranches] = useState<BranchInfo[]>([]);
   const [branchNumber, setBranchNumber] = useState<number>();
-  const [languages, setLanguages] = useState<LanguageData>({});
-  const [commits, setCommits] = useState<LanguageData[]>([]);
+  // const [languages, setLanguages] = useState<LanguageData>({});
+  // const queryClient = useQueryClient();
 
-  useEffect(() => {
-    getBranches(repoInfo, setBranches, setBranchNumber);
-    getLanguages(repoInfo, setLanguages, sendUpLangauges);
-    getCommits(repoInfo, setCommits, sendUpCommits);
-  }, []);
+  // When you want to invalidate the query (e.g., after some action)
+  // queryClient.invalidateQueries({ queryKey: ["languages"] });
+  const { data: branchData } = useQuery({
+    queryKey: ["branches", repoInfo.id],
+    queryFn: () => getBranches(repoInfo, setBranchNumber),
+  });
+
+  const { data: commitData } = useQuery({
+    queryKey: ["commits", repoInfo.id],
+    queryFn: () => getCommits(repoInfo, sendUpCommits),
+  });
+
+  const { data: languageData } = useQuery({
+    queryKey: ["languages", repoInfo.id],
+    queryFn: () => getLanguages(repoInfo, sendUpLanguages),
+  });
 
   //converting the amount of languages to a percentage
   function getPercentage(num: number): string {
-    const total = Object.values(languages).reduce((a, b) => a + b, 0);
-    return ((num / total) * 100).toFixed(2);
+    if (languageData) {
+      const total = Object.values(languageData).reduce((a, b) => a + b, 0);
+      return ((num / total) * 100).toFixed(2);
+    } else {
+      return "0";
+    }
   }
-
-  useQuery({
-    queryKey: ["branches"],
-    queryFn: () => getBranches(repoInfo, setBranches, setBranchNumber),
-    enabled: false,
-  });
-
-  useQuery({
-    queryKey: ["languages"],
-    queryFn: () => getLanguages(repoInfo, setLanguages, sendUpLangauges),
-    enabled: false,
-  });
-
-  useQuery({
-    queryKey: ["commits"],
-    queryFn: () => getCommits(repoInfo, setCommits, sendUpCommits),
-    enabled: false,
-  });
 
   return (
     <div className="w-full h-fit bg-off-white rounded-xl shadow-4xl p-3 flex flex-col justify-center text-dark-text">
@@ -77,7 +69,7 @@ const RepoCard: React.FC<RepoCardProps> = ({
           <label>{repoName}</label>
         </div>
         <div className="badge bg-off-white flex gap-2">
-          <span>{repoInfo.private ? <p>Private</p> : <p>Public</p>}</span>
+          <span>{repoInfo.private ? "Private" : "Public"}</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -137,51 +129,54 @@ const RepoCard: React.FC<RepoCardProps> = ({
 
       <div id="usageBar">
         <div className="w-full bg-dark-off-white rounded-full h-1.5 flex overflow-hidden">
-          {Object.entries(languages)
-            .slice(0, 8)
-            .map(([language, count], index) => {
-              const color = hexColors[index].color;
-              return (
-                <div
-                  key={`${repoInfo.id}_${language}_${index}`}
-                  className="h-1.5"
-                  style={{
-                    width: `${getPercentage(count)}%`,
-                    backgroundColor: color,
-                  }}
-                ></div>
-              );
-            })}
+          {languageData &&
+            Object.entries(languageData)
+              .slice(0, 8)
+              .map(([language, count]: [string, number], index: number) => {
+                const color = hexColors[index].color;
+                const uniqueKey = `${repoInfo.id}_${uuidv4()}`;
+                return (
+                  <div
+                    key={`${uniqueKey}`}
+                    className="h-1.5"
+                    style={{
+                      width: `${getPercentage(count)}%`,
+                      backgroundColor: color,
+                    }}
+                  ></div>
+                );
+              })}
         </div>
       </div>
 
       <div id="langauges">
         <div className="flex justify-start items-center gap-x-8 gap-y-2 m-2 flex-wrap">
-          {Object.entries(languages)
-            .slice(0, 8)
-            .map(([language, count], index) => {
-              const color = hexColors[index].color;
+          {languageData &&
+            Object.entries(languageData)
+              .slice(0, 8)
+              .map(([language, count]: [string, number], index: number) => {
+                const color = hexColors[index].color;
 
-              return (
-                <div
-                  key={repoInfo.id + language}
-                  className="flex items-center gap-1.5"
-                >
+                return (
                   <div
-                    className="h-2 w-2 rounded-full"
-                    style={{
-                      backgroundColor: color,
-                    }}
-                  ></div>
-                  <span className="text-xs flex gap-1.5">
-                    <p>{language} </p>
-                    <p className="text-lighter-text text-[1em]">
-                      {getPercentage(count)}%
-                    </p>
-                  </span>
-                </div>
-              );
-            })}
+                    key={repoInfo.id + language}
+                    className="flex items-center gap-1.5"
+                  >
+                    <div
+                      className="h-2 w-2 rounded-full"
+                      style={{
+                        backgroundColor: color,
+                      }}
+                    ></div>
+                    <span className="text-xs flex gap-1.5">
+                      <p>{language} </p>
+                      <p className="text-lighter-text text-[1em]">
+                        {getPercentage(count)}%
+                      </p>
+                    </span>
+                  </div>
+                );
+              })}
         </div>
       </div>
       <div className="text-xs mt-2 self-end">

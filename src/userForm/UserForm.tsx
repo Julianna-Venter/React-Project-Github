@@ -11,13 +11,15 @@ import { getUsers } from "./Api/userFormApi";
 function UserForm() {
   const navigate = useNavigate({ from: "/profile" });
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
-  const [options, setOptions] = useState<Option[]>([]);
   const [selectedOption, setSelectedOption] =
     useState<SingleValue<Option> | null>(null);
 
-  useEffect(() => {
-    getUsers(searchTerm, setOptions);
-  }, []);
+  //tanstack/react-query hook to fetch the users
+  const { data: optionData } = useQuery({
+    queryKey: ["searchUsernames", searchTerm?.trim()],
+    queryFn: () => getUsers(searchTerm),
+    enabled: !!searchTerm, // Enable the query only when searchTerm is truthy
+  });
 
   //when the search term, or new options, have changed, check the search term
   //if it exists in the options, let the select do its own filtering. If not, fetch new options
@@ -28,29 +30,20 @@ function UserForm() {
     }
 
     let searchTermContainsInOptions = false;
-    const latestOptions = options;
+    const latestOptions = optionData;
 
-    if (searchTerm?.trim() !== "") {
-      searchTermContainsInOptions = latestOptions.some((option) =>
-        option.label
+    if (searchTerm?.trim() !== "" && latestOptions) {
+      searchTermContainsInOptions = latestOptions.some((optionData) =>
+        optionData.label
           .toLowerCase()
           .includes(searchTerm?.trim().toLowerCase() as string)
       );
 
       if (!searchTermContainsInOptions) {
-        getUsers(searchTerm, setOptions);
+        getUsers(searchTerm);
       }
-    } else {
-      setOptions([]);
     }
-  }, [searchTerm, options]);
-
-  //tanstack/react-query hook to fetch the users
-  useQuery({
-    queryKey: ["searchUsernames", searchTerm?.trim()],
-    queryFn: () => getUsers(searchTerm, setOptions),
-    enabled: false,
-  });
+  }, [searchTerm, optionData]);
 
   let timeoutId: NodeJS.Timeout;
 
@@ -101,7 +94,7 @@ function UserForm() {
                     value={selectedOption}
                     onChange={handleSelectChange}
                     onInputChange={handleInputChange}
-                    options={options}
+                    options={optionData}
                     placeholder="Enter a Username"
                   />
                 </div>

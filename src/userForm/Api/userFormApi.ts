@@ -6,11 +6,8 @@ import { Option } from "../../Models/interfaces";
 
 //populate the options array with the fetched data
 export const getUsers = async (
-  searchTerm: string | null,
-  setOptions: {
-    (value: SetStateAction<Option[]>): void;
-  }
-) => {
+  searchTerm: string | null
+): Promise<Option[] | undefined> => {
   if (searchTerm) {
     try {
       const res = await octokit.request(
@@ -28,11 +25,9 @@ export const getUsers = async (
           value: user.login,
           label: user.login,
         })) ?? [];
-      setOptions(newOptions); // Set options to the newly fetched data
       return newOptions;
     } catch (error) {
       console.error("Error fetching usernames:", error);
-      setOptions([]);
       return [];
     }
   }
