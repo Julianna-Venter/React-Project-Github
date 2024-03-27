@@ -1,39 +1,19 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { hexColors } from "../Models/data";
-import { CommitItem, LanguageData, RepoItem } from "../Models/interfaces";
-import { getBranches, getCommits, getLanguages } from "./Api/profileApi";
+import { LanguageData, RepoItem } from "../Models/interfaces";
 
 interface RepoCardProps {
   repoName: string;
   repoInfo: RepoItem;
-  sendUpLanguages: (languages: LanguageData) => void;
-  sendUpCommits: (commits: CommitItem[]) => void;
+  languageData: LanguageData | undefined | null;
+  branchNumber: number | undefined;
 }
 
 const RepoCard: React.FC<RepoCardProps> = ({
   repoName,
   repoInfo,
-  sendUpLanguages,
-  sendUpCommits,
+  languageData,
+  branchNumber,
 }) => {
-  const [branchNumber, setBranchNumber] = useState<number>();
-
-  const { data: branchData } = useQuery({
-    queryKey: ["branches", repoInfo.id],
-    queryFn: () => getBranches(repoInfo, setBranchNumber),
-  });
-
-  const { data: commitData } = useQuery({
-    queryKey: ["commits", repoInfo.id],
-    queryFn: () => getCommits(repoInfo, sendUpCommits),
-  });
-
-  const { data: languageData } = useQuery({
-    queryKey: ["languages", repoInfo.id],
-    queryFn: () => getLanguages(repoInfo, sendUpLanguages),
-  });
-
   //converting the amount of languages to a percentage
   function getPercentage(num: number): string {
     if (languageData) {

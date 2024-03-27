@@ -68,3 +68,8 @@ interface LanguageData {
 interface CommitData {
   [key: string]: number;
 }
+
+export interface LanguageObjectItem {
+  repoName: string;
+  languageData: LanguageData;
+}

@@ -3,18 +3,13 @@ import { getStats } from "./Api/profileApi";
 
 const QuickStats = ({
   repoNumber,
-  username,
+  starsNumber,
   commits,
 }: {
   repoNumber: number | undefined;
-  username: string | undefined;
+  starsNumber: number | undefined;
   commits: number | undefined;
 }) => {
-  const { data: statsData } = useQuery({
-    queryKey: ["Stats", username],
-    queryFn: () => getStats(username),
-  });
-
   return (
     <div
       id="highlightsContainer"
@@ -53,7 +48,7 @@ const QuickStats = ({
         <div className="w-full h-full flex justify-center items-center">
           <div className="flex flex-col justify-center items-center">
             <span className="text-lg lg:text-xl leading-none font-semibold">
-              {statsData}
+              {starsNumber}
             </span>
             <span className="text-xs lg:text-sm">Stars</span>
           </div>

@@ -2,20 +2,17 @@ import { hexColorsDark } from "../Models/data";
 import { LanguageData } from "../Models/interfaces";
 import "./Styles/radialStyles.css";
 interface RadialProps {
-  result: LanguageData;
-  dataReady: boolean;
+  result: LanguageData[];
 }
 
-const StatsRadial: React.FC<RadialProps> = ({ result, dataReady }) => {
+const StatsRadial: React.FC<RadialProps> = ({ result }) => {
   function getPercentage(num: number): string {
-    const total = Object.values(result).reduce((a, b) => a + b, 0);
+    if (result.length === 0) return "0"; // Prevent division by zero if result is empty
+    const total = result.reduce((acc, data) => {
+      const totalCount = Object.values(data).reduce((a, b) => a + b, 0);
+      return acc + totalCount;
+    }, 0);
     return ((num / total) * 100).toFixed(1);
-  }
-
-  if (!dataReady) {
-    // Return loading indicator or placeholder if data is not ready
-    //will be replaced with a loading spinner
-    return <div>Loading...</div>;
   }
 
   return (
@@ -24,8 +21,10 @@ const StatsRadial: React.FC<RadialProps> = ({ result, dataReady }) => {
       <div className="carousel flex gap-4 lg:justify-between lg:px-20">
         {Object.entries(result)
           .slice(0, 5)
-          .map(([language, count], index) => {
-            const color = hexColorsDark[index].color; // Get color based on index
+          .map(([language, data], index) => {
+            const count = data[Object.keys(data)[0]];
+            const languages = Object.keys(data)[0];
+            const color = hexColorsDark[index].color;
             return (
               <div key={language} className={`text-${color}`}>
                 <div
@@ -47,7 +46,7 @@ const StatsRadial: React.FC<RadialProps> = ({ result, dataReady }) => {
                       {getPercentage(count)}
                       <p className="text-xs opacity-80 font-bold ml-0.5">%</p>
                     </label>
-                    <label className="text-xs px-5">{language}</label>
+                    <label className="text-xs px-5">{languages}</label>
                   </div>
                 </div>
               </div>

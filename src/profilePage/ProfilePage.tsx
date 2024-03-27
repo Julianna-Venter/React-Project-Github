@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import Calendar from "react-github-contribution-calendar";
 import {
@@ -10,13 +10,20 @@ import {
 } from "../Models/calendarHeatmap";
 import {
   CommitData,
-  CommitItem,
   LanguageData,
+  LanguageObjectItem,
   RepoItem,
 } from "../Models/interfaces";
 import Drawer from "../Navigation/Drawer";
 import { Route } from "../routes";
-import { getProfile, getRepos } from "./Api/profileApi";
+import {
+  getBranches,
+  getCommits,
+  getLanguages,
+  getProfile,
+  getRepos,
+  getStats,
+} from "./Api/profileApi";
 import QuickStats from "./QuickStats";
 import RepoCard from "./RepoCard";
 import StatsCarousel from "./StatsCarousel";
@@ -28,14 +35,16 @@ interface RouteParams {
 
 function ProfilePage() {
   const [repoNumber, setRepoNumber] = useState<number>(0);
-  const [commitsNumber, setCommitsNumber] = useState<number>(0);
-  const [dataReady, setDataReady] = useState(false);
-  const [result, setResult] = useState<LanguageData>({});
-  const [commitsReady, setCommitsReady] = useState(false);
-  const [commits, setCommits] = useState<CommitData>({});
+  // const [commitsNumber, setCommitsNumber] = useState<number>(0);
+  // const [dataReady, setDataReady] = useState(false);
+  // const [result, setResult] = useState<LanguageData>({});
+  // const [commitsReady, setCommitsReady] = useState(false);
+  // const [commits, setCommits] = useState<CommitData>({});
+  const [branchNumber, setBranchNumber] = useState<number>();
 
   const { profileId } = Route.useParams<RouteParams>();
   const profileName = profileId;
+  let languages: LanguageObjectItem[] = [];
 
   //tanstack/react-query hook to fetch the users
   const { data: profileData } = useQuery({
@@ -48,55 +57,111 @@ function ProfilePage() {
     queryFn: () => getRepos(profileName, setRepoNumber),
   });
 
-  function giveMeLanguages(languages: LanguageData) {
-    setResult((prevResult) => {
-      // Create a copy of the previous state
-      const updatedResult = { ...prevResult };
+  const { data: starsData } = useQuery({
+    queryKey: ["Stars", profileId],
+    queryFn: () => getStats(profileId),
+  });
 
-      // Update counts or add new languages
-      for (const [language, count] of Object.entries(languages)) {
-        if (updatedResult[language]) {
-          updatedResult[language] += count;
-        } else {
-          updatedResult[language] = count;
+  const branchQueries = useQueries({
+    queries:
+      repoData?.map((repoInfo) => {
+        return {
+          queryKey: ["branch", repoInfo.id],
+          queryFn: () => getBranches(repoInfo),
+          enabled: !!repoData,
+        };
+      }) ?? [],
+  });
+
+  const commitsQueries = useQueries({
+    queries:
+      repoData?.map((repoInfo) => {
+        return {
+          queryKey: ["commits", repoInfo.id],
+          queryFn: () => getCommits(repoInfo),
+          enabled: !!repoData,
+        };
+      }) ?? [],
+  });
+
+  const languagesQueries = useQueries({
+    queries:
+      repoData?.map((repoInfo) => {
+        return {
+          queryKey: ["languages", repoInfo.id],
+          queryFn: () => getLanguages(repoInfo),
+          enabled: !!repoData,
+        };
+      }) ?? [],
+  });
+
+  let languagesQueriesData: LanguageData[] = [];
+
+  if (languagesQueries) {
+    for (const languageQuery of languagesQueries) {
+      if (languageQuery.data) {
+        for (const language in languageQuery.data) {
+          if (languageQuery.data.hasOwnProperty(language)) {
+            const count = languageQuery.data[language];
+            const existingLanguageIndex = languagesQueriesData.findIndex(
+              (item) => item.hasOwnProperty(language)
+            );
+            if (existingLanguageIndex !== -1) {
+              // Language exists, update count
+              languagesQueriesData[existingLanguageIndex][language] += count;
+            } else {
+              // Language doesn't exist, add it
+              const newLanguageData: LanguageData = {};
+              newLanguageData[language] = count;
+              languagesQueriesData.push(newLanguageData);
+            }
+          }
         }
       }
-
-      const sortedResult = Object.fromEntries(
-        Object.entries(updatedResult).sort(
-          ([, countA], [, countB]) => countB - countA
-        )
-      );
-
-      return sortedResult;
-    });
-
-    setDataReady(true);
+    }
   }
 
-  function giveMeCommits(commits: CommitItem[]) {
-    const totalCommits = commits.length;
+  let commitsData: CommitData = {};
+  let commitsNumber: number = 0;
 
-    setCommitsNumber((prevCommitsNumber) =>
-      prevCommitsNumber ? prevCommitsNumber + totalCommits : totalCommits
-    );
+  if (commitsQueries) {
+    for (const commitQuery of commitsQueries) {
+      if (commitQuery.data) {
+        for (const commit of commitQuery.data) {
+          const { date } = commit.commit.author;
+          const commitDate = new Date(date);
+          const formattedCommitDate = commitDate.toISOString().substring(0, 10);
 
-    setCommits((prevCommits) => {
-      const updatedCommits = { ...prevCommits };
+          commitsData[formattedCommitDate] =
+            (commitsData[formattedCommitDate] !== undefined
+              ? commitsData[formattedCommitDate]
+              : 0) + 1;
+        }
+        commitsNumber += commitQuery.data.length;
+      }
+    }
+  }
 
-      commits.forEach((commitItem) => {
-        const { date } = commitItem.commit.author;
-        const commitDate = new Date(date);
-        const formattedCommitDate = commitDate.toISOString().substring(0, 10);
+  function returnLanguages(repoName: string) {
+    if (languagesQueries && repoData) {
+      const index = repoData.findIndex((repo) => repo.name === repoName);
+      return languagesQueries[index].data;
+    } else {
+      const temp: LanguageData = {};
+      //Log an error
+      return {};
+    }
+  }
 
-        updatedCommits[formattedCommitDate] =
-          (updatedCommits[formattedCommitDate] || 0) + 1;
-      });
-
-      return updatedCommits;
-    });
-
-    setCommitsReady(true);
+  function returnBranches(repoName: string) {
+    if (branchQueries && repoData) {
+      const index = repoData.findIndex((repo) => repo.name === repoName);
+      return branchQueries[index].data?.length;
+    } else {
+      const temp: LanguageData = {};
+      //Log an error
+      return 0;
+    }
   }
 
   return (
@@ -128,7 +193,7 @@ function ProfilePage() {
                 </div>
               </div>
               <QuickStats
-                username={profileData?.login}
+                starsNumber={starsData}
                 repoNumber={repoNumber}
                 commits={commitsNumber}
               />
@@ -153,12 +218,14 @@ function ProfilePage() {
             </div>
           </div>
           <div className="detailsContainer w-full flex flex-col gap-5 mt-4 lg:w-5/6">
-            <StatsRadial result={result} dataReady={dataReady} />
+            {languagesQueriesData.length != 0 && (
+              <StatsRadial result={languagesQueriesData} />
+            )}
             <div className="flex flex-col m-5 lg:px-20">
-              {commitsReady ? (
+              {Object.keys(commitsData).length != 0 ? (
                 <>
                   <Calendar
-                    values={commits}
+                    values={commitsData}
                     until={until}
                     weekLabelAttributes={weekLabelAttributes}
                     monthLabelAttributes={monthLabelAttributes}
@@ -193,8 +260,8 @@ function ProfilePage() {
                     key={repo.id}
                     repoName={repo.name}
                     repoInfo={repo}
-                    sendUpLanguages={giveMeLanguages}
-                    sendUpCommits={giveMeCommits}
+                    branchNumber={returnBranches(repo.name)}
+                    languageData={returnLanguages(repo.name)}
                   />
                 ))}
             </div>
