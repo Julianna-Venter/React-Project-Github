@@ -4,8 +4,6 @@ import { hexColors } from "../Models/data";
 import { CommitItem, LanguageData, RepoItem } from "../Models/interfaces";
 import { getBranches, getCommits, getLanguages } from "./Api/profileApi";
 
-import { v4 as uuidv4 } from "uuid";
-
 interface RepoCardProps {
   repoName: string;
   repoInfo: RepoItem;
@@ -130,7 +128,7 @@ const RepoCard: React.FC<RepoCardProps> = ({
               .slice(0, 8)
               .map(([language, count]: [string, number], index: number) => {
                 const color = hexColors[index].color;
-                const uniqueKey = `${repoInfo.id}_${uuidv4()}`;
+                const uniqueKey = `${repoInfo.id}_${repoInfo.name}_${language}`;
                 return (
                   <div
                     key={`${uniqueKey}`}
