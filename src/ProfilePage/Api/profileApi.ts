@@ -16,7 +16,7 @@ export const getCommits = async (repoInfo: RepoItem): Promise<CommitItem[]> => {
     const commitsUrl = `https://api.github.com/repos/${repoInfo.full_name}/commits`;
     const commitsData = await getPaginatedData(commitsUrl);
 
-    const newCommits = commitsData.map((commit: any) => ({
+    const newCommits = commitsData.map((commit: CommitItem) => ({
       sha: commit.sha,
       commit: commit.commit,
       parents: commit.parents,
@@ -69,7 +69,7 @@ export const getBranches = async (
     const branchesUrl = `https://api.github.com/repos/${repoInfo.full_name}/branches`;
     const branchesData = await getPaginatedData(branchesUrl);
 
-    const newBranches = branchesData.map((branch: any) => ({
+    const newBranches = branchesData.map((branch: BranchInfo) => ({
       name: branch.name,
       protected: branch.protected,
     }));

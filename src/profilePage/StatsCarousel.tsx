@@ -1,11 +1,9 @@
 const StatsCarousel = ({
   followers,
   following,
-  url,
 }: {
   followers: number | undefined;
   following: number | undefined;
-  url: string | undefined;
 }) => {
   return (
     <div id="carousel" className="carousel flex gap-4 text-dark-text">

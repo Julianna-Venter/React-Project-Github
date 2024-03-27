@@ -1,6 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
-import { getStats } from "./Api/profileApi";
-
 const QuickStats = ({
   repoNumber,
   starsNumber,

@@ -35,16 +35,8 @@ interface RouteParams {
 
 function ProfilePage() {
   const [repoNumber, setRepoNumber] = useState<number>(0);
-  // const [commitsNumber, setCommitsNumber] = useState<number>(0);
-  // const [dataReady, setDataReady] = useState(false);
-  // const [result, setResult] = useState<LanguageData>({});
-  // const [commitsReady, setCommitsReady] = useState(false);
-  // const [commits, setCommits] = useState<CommitData>({});
-  const [branchNumber, setBranchNumber] = useState<number>();
-
   const { profileId } = Route.useParams<RouteParams>();
   const profileName = profileId;
-  let languages: LanguageObjectItem[] = [];
 
   //tanstack/react-query hook to fetch the users
   const { data: profileData } = useQuery({
@@ -119,6 +111,11 @@ function ProfilePage() {
         }
       }
     }
+    languagesQueriesData.sort((a, b) => {
+      const countA = Object.values(a)[0];
+      const countB = Object.values(b)[0];
+      return countB - countA;
+    });
   }
 
   let commitsData: CommitData = {};
@@ -148,7 +145,7 @@ function ProfilePage() {
       return languagesQueries[index].data;
     } else {
       const temp: LanguageData = {};
-      //Log an error
+      //Log an error here later
       return {};
     }
   }
@@ -159,7 +156,7 @@ function ProfilePage() {
       return branchQueries[index].data?.length;
     } else {
       const temp: LanguageData = {};
-      //Log an error
+      //Log an error here later
       return 0;
     }
   }
@@ -213,7 +210,6 @@ function ProfilePage() {
               <StatsCarousel
                 followers={profileData?.followers}
                 following={profileData?.following}
-                url={profileData?.organizations_url}
               />
             </div>
           </div>

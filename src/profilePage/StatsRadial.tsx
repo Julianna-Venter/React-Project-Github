@@ -7,7 +7,7 @@ interface RadialProps {
 
 const StatsRadial: React.FC<RadialProps> = ({ result }) => {
   function getPercentage(num: number): string {
-    if (result.length === 0) return "0"; // Prevent division by zero if result is empty
+    if (result.length === 0) return "0";
     const total = result.reduce((acc, data) => {
       const totalCount = Object.values(data).reduce((a, b) => a + b, 0);
       return acc + totalCount;

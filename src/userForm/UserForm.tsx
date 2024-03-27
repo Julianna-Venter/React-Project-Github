@@ -18,12 +18,13 @@ function UserForm() {
   const { data: optionData } = useQuery({
     queryKey: ["searchUsernames", searchTerm?.trim()],
     queryFn: () => getUsers(searchTerm),
-    enabled: !!searchTerm, // Enable the query only when searchTerm is truthy
+    enabled: !!searchTerm,
   });
 
   //when the search term, or new options, have changed, check the search term
   //if it exists in the options, let the select do its own filtering. If not, fetch new options
   //if there is nothing typed yet, keep the array empty
+  //this logic is curently being reworked on another branch for better efficiency when searching
   useEffect(() => {
     if (searchTerm?.trim() === "" || searchTerm === null) {
       return;
