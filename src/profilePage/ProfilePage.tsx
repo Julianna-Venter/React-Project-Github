@@ -8,12 +8,7 @@ import {
   until,
   weekLabelAttributes,
 } from "../Models/calendarHeatmap";
-import {
-  CommitData,
-  LanguageData,
-  LanguageObjectItem,
-  RepoItem,
-} from "../Models/interfaces";
+import { CommitData, LanguageData, RepoItem } from "../Models/interfaces";
 import Drawer from "../Navigation/Drawer";
 import { Route } from "../routes";
 import {
@@ -40,7 +35,7 @@ function ProfilePage() {
 
   //tanstack/react-query hook to fetch the users
   const { data: profileData } = useQuery({
-    queryKey: [profileName?.trim()],
+    queryKey: [profileName],
     queryFn: () => getProfile(profileName),
   });
 
