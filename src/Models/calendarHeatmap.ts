@@ -11,7 +11,7 @@ export const weekLabelAttributes = {
     fill: "#566",
   },
 };
-export let monthLabelAttributes = {
+export const monthLabelAttributes = {
   style: {
     textDecoration: "none",
     fontSize: 10,
@@ -20,7 +20,7 @@ export let monthLabelAttributes = {
   },
 };
 
-export let panelColors = [
+export const panelColors = [
   "#DDD",
   "#7fb1eb",
   "#5a9ae5",
