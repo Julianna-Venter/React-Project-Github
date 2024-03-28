@@ -163,6 +163,9 @@ export const getProfile = async (profileName: string): Promise<ProfileItem> => {
   }
 };
 
+//TODO: rewrite this with explicit typing later
+//Got these functions from the github docs
+//https://docs.github.com/en/rest/using-the-rest-api/using-pagination-in-the-rest-api?apiVersion=2022-11-28
 async function getPaginatedData(url: string) {
   const nextPattern = /(?<=<)([\S]*)(?=>; rel="next")/i;
   let pagesRemaining: string | boolean | undefined = true;
