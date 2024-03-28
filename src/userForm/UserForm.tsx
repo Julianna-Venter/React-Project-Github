@@ -4,83 +4,47 @@ import { useNavigate } from "@tanstack/react-router";
 import { Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import Select, { SingleValue } from "react-select";
-import { octokit } from "../../environment/apiKey";
 import { Option } from "../Models/interfaces";
 import Drawer from "../Navigation/Drawer";
+import { getUsers } from "./Api/userFormApi";
 
 function UserForm() {
   const navigate = useNavigate({ from: "/profile" });
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
-  const [options, setOptions] = useState<Option[]>([]);
   const [selectedOption, setSelectedOption] =
     useState<SingleValue<Option> | null>(null);
 
-  useEffect(() => {
-    getUsers();
-  }, []);
+  //tanstack/react-query hook to fetch the users
+  const { data: optionData } = useQuery({
+    queryKey: ["searchUsernames", searchTerm?.trim()],
+    queryFn: () => getUsers(searchTerm),
+    enabled: !!searchTerm,
+  });
 
   //when the search term, or new options, have changed, check the search term
   //if it exists in the options, let the select do its own filtering. If not, fetch new options
   //if there is nothing typed yet, keep the array empty
+  //this logic is curently being reworked on another branch for better efficiency when searching
   useEffect(() => {
     if (searchTerm?.trim() === "" || searchTerm === null) {
       return;
     }
 
     let searchTermContainsInOptions = false;
-    const latestOptions = options;
+    const latestOptions = optionData;
 
-    if (searchTerm?.trim() !== "") {
-      searchTermContainsInOptions = latestOptions.some((option) =>
-        option.label
+    if (searchTerm?.trim() !== "" && latestOptions) {
+      searchTermContainsInOptions = latestOptions.some((optionData) =>
+        optionData.label
           .toLowerCase()
           .includes(searchTerm?.trim().toLowerCase() as string)
       );
 
       if (!searchTermContainsInOptions) {
-        getUsers();
-      }
-    } else {
-      setOptions([]);
-    }
-  }, [searchTerm, options]);
-
-  //fetch the users from the github api
-  //populate the options array with the fetched data
-  const getUsers = async () => {
-    if (searchTerm) {
-      try {
-        const res = await octokit.request(
-          `GET https://api.github.com/search/users?q=${searchTerm?.trim()}&per_page=100`
-        );
-        let data: any;
-        if (res.status === 200) {
-          data = res.data;
-        } else {
-          // Handle errors appropriately
-          console.error("Request failed with status:", res.status);
-        }
-        const newOptions =
-          data?.items?.map((user: { login: string }) => ({
-            value: user.login,
-            label: user.login,
-          })) ?? [];
-        setOptions(newOptions); // Set options to the newly fetched data
-        return newOptions;
-      } catch (error) {
-        console.error("Error fetching usernames:", error);
-        setOptions([]);
-        return [];
+        getUsers(searchTerm);
       }
     }
-  };
-
-  //tanstack/react-query hook to fetch the users
-  useQuery({
-    queryKey: ["searchUsernames", searchTerm?.trim()],
-    queryFn: getUsers,
-    enabled: false,
-  });
+  }, [searchTerm, optionData]);
 
   let timeoutId: NodeJS.Timeout;
 
@@ -118,10 +82,9 @@ function UserForm() {
           <Formik
             initialValues={{ username: "", rememberMe: false }}
             onSubmit={(values, { setSubmitting }) => {
-              // Reset the form
-              navigate({ to: "/profile" });
-              //for future use
-              //navigate({ to: '/posts/$postId', params: { postId } })
+              let profileId = selectedOption?.value;
+
+              navigate({ to: "/profile/$profileId", params: { profileId } });
               setSubmitting(false);
             }}
           >
@@ -132,7 +95,7 @@ function UserForm() {
                     value={selectedOption}
                     onChange={handleSelectChange}
                     onInputChange={handleInputChange}
-                    options={options}
+                    options={optionData}
                     placeholder="Enter a Username"
                   />
                 </div>

@@ -11,18 +11,18 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as ProfileImport } from './routes/profile'
 import { Route as IndexImport } from './routes/index'
+import { Route as ProfileProfileIdImport } from './routes/profile/$profileId'
 
 // Create/Update Routes
 
-const ProfileRoute = ProfileImport.update({
-  path: '/profile',
+const IndexRoute = IndexImport.update({
+  path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
-  path: '/',
+const ProfileProfileIdRoute = ProfileProfileIdImport.update({
+  path: '/profile/$profileId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -34,8 +34,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/profile': {
-      preLoaderRoute: typeof ProfileImport
+    '/profile/$profileId': {
+      preLoaderRoute: typeof ProfileProfileIdImport
       parentRoute: typeof rootRoute
     }
   }
@@ -43,6 +43,9 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([IndexRoute, ProfileRoute])
+export const routeTree = rootRoute.addChildren([
+  IndexRoute,
+  ProfileProfileIdRoute,
+])
 
 /* prettier-ignore-end */
