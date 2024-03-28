@@ -35,7 +35,8 @@ function ProfilePage() {
   const profileName = profileId;
 
   //tanstack/react-query hook to fetch the users
-  const { data: profileData } = useQuery({
+  const { data: profileDat
+    a } = useQuery({
     queryKey: [profileName],
     queryFn: () => getProfile(profileName),
   });
