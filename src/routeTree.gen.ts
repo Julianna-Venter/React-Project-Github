@@ -10,44 +10,54 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as ErrorImport } from './routes/error'
-import { Route as IndexImport } from './routes/index'
-import { Route as ProfileProfileIdImport } from './routes/profile/$profileId'
+import { Route as rootRoute } from "./routes/__root";
+import { Route as NoDataImport } from "./routes/noData";
+import { Route as ErrorImport } from "./routes/error";
+import { Route as IndexImport } from "./routes/index";
+import { Route as ProfileProfileIdImport } from "./routes/profile/$profileId";
 
 // Create/Update Routes
 
-const ErrorRoute = ErrorImport.update({
-  path: '/error',
+const NoDataRoute = NoDataImport.update({
+  path: "/noData",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
+
+const ErrorRoute = ErrorImport.update({
+  path: "/error",
+  getParentRoute: () => rootRoute,
+} as any);
 
 const IndexRoute = IndexImport.update({
-  path: '/',
+  path: "/",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const ProfileProfileIdRoute = ProfileProfileIdImport.update({
-  path: '/profile/$profileId',
+  path: "/profile/$profileId",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 // Populate the FileRoutesByPath interface
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/error': {
-      preLoaderRoute: typeof ErrorImport
-      parentRoute: typeof rootRoute
-    }
-    '/profile/$profileId': {
-      preLoaderRoute: typeof ProfileProfileIdImport
-      parentRoute: typeof rootRoute
-    }
+    "/": {
+      preLoaderRoute: typeof IndexImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/error": {
+      preLoaderRoute: typeof ErrorImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/noData": {
+      preLoaderRoute: typeof NoDataImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/profile/$profileId": {
+      preLoaderRoute: typeof ProfileProfileIdImport;
+      parentRoute: typeof rootRoute;
+    };
   }
 }
 
@@ -56,7 +66,8 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   ErrorRoute,
+  NoDataRoute,
   ProfileProfileIdRoute,
-])
+]);
 
 /* prettier-ignore-end */

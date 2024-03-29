@@ -42,10 +42,21 @@ function ProfilePage() {
   const profileName = profileId;
 
   //tanstack/react-query hook to fetch the users
-  const { data: profileData, isError: isProfileError } = useQuery({
+  const {
+    data: profileData,
+    isError: isProfileError,
+    isPending,
+    isLoading,
+  } = useQuery({
     queryKey: [profileId],
     queryFn: () => getProfile(profileName),
   });
+
+  if (!profileData && (isPending || isLoading)) {
+    setTimeout(function () {
+      navigate({ to: "/noData" });
+    }, 10000);
+  }
 
   let { data: repoData, isError: isReposError } = useQuery({
     queryKey: ["Repos", profileId],
