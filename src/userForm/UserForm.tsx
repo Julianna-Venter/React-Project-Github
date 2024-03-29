@@ -7,14 +7,15 @@ import Select, { SingleValue } from "react-select";
 import { Option } from "../models/interfaces";
 import Drawer from "../navigation/Drawer";
 import { getUsers } from "./Api/userFormApi";
+import { useUserStore } from "./store";
 
 function UserForm() {
   const navigate = useNavigate({ from: "/profile" });
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
   const [selectedOption, setSelectedOption] =
     useState<SingleValue<Option> | null>(null);
-  const iDB = window.indexedDB;
-  const request = iDB.open("UserFormDatabase", 1);
+
+  const addUser = useUserStore((state) => state.addUser);
 
   //tanstack/react-query hook to fetch the users
   const { data: optionData } = useQuery({
@@ -45,10 +46,10 @@ function UserForm() {
         }
       }
       if (!matchSearchTerm) {
-        console.log("cannot find in options, fetching...");
+        // console.log("cannot find in options, fetching...");
         getUsers(searchTerm);
       } else {
-        console.log("found in options");
+        // console.log("found in options");
       }
     }
   }, [searchTerm, optionData]);
@@ -66,18 +67,6 @@ function UserForm() {
 
   const handleSelectChange = (selectedOption: SingleValue<Option>) => {
     setSelectedOption(selectedOption as SingleValue<Option>);
-  };
-
-  //IdexedDB functions
-  request.onerror = function (event) {
-    console.error("Database error: ", event);
-  };
-
-  request.onupgradeneeded = function () {
-    const db = request.result;
-    const objectStore = db.createObjectStore("users", { keyPath: "id" });
-    objectStore.createIndex("username", "username", { unique: true });
-    objectStore.createIndex("bookmarked", "bookmarked", { unique: false });
   };
 
   return (
@@ -103,40 +92,15 @@ function UserForm() {
             onSubmit={(values, { setSubmitting }) => {
               let profileId = selectedOption?.value;
 
-              const request = indexedDB.open("UserFormDatabase", 1);
+              if (values.rememberMe && profileId) {
+                addUser(profileId);
+              }
 
-              request.onerror = function (event) {
-                console.error("Database error: ", event);
-              };
-
-              request.onsuccess = function () {
-                const db = request.result;
-                const transaction = db.transaction("users", "readwrite");
-                const store = transaction.objectStore("users");
-
-                // Add or update user data in IndexedDB
-                if (values.rememberMe) {
-                  store.put({
-                    id: profileId,
-                    username: profileId,
-                    bookmarked: false,
-                  });
-                }
-
-                // Wait for IndexedDB operation to complete
-                transaction.oncomplete = function () {
-                  // Perform navigation after IndexedDB operation finishes
-                  navigate({
-                    to: `/profile/${profileId}`,
-                    params: { profileId },
-                  });
-                  setSubmitting(false);
-                };
-
-                transaction.onerror = function (event) {
-                  console.error("Transaction error: ", event);
-                };
-              };
+              navigate({
+                to: `/profile/${profileId}`,
+                params: { profileId },
+              });
+              setSubmitting(false);
             }}
           >
             {({ isSubmitting }) => (

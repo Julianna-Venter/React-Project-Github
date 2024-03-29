@@ -1,139 +1,32 @@
 import { cilSearch } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { IndexedDBItem } from "../Models/interfaces";
 import { Route } from "../routes";
+import { useUserStore } from "../userForm/store";
 
 interface RouteParams {
   profileId: string;
 }
 
 const Drawer = ({ username }: { username: string }) => {
-  const [userArray, setUserArray] = useState<IndexedDBItem[]>([]);
-  const [isBookmarked, setIsBookmarked] = useState(false);
-  const [usernames, setUsername] = useState<string>("");
-  const [disable, setDisable] = useState<boolean>(false);
-
   const { profileId } = Route.useParams<RouteParams>();
 
-  useEffect(() => {
-    setUsername(profileId);
-    const request = indexedDB.open("UserFormDatabase", 1);
+  const users = useUserStore((state) => state.users);
+  const bookmarked = useUserStore((state) => state.bookmarked);
+  const setBookmarked = useUserStore((state) => state.setBookmarked);
+  const removeBookmarked = useUserStore((state) => state.removeBookmarked);
+  const removeUser = useUserStore((state) => state.removeUser);
+  const isBookmarked = useUserStore((state) => state.isBookmarked);
+  const addUser = useUserStore((state) => state.addUser);
 
-    request.onerror = function (event) {
-      console.error("Database error: ", event);
-    };
-
-    request.onsuccess = function () {
-      const db = request.result;
-      const transaction = db.transaction("users", "readwrite");
-      const store = transaction.objectStore("users");
-
-      const getRequest = store.getAll();
-
-      getRequest.onsuccess = function () {
-        setUserArray(getRequest.result);
-      };
-
-      getRequest.onerror = function () {
-        console.error("Request error", getRequest.error);
-      };
-    };
-
-    for (const user of userArray) {
-      console.log(user);
-      if (user.bookmarked === true && user.username !== profileId) {
-        setDisable(true);
-        console.log("disable");
-      }
-    }
-
-    const bookmarkIcon = document.getElementById("bookmarkIcon");
-    const bookmarkIconSolid = document.getElementById("bookmarkIconSolid");
-
-    bookmarkIcon?.addEventListener("click", handleBookmarkIconClick);
-    bookmarkIconSolid?.addEventListener("click", handleBookmarkIconSolidClick);
-
-    return () => {
-      bookmarkIcon?.removeEventListener("click", handleBookmarkIconClick);
-      bookmarkIconSolid?.removeEventListener(
-        "click",
-        handleBookmarkIconSolidClick
-      );
-    };
-  }, [profileId]);
-
-  useEffect(() => {
-    const currentUser = userArray.find((user) => user.username === username);
-    if (currentUser) {
-      setIsBookmarked(currentUser.bookmarked);
-    }
-  }, [userArray, username]);
-
-  const handleBookmarkIconClick = () => {
-    setDisable(true);
-    setIsBookmarked(!isBookmarked);
-
-    const request = indexedDB.open("UserFormDatabase", 1);
-    request.onerror = function (event) {
-      console.error("Database error: ", event);
-    };
-
-    request.onsuccess = function () {
-      const db = request.result;
-      const transaction = db.transaction("users", "readwrite");
-      const store = transaction.objectStore("users");
-
-      store.put({
-        id: username,
-        username: username,
-        bookmarked: true,
-      });
-
-      const getRequest = store.getAll();
-
-      getRequest.onsuccess = function () {
-        setUserArray(getRequest.result);
-      };
-
-      getRequest.onerror = function () {
-        console.error("Request error", getRequest.error);
-      };
-    };
+  const handleBookmarking = () => {
+    setBookmarked(profileId);
+    removeUser(profileId);
   };
 
-  const handleBookmarkIconSolidClick = () => {
-    setDisable(false);
-    console.log(username);
-    setIsBookmarked(!isBookmarked);
-
-    const request = indexedDB.open("UserFormDatabase", 1);
-    request.onerror = function (event) {
-      console.error("Database error: ", event);
-    };
-
-    request.onsuccess = function () {
-      const db = request.result;
-      const transaction = db.transaction("users", "readwrite");
-      const store = transaction.objectStore("users");
-
-      store.put({
-        id: username,
-        username: username,
-        bookmarked: false,
-      });
-
-      const getRequest = store.getAll();
-
-      getRequest.onsuccess = function () {
-        setUserArray(getRequest.result);
-      };
-
-      getRequest.onerror = function () {
-        console.error("Request error", getRequest.error);
-      };
-    };
+  const handleRemovingBookamrk = () => {
+    removeBookmarked();
+    addUser(profileId);
   };
 
   return (
@@ -200,7 +93,8 @@ const Drawer = ({ username }: { username: string }) => {
               id="bookmarkIcon"
               tabIndex={0}
               role="button"
-              className={`btn btn-ghost btn-circle ${isBookmarked ? "hidden" : ""} ${!disable ? "" : "hidden"}`}
+              onClick={handleBookmarking}
+              className={`btn btn-ghost btn-circle ${isBookmarked(profileId) ? "hidden" : ""} ${!isBookmarked(profileId) && bookmarked != "" ? "hidden" : ""}`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -222,7 +116,8 @@ const Drawer = ({ username }: { username: string }) => {
               id="bookmarkIconSolid"
               tabIndex={0}
               role="button"
-              className={`btn btn-ghost btn-circle ${isBookmarked ? "" : "hidden"} ${!disable ? "" : "hidden"}`}
+              onClick={handleRemovingBookamrk}
+              className={`btn btn-ghost btn-circle ${isBookmarked(profileId) ? "" : "hidden"} ${!isBookmarked(profileId) && bookmarked != "hidden" ? "" : ""}`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -242,7 +137,7 @@ const Drawer = ({ username }: { username: string }) => {
               id="bookmarkIconClosed"
               tabIndex={0}
               role="button"
-              className={`btn btn-ghost btn-circle ${disable ? "" : "hidden"}`}
+              className={`btn btn-ghost btn-circle ${!isBookmarked(profileId) && bookmarked != "" ? "" : "hidden"}`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -280,42 +175,41 @@ const Drawer = ({ username }: { username: string }) => {
                   Bookmarked
                 </summary>
                 <ul className="text-lg">
-                  {userArray
-                    .filter((user) => user.bookmarked)
-                    .map((user) => (
-                      <li
-                        key={user.id}
-                        className="cursor-pointer flex flex-row justify-between items-center gap-2"
+                  {bookmarked != "" ? (
+                    <li className="cursor-pointer flex flex-row justify-between items-center gap-2">
+                      <Link
+                        to="/profile/$profileId"
+                        params={{
+                          profileId: bookmarked,
+                        }}
                       >
-                        <Link
-                          to="/profile/$profileId"
-                          params={{
-                            profileId: user.username,
-                          }}
+                        {bookmarked}
+                      </Link>
+                      <div
+                        id="bookmarkIcon"
+                        tabIndex={0}
+                        role="button"
+                        className="btn btn-ghost btn-circle"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="w-6 h-6"
                         >
-                          {user.username}
-                        </Link>
-                        <div
-                          id="bookmarkIcon"
-                          tabIndex={0}
-                          role="button"
-                          className="btn btn-ghost btn-circle"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="w-6 h-6"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z"
-                              clipRule="evenodd"
-                            />
-                          </svg>{" "}
-                        </div>
-                      </li>
-                    ))}
+                          <path
+                            fillRule="evenodd"
+                            d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z"
+                            clipRule="evenodd"
+                          />
+                        </svg>{" "}
+                      </div>
+                    </li>
+                  ) : (
+                    <li className="text-xs text-lighter-text font-thin">
+                      <span>No Bookmarked Users</span>
+                    </li>
+                  )}
                 </ul>
               </details>
             </li>
@@ -325,20 +219,18 @@ const Drawer = ({ username }: { username: string }) => {
                   Users
                 </summary>
                 <ul className="text-lg">
-                  {userArray
-                    .filter((user) => !user.bookmarked)
-                    .map((user) => (
-                      <li key={user.id} className="cursor-pointer">
-                        <Link
-                          to="/profile/$profileId"
-                          params={{
-                            profileId: user.username,
-                          }}
-                        >
-                          {user.username}
-                        </Link>
-                      </li>
-                    ))}
+                  {users.map((user) => (
+                    <li key={user} className="cursor-pointer">
+                      <Link
+                        to="/profile/$profileId"
+                        params={{
+                          profileId: user,
+                        }}
+                      >
+                        {user}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </details>
             </li>

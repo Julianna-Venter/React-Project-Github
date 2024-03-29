@@ -32,6 +32,7 @@ export interface RepoItem {
   open_issues_count: number;
   default_branch: string;
   stargazers_count: number;
+  size: number;
 }
 
 export interface BranchInfo {
