@@ -70,12 +70,6 @@ export interface CommitData {
   [key: string]: number;
 }
 
-export interface IndexedDBItem {
-  id: string;
-  username: string;
-  bookmarked: boolean;
-}
-
 export interface LanguageObjectItem {
   repoName: string;
   languageData: LanguageData;
