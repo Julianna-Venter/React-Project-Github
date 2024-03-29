@@ -29,6 +29,10 @@ const Drawer = ({ username }: { username: string }) => {
     addUser(profileId);
   };
 
+  const handleRemoveUser = (user: string) => {
+    removeUser(user);
+  };
+
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
@@ -94,7 +98,7 @@ const Drawer = ({ username }: { username: string }) => {
               tabIndex={0}
               role="button"
               onClick={handleBookmarking}
-              className={`btn btn-ghost btn-circle ${isBookmarked(profileId) ? "hidden" : ""} ${!isBookmarked(profileId) && bookmarked != "" ? "hidden" : ""}`}
+              className={`btn btn-ghost btn-circle ${isBookmarked(profileId) ? "hidden" : ""} ${!isBookmarked(profileId) && bookmarked != "" ? "hidden" : ""} cursor-pointer`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -117,7 +121,7 @@ const Drawer = ({ username }: { username: string }) => {
               tabIndex={0}
               role="button"
               onClick={handleRemovingBookamrk}
-              className={`btn btn-ghost btn-circle ${isBookmarked(profileId) ? "" : "hidden"} ${!isBookmarked(profileId) && bookmarked != "hidden" ? "" : ""}`}
+              className={`btn btn-ghost btn-circle ${isBookmarked(profileId) ? "" : "hidden"} ${!isBookmarked(profileId) && bookmarked != "hidden" ? "" : ""} cursor-pointer`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +141,7 @@ const Drawer = ({ username }: { username: string }) => {
               id="bookmarkIconClosed"
               tabIndex={0}
               role="button"
-              className={`btn btn-ghost btn-circle ${!isBookmarked(profileId) && bookmarked != "" ? "" : "hidden"}`}
+              className={`btn btn-ghost btn-circle ${!isBookmarked(profileId) && bookmarked != "" ? "" : "hidden"} cursor-pointer`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -220,7 +224,10 @@ const Drawer = ({ username }: { username: string }) => {
                 </summary>
                 <ul className="text-lg">
                   {users.map((user) => (
-                    <li key={user} className="cursor-pointer">
+                    <li
+                      key={user}
+                      className="flex flex-row justify-between items-center gap-2"
+                    >
                       <Link
                         to="/profile/$profileId"
                         params={{
@@ -229,6 +236,23 @@ const Drawer = ({ username }: { username: string }) => {
                       >
                         {user}
                       </Link>
+                      {/* close icon */}
+                      <div onClick={() => handleRemoveUser(user)}>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={3.5}
+                          stroke="currentColor"
+                          className="w-4 h-4 hover:text-red-600"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M6 18 18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </div>
                     </li>
                   ))}
                 </ul>

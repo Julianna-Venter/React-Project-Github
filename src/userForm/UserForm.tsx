@@ -46,13 +46,10 @@ function UserForm() {
         }
       }
       if (!matchSearchTerm) {
-        // console.log("cannot find in options, fetching...");
         getUsers(searchTerm);
-      } else {
-        // console.log("found in options");
       }
     }
-  }, [searchTerm, optionData]);
+  }, [searchTerm]);
 
   let timeoutId: NodeJS.Timeout;
 
@@ -112,6 +109,9 @@ function UserForm() {
                     onInputChange={handleInputChange}
                     options={optionData}
                     placeholder="Enter a Username"
+                    noOptionsMessage={() =>
+                      (optionData ? "No results found" : "Loading...") || ""
+                    }
                   />
                 </div>
                 <label className="text-dark-text text-sm">

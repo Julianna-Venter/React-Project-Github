@@ -26,9 +26,14 @@ export const useUserStore = create<UserStore>((set, get) => ({
 
   addUser: (user) => {
     set((state) => {
-      const updatedUsers = [...state.users, user];
-      localStorage.setItem("users", JSON.stringify(updatedUsers));
-      return { users: updatedUsers };
+      const userExists =
+        state.users.includes(user) || state.bookmarked === user;
+      if (!userExists) {
+        const updatedUsers = [...state.users, user];
+        localStorage.setItem("users", JSON.stringify(updatedUsers));
+        return { users: updatedUsers };
+      }
+      return state;
     });
   },
 
