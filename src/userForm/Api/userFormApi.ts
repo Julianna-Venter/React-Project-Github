@@ -13,8 +13,6 @@ export const getUsers = async (
         `GET https://api.github.com/search/users?q=${searchTerm?.trim()}&per_page=100`
       );
 
-      console.log("fetching...");
-
       if (res.status === 200) {
         const data = res.data;
         const newOptions =

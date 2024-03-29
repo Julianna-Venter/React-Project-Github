@@ -2,7 +2,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { Field, Form, Formik } from "formik";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Select, { SingleValue } from "react-select";
 import { Option } from "../models/interfaces";
 import Drawer from "../navigation/Drawer";
@@ -24,33 +24,6 @@ function UserForm() {
     enabled: !!searchTerm,
   });
 
-  //when the search term, or new options, have changed, check the search term
-  //if it exists in the options, let the select do its own filtering. If not, fetch new options
-  //if there is nothing typed yet, keep the array empty
-  //this logic is curently being reworked on another branch for better efficiency when searching
-  useEffect(() => {
-    if (searchTerm?.trim() === "" || searchTerm === null) {
-      return;
-    }
-
-    const latestOptions = optionData;
-    let matchSearchTerm = false;
-
-    if (searchTerm?.trim() !== "" && latestOptions) {
-      for (const option of latestOptions) {
-        let searchOption = option.label;
-        const result = searchOption.includes(searchTerm);
-        if (result) {
-          matchSearchTerm = true;
-          break;
-        }
-      }
-      if (!matchSearchTerm) {
-        getUsers(searchTerm);
-      }
-    }
-  }, [searchTerm]);
-
   let timeoutId: NodeJS.Timeout;
 
   //handle the input change, use debounce to wait for the user to stop typing, then only search
@@ -58,7 +31,13 @@ function UserForm() {
     clearTimeout(timeoutId);
 
     timeoutId = setTimeout(() => {
-      setSearchTerm(inputValue);
+      const existingOption = optionData?.find((option: Option) =>
+        option.label.includes(inputValue)
+      );
+
+      if (!existingOption) {
+        setSearchTerm(inputValue);
+      }
     }, 300);
   };
 
