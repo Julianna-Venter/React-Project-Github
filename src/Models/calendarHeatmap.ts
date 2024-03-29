@@ -1,23 +1,33 @@
-export let values = {
-  "2016-03-12": 6,
-  "2016-06-23": 1,
-  "2016-06-26": 2,
-  "2016-06-27": 3,
-  "2016-06-28": 4,
-  "2016-06-29": 4,
-};
-export let until = "2016-06-30";
+const currentDate = new Date();
+export const until = currentDate.toISOString().substring(0, 10);
+
 export const panelAttributes = { rx: 3, ry: 3 };
-export let weekLabelAttributes = {
+export const weekLabelAttributes = {
   rotate: 0,
-};
-export let monthLabelAttributes = {
   style: {
     textDecoration: "none",
     fontSize: 10,
     alignmentBaseline: "central",
-    fill: "#AAA",
+    fill: "#566",
+  },
+};
+export const monthLabelAttributes = {
+  style: {
+    textDecoration: "none",
+    fontSize: 10,
+    alignmentBaseline: "central",
+    fill: "#566",
   },
 };
 
-export let panelColors = ["#DDD", "#F78A23", "#F87D09", "#AC5808", "#7B3F06"];
+export const panelColors = [
+  "#DDD",
+  "#7fb1eb",
+  "#5a9ae5",
+  "#3584df",
+  "#206fca",
+  "#1a5ba5",
+  "#144680",
+  "#0f325c",
+  "#091e37",
+];

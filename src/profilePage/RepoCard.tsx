@@ -1,10 +1,31 @@
+import { hexColors } from "../Models/data";
+import { LanguageData, RepoItem } from "../Models/interfaces";
+
 interface RepoCardProps {
   repoName: string;
+  repoInfo: RepoItem;
+  languageData: LanguageData | undefined | null;
+  branchNumber: number | undefined;
 }
 
-const RepoCard: React.FC<RepoCardProps> = ({ repoName }) => {
+const RepoCard: React.FC<RepoCardProps> = ({
+  repoName,
+  repoInfo,
+  languageData,
+  branchNumber,
+}) => {
+  //converting the amount of languages to a percentage
+  function getPercentage(num: number): string {
+    if (languageData) {
+      const total = Object.values(languageData).reduce((a, b) => a + b, 0);
+      return ((num / total) * 100).toFixed(2);
+    } else {
+      return "0";
+    }
+  }
+
   return (
-    <div className="w-full h-[9.375rem] bg-off-white rounded-xl shadow-4xl p-3 flex flex-col justify-center text-dark-text">
+    <div className="w-full h-fit bg-off-white rounded-xl shadow-4xl p-3 flex flex-col justify-center text-dark-text">
       <div className="flex justify-between items-center mb-1">
         <div className="flex justify-center items-center">
           <svg
@@ -22,7 +43,7 @@ const RepoCard: React.FC<RepoCardProps> = ({ repoName }) => {
           <label>{repoName}</label>
         </div>
         <div className="badge bg-off-white flex gap-2">
-          <span>Public</span>
+          <span>{repoInfo.private ? "Private" : "Public"}</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -47,7 +68,7 @@ const RepoCard: React.FC<RepoCardProps> = ({ repoName }) => {
 
       <div className="flex justify-between items-center mb-5">
         <div id="branches" className="flex justify-center items-center gap-1">
-          <span>3</span>
+          <span>{branchNumber}</span>
           <svg
             aria-hidden="true"
             focusable="false"
@@ -62,7 +83,7 @@ const RepoCard: React.FC<RepoCardProps> = ({ repoName }) => {
           </svg>
         </div>
         <div id="stars" className="flex justify-center items-center gap-1">
-          <span>0</span>
+          <span>{repoInfo.stargazers_count}</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -82,15 +103,61 @@ const RepoCard: React.FC<RepoCardProps> = ({ repoName }) => {
 
       <div id="usageBar">
         <div className="w-full bg-dark-off-white rounded-full h-1.5 flex overflow-hidden">
-          <div className="bg-primary-blue  h-1.5 w-[70%]"></div>
-          <div className="bg-secondary-orange  h-1.5 w-[20%]"></div>
+          {languageData &&
+            Object.entries(languageData)
+              .slice(0, 8)
+              .map(([language, count]: [string, number], index: number) => {
+                const color = hexColors[index].color;
+                const uniqueKey = `${repoInfo.id}_${repoInfo.name}_${language}`;
+                return (
+                  <div
+                    key={`${uniqueKey}`}
+                    className="h-1.5"
+                    style={{
+                      width: `${getPercentage(count)}%`,
+                      backgroundColor: color,
+                    }}
+                  ></div>
+                );
+              })}
         </div>
       </div>
+
       <div id="langauges">
-        <div className="flex justify-center items-center gap-1 m-1">
-          <div className=" bg-primary-blue h-2 w-2 rounded-full"></div>
-          <label>html</label>
+        <div className="flex justify-start items-center gap-x-8 gap-y-2 m-2 flex-wrap">
+          {languageData &&
+            Object.entries(languageData)
+              .slice(0, 8)
+              .map(([language, count]: [string, number], index: number) => {
+                const color = hexColors[index].color;
+
+                return (
+                  <div
+                    key={repoInfo.id + language}
+                    className="flex items-center gap-1.5"
+                  >
+                    <div
+                      className="h-2 w-2 rounded-full"
+                      style={{
+                        backgroundColor: color,
+                      }}
+                    ></div>
+                    <span className="text-xs flex gap-1.5">
+                      <p>{language} </p>
+                      <p className="text-lighter-text text-[1em]">
+                        {getPercentage(count)}%
+                      </p>
+                    </span>
+                  </div>
+                );
+              })}
         </div>
+      </div>
+      <div className="text-xs mt-2 self-end">
+        <span className="text-dark-text">Last Updated: </span>
+        <span className="text-lighter-text">
+          {repoInfo.pushed_at.substring(0, 10)}
+        </span>
       </div>
     </div>
   );
