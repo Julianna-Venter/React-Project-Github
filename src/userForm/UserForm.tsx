@@ -4,8 +4,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import Select, { SingleValue } from "react-select";
-import { Option } from "../Models/interfaces";
-import Drawer from "../Navigation/Drawer";
+import { Option } from "../models/interfaces";
+import Drawer from "../navigation/Drawer";
 import { getUsers } from "./Api/userFormApi";
 
 function UserForm() {
@@ -13,12 +13,14 @@ function UserForm() {
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
   const [selectedOption, setSelectedOption] =
     useState<SingleValue<Option> | null>(null);
+  const iDB = window.indexedDB;
+  const request = iDB.open("UserFormDatabase", 1);
 
   //tanstack/react-query hook to fetch the users
   const { data: optionData } = useQuery({
     queryKey: ["searchUsernames", searchTerm?.trim()],
     queryFn: () => getUsers(searchTerm),
-    enabled: !!searchTerm,
+    enabled: !!searchTerm, //make this an approved varaible?
   });
 
   //when the search term, or new options, have changed, check the search term
@@ -30,18 +32,23 @@ function UserForm() {
       return;
     }
 
-    let searchTermContainsInOptions = false;
     const latestOptions = optionData;
+    let matchSearchTerm = false;
 
     if (searchTerm?.trim() !== "" && latestOptions) {
-      searchTermContainsInOptions = latestOptions.some((optionData) =>
-        optionData.label
-          .toLowerCase()
-          .includes(searchTerm?.trim().toLowerCase() as string)
-      );
-
-      if (!searchTermContainsInOptions) {
+      for (const option of latestOptions) {
+        let searchOption = option.label;
+        const result = searchOption.includes(searchTerm);
+        if (result) {
+          matchSearchTerm = true;
+          break;
+        }
+      }
+      if (!matchSearchTerm) {
+        console.log("cannot find in options, fetching...");
         getUsers(searchTerm);
+      } else {
+        console.log("found in options");
       }
     }
   }, [searchTerm, optionData]);
@@ -59,6 +66,18 @@ function UserForm() {
 
   const handleSelectChange = (selectedOption: SingleValue<Option>) => {
     setSelectedOption(selectedOption as SingleValue<Option>);
+  };
+
+  //IdexedDB functions
+  request.onerror = function (event) {
+    console.error("Database error: ", event);
+  };
+
+  request.onupgradeneeded = function () {
+    const db = request.result;
+    const objectStore = db.createObjectStore("users", { keyPath: "id" });
+    objectStore.createIndex("username", "username", { unique: true });
+    objectStore.createIndex("bookmarked", "bookmarked", { unique: false });
   };
 
   return (
@@ -84,8 +103,40 @@ function UserForm() {
             onSubmit={(values, { setSubmitting }) => {
               let profileId = selectedOption?.value;
 
-              navigate({ to: "/profile/$profileId", params: { profileId } });
-              setSubmitting(false);
+              const request = indexedDB.open("UserFormDatabase", 1);
+
+              request.onerror = function (event) {
+                console.error("Database error: ", event);
+              };
+
+              request.onsuccess = function () {
+                const db = request.result;
+                const transaction = db.transaction("users", "readwrite");
+                const store = transaction.objectStore("users");
+
+                // Add or update user data in IndexedDB
+                if (values.rememberMe) {
+                  store.put({
+                    id: profileId,
+                    username: profileId,
+                    bookmarked: false,
+                  });
+                }
+
+                // Wait for IndexedDB operation to complete
+                transaction.oncomplete = function () {
+                  // Perform navigation after IndexedDB operation finishes
+                  navigate({
+                    to: `/profile/${profileId}`,
+                    params: { profileId },
+                  });
+                  setSubmitting(false);
+                };
+
+                transaction.onerror = function (event) {
+                  console.error("Transaction error: ", event);
+                };
+              };
             }}
           >
             {({ isSubmitting }) => (
@@ -110,7 +161,7 @@ function UserForm() {
                 <button
                   type="submit"
                   disabled={!selectedOption || isSubmitting}
-                  className={`h-10 rounded-md px-3.5 ${
+                  className={`h-10 rounded-md px-3.5 hover:bg-secondary-orange ${
                     !selectedOption ? "bg-gray-400" : "bg-primary-blue"
                   } text-off-white self-end btn`}
                 >

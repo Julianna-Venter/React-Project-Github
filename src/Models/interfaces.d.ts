@@ -61,12 +61,18 @@ export interface Parent {
   html_url: string;
 }
 
-interface LanguageData {
+export interface LanguageData {
   [key: string]: number;
 }
 
-interface CommitData {
+export interface CommitData {
   [key: string]: number;
+}
+
+export interface IndexedDBItem {
+  id: string;
+  username: string;
+  bookmarked: boolean;
 }
 
 export interface LanguageObjectItem {

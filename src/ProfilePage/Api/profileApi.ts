@@ -5,7 +5,7 @@ import {
   LanguageData,
   ProfileItem,
   RepoItem,
-} from "../../Models/interfaces";
+} from "../../models/interfaces";
 
 export const getCommits = async (repoInfo: RepoItem): Promise<CommitItem[]> => {
   if (!repoInfo) {

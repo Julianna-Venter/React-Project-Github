@@ -1,5 +1,5 @@
-import { hexColors } from "../Models/data";
-import { LanguageData, RepoItem } from "../Models/interfaces";
+import { hexColors } from "../models/data";
+import { LanguageData, RepoItem } from "../models/interfaces";
 
 interface RepoCardProps {
   repoName: string;

@@ -7,10 +7,10 @@ import {
   panelColors,
   until,
   weekLabelAttributes,
-} from "../Models/calendarHeatmap";
+} from "../models/calendarHeatmap";
 
-import { CommitData, LanguageData, RepoItem } from "../Models/interfaces";
-import Drawer from "../Navigation/Drawer";
+import { CommitData, LanguageData, RepoItem } from "../models/interfaces";
+import Drawer from "../navigation/Drawer";
 import { Route } from "../routes";
 import {
   getBranches,

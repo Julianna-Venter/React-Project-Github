@@ -1,7 +1,7 @@
 //fetch the users from the github api
 
 import { octokit } from "../../../environment/apiKey";
-import { Option } from "../../Models/interfaces";
+import { Option } from "../../models/interfaces";
 
 //populate the options array with the fetched data
 export const getUsers = async (
@@ -12,6 +12,8 @@ export const getUsers = async (
       const res = await octokit.request(
         `GET https://api.github.com/search/users?q=${searchTerm?.trim()}&per_page=100`
       );
+
+      console.log("fetching...");
 
       if (res.status === 200) {
         const data = res.data;
