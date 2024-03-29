@@ -8,6 +8,7 @@ import {
   weekLabelAttributes,
 } from "../models/calendarHeatmap";
 
+import { useNavigate } from "@tanstack/react-router";
 import {
   CalendarLoader,
   HeaderLoader,
@@ -35,16 +36,18 @@ interface RouteParams {
 }
 
 function ProfilePage() {
+  const navigate = useNavigate({ from: "/" });
+
   const { profileId } = Route.useParams<RouteParams>();
   const profileName = profileId;
 
   //tanstack/react-query hook to fetch the users
-  const { data: profileData } = useQuery({
+  const { data: profileData, isError: isProfileError } = useQuery({
     queryKey: [profileId],
     queryFn: () => getProfile(profileName),
   });
 
-  let { data: repoData } = useQuery({
+  let { data: repoData, isError: isReposError } = useQuery({
     queryKey: ["Repos", profileId],
     queryFn: () => getRepos(profileName),
   });
@@ -54,7 +57,7 @@ function ProfilePage() {
     repoData = filteredRepoData;
   }
 
-  const { data: starsData } = useQuery({
+  const { data: starsData, isError: isStarsError } = useQuery({
     queryKey: ["Stars", profileId],
     queryFn: () => getStats(profileId),
   });
@@ -91,6 +94,32 @@ function ProfilePage() {
         };
       }) ?? [],
   });
+
+  if (isReposError || isProfileError || isStarsError) {
+    navigate({ to: "/error" });
+  }
+
+  if (branchQueries) {
+    branchQueries.forEach((queryResult) => {
+      if (queryResult.isError) {
+        navigate({ to: "/error" });
+      }
+    });
+  }
+  if (commitsQueries) {
+    commitsQueries.forEach((queryResult) => {
+      if (queryResult.isError) {
+        navigate({ to: "/error" });
+      }
+    });
+  }
+  if (languagesQueries) {
+    languagesQueries.forEach((queryResult) => {
+      if (queryResult.isError) {
+        navigate({ to: "/error" });
+      }
+    });
+  }
 
   let languagesQueriesData: LanguageData[] = [];
 

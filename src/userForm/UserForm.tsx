@@ -18,11 +18,15 @@ function UserForm() {
   const addUser = useUserStore((state) => state.addUser);
 
   //tanstack/react-query hook to fetch the users
-  const { data: optionData } = useQuery({
+  const { data: optionData, isError } = useQuery({
     queryKey: ["searchUsernames", searchTerm?.trim()],
     queryFn: () => getUsers(searchTerm),
     enabled: !!searchTerm,
   });
+
+  if (isError) {
+    navigate({ to: "/error" });
+  }
 
   let timeoutId: NodeJS.Timeout;
 

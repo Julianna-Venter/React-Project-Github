@@ -38,3 +38,10 @@
 .menu li > *:not(ul):not(.menu-title):not(details):active {
   @apply text-zinc-700;
 }
+
+.text-gradient {
+  background-image: linear-gradient(to bottom, #4990e2, transparent 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
