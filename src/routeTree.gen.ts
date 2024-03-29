@@ -11,10 +11,16 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ErrorImport } from './routes/error'
 import { Route as IndexImport } from './routes/index'
 import { Route as ProfileProfileIdImport } from './routes/profile/$profileId'
 
 // Create/Update Routes
+
+const ErrorRoute = ErrorImport.update({
+  path: '/error',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   path: '/',
@@ -34,6 +40,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/error': {
+      preLoaderRoute: typeof ErrorImport
+      parentRoute: typeof rootRoute
+    }
     '/profile/$profileId': {
       preLoaderRoute: typeof ProfileProfileIdImport
       parentRoute: typeof rootRoute
@@ -45,6 +55,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
+  ErrorRoute,
   ProfileProfileIdRoute,
 ])
 

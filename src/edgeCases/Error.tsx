@@ -1,5 +1,11 @@
+import { HeaderLoader } from "./Loaders";
+
 function Error() {
-  return <div></div>;
+  return (
+    <div>
+      <HeaderLoader />
+    </div>
+  );
 }
 
 export default Error;
