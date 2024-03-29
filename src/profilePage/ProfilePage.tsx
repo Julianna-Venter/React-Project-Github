@@ -1,5 +1,4 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import Calendar from "react-github-contribution-calendar";
 import {
   monthLabelAttributes,
@@ -30,20 +29,24 @@ interface RouteParams {
 }
 
 function ProfilePage() {
-  const [repoNumber, setRepoNumber] = useState<number>(0);
   const { profileId } = Route.useParams<RouteParams>();
   const profileName = profileId;
 
   //tanstack/react-query hook to fetch the users
   const { data: profileData } = useQuery({
-    queryKey: [profileName],
+    queryKey: [profileId],
     queryFn: () => getProfile(profileName),
   });
 
-  const { data: repoData } = useQuery({
-    queryKey: ["Repos", profileName],
-    queryFn: () => getRepos(profileName, setRepoNumber),
+  let { data: repoData } = useQuery({
+    queryKey: ["Repos", profileId],
+    queryFn: () => getRepos(profileName),
   });
+
+  if (repoData) {
+    const filteredRepoData = repoData.filter((repo) => repo.size !== 0);
+    repoData = filteredRepoData;
+  }
 
   const { data: starsData } = useQuery({
     queryKey: ["Stars", profileId],
@@ -187,7 +190,7 @@ function ProfilePage() {
               </div>
               <QuickStats
                 starsNumber={starsData}
-                repoNumber={repoNumber}
+                repoNumber={repoData?.length}
                 commits={commitsNumber}
               />
             </div>

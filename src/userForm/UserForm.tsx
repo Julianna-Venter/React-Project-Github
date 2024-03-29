@@ -7,12 +7,15 @@ import Select, { SingleValue } from "react-select";
 import { Option } from "../models/interfaces";
 import Drawer from "../navigation/Drawer";
 import { getUsers } from "./Api/userFormApi";
+import { useUserStore } from "./store";
 
 function UserForm() {
   const navigate = useNavigate({ from: "/profile" });
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
   const [selectedOption, setSelectedOption] =
     useState<SingleValue<Option> | null>(null);
+
+  const addUser = useUserStore((state) => state.addUser);
 
   //tanstack/react-query hook to fetch the users
   const { data: optionData } = useQuery({
@@ -30,21 +33,23 @@ function UserForm() {
       return;
     }
 
-    let searchTermContainsInOptions = false;
     const latestOptions = optionData;
+    let matchSearchTerm = false;
 
     if (searchTerm?.trim() !== "" && latestOptions) {
-      searchTermContainsInOptions = latestOptions.some((optionData) =>
-        optionData.label
-          .toLowerCase()
-          .includes(searchTerm?.trim().toLowerCase() as string)
-      );
-
-      if (!searchTermContainsInOptions) {
+      for (const option of latestOptions) {
+        let searchOption = option.label;
+        const result = searchOption.includes(searchTerm);
+        if (result) {
+          matchSearchTerm = true;
+          break;
+        }
+      }
+      if (!matchSearchTerm) {
         getUsers(searchTerm);
       }
     }
-  }, [searchTerm, optionData]);
+  }, [searchTerm]);
 
   let timeoutId: NodeJS.Timeout;
 
@@ -84,7 +89,14 @@ function UserForm() {
             onSubmit={(values, { setSubmitting }) => {
               let profileId = selectedOption?.value;
 
-              navigate({ to: "/profile/$profileId", params: { profileId } });
+              if (values.rememberMe && profileId) {
+                addUser(profileId);
+              }
+
+              navigate({
+                to: `/profile/${profileId}`,
+                params: { profileId },
+              });
               setSubmitting(false);
             }}
           >
@@ -97,6 +109,9 @@ function UserForm() {
                     onInputChange={handleInputChange}
                     options={optionData}
                     placeholder="Enter a Username"
+                    noOptionsMessage={() =>
+                      (optionData ? "No results found" : "Loading...") || ""
+                    }
                   />
                 </div>
                 <label className="text-dark-text text-sm">
@@ -110,7 +125,7 @@ function UserForm() {
                 <button
                   type="submit"
                   disabled={!selectedOption || isSubmitting}
-                  className={`h-10 rounded-md px-3.5 ${
+                  className={`h-10 rounded-md px-3.5 hover:bg-secondary-orange ${
                     !selectedOption ? "bg-gray-400" : "bg-primary-blue"
                   } text-off-white self-end btn`}
                 >
