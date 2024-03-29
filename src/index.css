@@ -13,3 +13,28 @@
     scrollbar-width: none; /* Firefox */
   }
 }
+
+.menu li > *:not(ul, .menu-title, details, .btn).active {
+  @apply bg-transparent;
+  @apply text-primary-blue;
+}
+
+.menu li > *:not(ul):not(.menu-title):not(details):active {
+  @apply bg-transparent;
+  @apply text-primary-blue;
+}
+
+.menu li > details > summary:active {
+  @apply bg-transparent;
+  @apply text-dark-text;
+}
+
+:where(
+    .menu li:not(.menu-title, .disabled) > *:not(ul, details, .menu-title)
+  ):not(summary, .active, .btn):focus {
+  @apply bg-transparent;
+}
+
+.menu li > *:not(ul):not(.menu-title):not(details):active {
+  @apply text-zinc-700;
+}

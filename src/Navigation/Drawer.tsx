@@ -212,12 +212,7 @@ const Drawer = ({ username }: { username: string }) => {
                       >
                         {bookmarked}
                       </Link>
-                      <div
-                        id="bookmarkIcon"
-                        tabIndex={0}
-                        role="button"
-                        className="btn btn-ghost btn-circle"
-                      >
+                      <div id="bookmarkIcon" role="text">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"

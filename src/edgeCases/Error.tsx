@@ -1,9 +1,9 @@
-import { HeaderLoader } from "./Loaders";
+import { RepoCardLoader } from "./Loaders";
 
 function Error() {
   return (
     <div>
-      <HeaderLoader />
+      <RepoCardLoader />
     </div>
   );
 }

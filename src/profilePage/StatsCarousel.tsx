@@ -10,13 +10,13 @@ const StatsCarousel = ({
       <div className="carousel-item">
         <div className="">
           <span>Followers</span>
-          <div className="badge badge-secondary ml-1">{followers}</div>
+          <div className="badge badge-outline ml-1">{followers}</div>
         </div>
       </div>
       <div className="carousel-item">
         <div className="">
           <span>Following</span>
-          <div className="badge badge-secondary ml-1">{following}</div>
+          <div className="badge badge-outline ml-1">{following}</div>
         </div>
       </div>
     </div>
