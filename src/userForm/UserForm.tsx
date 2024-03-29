@@ -21,7 +21,7 @@ function UserForm() {
   const { data: optionData } = useQuery({
     queryKey: ["searchUsernames", searchTerm?.trim()],
     queryFn: () => getUsers(searchTerm),
-    enabled: !!searchTerm, //make this an approved varaible?
+    enabled: !!searchTerm,
   });
 
   //when the search term, or new options, have changed, check the search term
