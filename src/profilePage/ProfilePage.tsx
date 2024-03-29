@@ -52,11 +52,13 @@ function ProfilePage() {
     queryFn: () => getProfile(profileName),
   });
 
-  if (!profileData && (isPending || isLoading)) {
-    setTimeout(function () {
-      navigate({ to: "/noData" });
-    }, 10000);
-  }
+  //This does not work I will have to ask for advice on how to properly implement this
+  //problem: still routes when loader is fetched (I know why, I don't know how to fix it)
+  // if (!profileData && (isPending || isLoading)) {
+  //   setTimeout(function () {
+  //     navigate({ to: "/noData" });
+  //   }, 10000);
+  // }
 
   let { data: repoData, isError: isReposError } = useQuery({
     queryKey: ["Repos", profileId],
