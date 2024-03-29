@@ -24,7 +24,7 @@ const Drawer = ({ username }: { username: string }) => {
     removeUser(profileId);
   };
 
-  const handleRemovingBookamrk = () => {
+  const handleRemovingBookmark = () => {
     removeBookmarked();
     addUser(profileId);
   };
@@ -120,7 +120,7 @@ const Drawer = ({ username }: { username: string }) => {
               id="bookmarkIconSolid"
               tabIndex={0}
               role="button"
-              onClick={handleRemovingBookamrk}
+              onClick={handleRemovingBookmark}
               className={`btn btn-ghost btn-circle ${isBookmarked(profileId) ? "" : "hidden"} ${!isBookmarked(profileId) && bookmarked != "hidden" ? "" : ""} cursor-pointer`}
             >
               <svg
