@@ -1,5 +1,5 @@
-import { hexColorsDark } from "../Models/data";
-import { LanguageData } from "../Models/interfaces";
+import { hexColorsDark } from "../models/data";
+import { LanguageData } from "../models/interfaces";
 import "./Styles/radialStyles.css";
 interface RadialProps {
   result: LanguageData[];

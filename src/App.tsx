@@ -1,5 +1,5 @@
 import { RouterProvider, createRouter } from "@tanstack/react-router";
-import BackgroundAssets from "./CommonComponents/BackgroundAssets";
+import BackgroundAssets from "./commonComponents/BackgroundAssets";
 import { routeTree } from "./routeTree.gen";
 
 const router = createRouter({ routeTree });
