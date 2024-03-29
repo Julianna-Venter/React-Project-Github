@@ -32,6 +32,7 @@ export interface RepoItem {
   open_issues_count: number;
   default_branch: string;
   stargazers_count: number;
+  size: number;
 }
 
 export interface BranchInfo {
@@ -61,11 +62,11 @@ export interface Parent {
   html_url: string;
 }
 
-interface LanguageData {
+export interface LanguageData {
   [key: string]: number;
 }
 
-interface CommitData {
+export interface CommitData {
   [key: string]: number;
 }
 

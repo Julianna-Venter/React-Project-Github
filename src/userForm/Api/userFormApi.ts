@@ -1,7 +1,7 @@
 //fetch the users from the github api
 
 import { octokit } from "../../../environment/apiKey";
-import { Option } from "../../Models/interfaces";
+import { Option } from "../../models/interfaces";
 
 //populate the options array with the fetched data
 export const getUsers = async (

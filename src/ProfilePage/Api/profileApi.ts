@@ -5,7 +5,7 @@ import {
   LanguageData,
   ProfileItem,
   RepoItem,
-} from "../../Models/interfaces";
+} from "../../models/interfaces";
 
 export const getCommits = async (repoInfo: RepoItem): Promise<CommitItem[]> => {
   if (!repoInfo) {
@@ -100,10 +100,7 @@ export const getStats = async (
   }
 };
 
-export const getRepos = async (
-  profileName: string,
-  setRepoNumber: { (branchNumber: number): void }
-): Promise<RepoItem[]> => {
+export const getRepos = async (profileName: string): Promise<RepoItem[]> => {
   if (!profileName) {
     return [];
   }
@@ -131,9 +128,9 @@ export const getRepos = async (
       open_issues_count: repo.open_issues_count,
       default_branch: repo.default_branch,
       stargazers_count: repo.stargazers_count,
+      size: repo.size,
     }));
 
-    setRepoNumber(reposData.length);
     return newRepos;
   } catch (error) {
     console.error("Error fetching repositories:", error);
