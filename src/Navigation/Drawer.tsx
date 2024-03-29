@@ -39,28 +39,7 @@ const Drawer = ({ username }: { username: string }) => {
       <div
         className={`drawer-content flex flex-col items-center justify-center ${!username && "h-lvh"} lg:relative`}
       >
-        {!username && (
-          <label
-            htmlFor="my-drawer-2"
-            className="btn btn-primary drawer-button lg:hidden absolute top-0 right-0 my-5 z-30 bg-off-white w-[3.5rem] h-[3.5rem] rounded-full shadow-3xl flex items-center justify-between border-none text-lg backdrop-blur-lg"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z"
-              />
-            </svg>
-          </label>
-        )}
-        {username && (
+        {username ? (
           <nav
             id="Navbar"
             className="bg-off-white w-full h-[3.5rem] rounded-2xl shadow-3xl flex items-center p-2.5 justify-between lg:absolute lg:top-0 lg:w-11/12 lg:mt-5 z-30"
@@ -182,6 +161,26 @@ const Drawer = ({ username }: { username: string }) => {
               </svg>
             </div>
           </nav>
+        ) : (
+          <label
+            htmlFor="my-drawer-2"
+            className="btn btn-primary drawer-button lg:hidden absolute top-0 right-0 my-5 z-30 text-dark-text bg-off-white w-[3.5rem] h-[3.5rem] rounded-full shadow-3xl flex items-center justify-between border-none text-lg backdrop-blur-lg"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z"
+              />
+            </svg>
+          </label>
         )}
       </div>
       <div className="drawer-side z-30">
