@@ -1,14 +1,11 @@
 import { cilSearch } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import { Link } from "@tanstack/react-router";
+import { RouteParams } from "../models/interfaces";
 import { Route } from "../routes";
 import { useUserStore } from "../userForm/Services/store";
 
-interface RouteParams {
-  profileId: string;
-}
-
-const Drawer = ({ username }: { username: string }) => {
+const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
   const { profileId } = Route.useParams<RouteParams>();
 
   const users = useUserStore((state) => state.users);
@@ -92,6 +89,26 @@ const Drawer = ({ username }: { username: string }) => {
               </svg>
 
               <label>{username}</label>
+              {repo && (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2.8}
+                    stroke="currentColor"
+                    className="w-4 h-4 text-lighter-text"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"
+                    />
+                  </svg>
+
+                  <label>{repo}</label>
+                </>
+              )}
             </div>
 
             {/* bookmark */}

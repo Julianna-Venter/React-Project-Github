@@ -78,3 +78,8 @@ export interface LanguageObjectItem {
 export interface RouteParams {
   profileId: string;
 }
+
+export interface RepoRouteParams {
+  profileId: string;
+  repoId: string;
+}
