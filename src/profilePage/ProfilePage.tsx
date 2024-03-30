@@ -8,6 +8,13 @@ import {
   weekLabelAttributes,
 } from "../models/calendarHeatmap";
 
+import { useNavigate } from "@tanstack/react-router";
+import {
+  CalendarLoader,
+  HeaderLoader,
+  LanguagesLoader,
+  RepoCardLoader,
+} from "../edgeCases/Loaders";
 import { CommitData, LanguageData, RepoItem } from "../models/interfaces";
 import Drawer from "../navigation/Drawer";
 import { Route } from "../routes";
@@ -29,16 +36,31 @@ interface RouteParams {
 }
 
 function ProfilePage() {
+  const navigate = useNavigate({ from: "/" });
+
   const { profileId } = Route.useParams<RouteParams>();
   const profileName = profileId;
 
   //tanstack/react-query hook to fetch the users
-  const { data: profileData } = useQuery({
+  const {
+    data: profileData,
+    isError: isProfileError,
+    isPending,
+    isLoading,
+  } = useQuery({
     queryKey: [profileId],
     queryFn: () => getProfile(profileName),
   });
 
-  let { data: repoData } = useQuery({
+  //This does not work I will have to ask for advice on how to properly implement this
+  //problem: still routes when loader is fetched (I know why, I don't know how to fix it)
+  // if (!profileData && (isPending || isLoading)) {
+  //   setTimeout(function () {
+  //     navigate({ to: "/noData" });
+  //   }, 10000);
+  // }
+
+  let { data: repoData, isError: isReposError } = useQuery({
     queryKey: ["Repos", profileId],
     queryFn: () => getRepos(profileName),
   });
@@ -48,7 +70,7 @@ function ProfilePage() {
     repoData = filteredRepoData;
   }
 
-  const { data: starsData } = useQuery({
+  const { data: starsData, isError: isStarsError } = useQuery({
     queryKey: ["Stars", profileId],
     queryFn: () => getStats(profileId),
   });
@@ -85,6 +107,32 @@ function ProfilePage() {
         };
       }) ?? [],
   });
+
+  if (isReposError || isProfileError || isStarsError) {
+    navigate({ to: "/error" });
+  }
+
+  if (branchQueries) {
+    branchQueries.forEach((queryResult) => {
+      if (queryResult.isError) {
+        navigate({ to: "/error" });
+      }
+    });
+  }
+  if (commitsQueries) {
+    commitsQueries.forEach((queryResult) => {
+      if (queryResult.isError) {
+        navigate({ to: "/error" });
+      }
+    });
+  }
+  if (languagesQueries) {
+    languagesQueries.forEach((queryResult) => {
+      if (queryResult.isError) {
+        navigate({ to: "/error" });
+      }
+    });
+  }
 
   let languagesQueriesData: LanguageData[] = [];
 
@@ -171,50 +219,56 @@ function ProfilePage() {
           className="lg:h-full lg:w-11/12 lg:flex lg:flex-col lg:backdrop-blur-lg lg:bg-off-white/30 lg:rounded-2xl lg:shadow-3xl lg:px-8 lg:py-7 lg:flex-grow lg:overflow-y-scroll lg:no-scrollbar lg:m-5 lg:items-center lg:gap-5"
           id="InnerProfileContainer"
         >
-          <div
-            id="headerContainer"
-            className="flex flex-col gap-5 lg:flex-row lg:justify-center lg:items-center lg:gap-10"
-          >
-            <div className="w-full pb-10 pt-8 self-start flex justify-center items-center gap-5 relative lg:w-fit lg:justify-start">
-              <div className="avatar absolute mr-20 lg:mr-0">
-                <div className="w-48 h-48 rounded-full shadow-3xl lg:w-60 lg:h-60">
-                  {profileData?.avatar_url ? (
-                    <img src={profileData?.avatar_url} alt="Profile Avatar" />
-                  ) : (
-                    <img
-                      src="https://i0.wp.com/sunrisedaycamp.org/wp-content/uploads/2020/10/placeholder.png?ssl=1"
-                      alt="Profile Avatar"
-                    />
-                  )}
+          {repoData && commitsNumber ? (
+            <div
+              id="headerContainer"
+              className="flex flex-col gap-5 lg:flex-row lg:justify-center lg:items-center lg:gap-10"
+            >
+              <div className="w-full pb-10 pt-8 self-start flex justify-center items-center gap-5 relative lg:w-fit lg:justify-start">
+                <div className="avatar absolute mr-20 lg:mr-0">
+                  <div className="w-48 h-48 rounded-full shadow-3xl lg:w-60 lg:h-60">
+                    {profileData?.avatar_url ? (
+                      <img src={profileData?.avatar_url} alt="Profile Avatar" />
+                    ) : (
+                      <img
+                        src="https://i0.wp.com/sunrisedaycamp.org/wp-content/uploads/2020/10/placeholder.png?ssl=1"
+                        alt="Profile Avatar"
+                      />
+                    )}
+                  </div>
                 </div>
+                <QuickStats
+                  starsNumber={starsData}
+                  repoNumber={repoData?.length}
+                  commits={commitsNumber}
+                />
               </div>
-              <QuickStats
-                starsNumber={starsData}
-                repoNumber={repoData?.length}
-                commits={commitsNumber}
-              />
-            </div>
-            <div className="flex flex-col gap-5">
-              <div className="flex flex-col">
-                <label className="font-bold text-dark-text text-xl">
-                  {profileData?.name}
-                </label>
-                <label className="text-lighter-text text-lg">
-                  {profileData?.login}
-                </label>
-                <p className="text-dark-text text-sm mt-2">
-                  {profileData?.bio}
-                </p>
+              <div className="flex flex-col gap-5">
+                <div className="flex flex-col">
+                  <label className="font-bold text-dark-text text-xl">
+                    {profileData?.name}
+                  </label>
+                  <label className="text-lighter-text text-lg">
+                    {profileData?.login}
+                  </label>
+                  <p className="text-dark-text text-sm mt-2">
+                    {profileData?.bio}
+                  </p>
+                </div>
+                <StatsCarousel
+                  followers={profileData?.followers}
+                  following={profileData?.following}
+                />
               </div>
-              <StatsCarousel
-                followers={profileData?.followers}
-                following={profileData?.following}
-              />
             </div>
-          </div>
+          ) : (
+            <HeaderLoader />
+          )}
           <div className="detailsContainer w-full flex flex-col gap-5 mt-4 lg:w-5/6">
-            {languagesQueriesData.length != 0 && (
+            {languagesQueriesData.length != 0 && languagesQueries ? (
               <StatsRadial result={languagesQueriesData} />
+            ) : (
+              <LanguagesLoader />
             )}
             <div className="flex flex-col m-5 lg:px-20">
               {Object.keys(commitsData).length != 0 ? (
@@ -244,12 +298,12 @@ function ProfilePage() {
                   </div>
                 </>
               ) : (
-                <div>Loading...</div>
+                <CalendarLoader />
               )}
             </div>
 
             <div className="flex flex-col gap-5 lg:px-20">
-              {repoData &&
+              {repoData ? (
                 Object.values(repoData).map((repo: RepoItem) => (
                   <RepoCard
                     key={repo.id}
@@ -258,7 +312,10 @@ function ProfilePage() {
                     branchNumber={returnBranches(repo.name)}
                     languageData={returnLanguages(repo.name)}
                   />
-                ))}
+                ))
+              ) : (
+                <RepoCardLoader />
+              )}
             </div>
           </div>
         </div>
