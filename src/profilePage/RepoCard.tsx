@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import { hexColors } from "../models/data";
 import { LanguageData, RepoItem } from "../models/interfaces";
 
@@ -6,6 +7,7 @@ interface RepoCardProps {
   repoInfo: RepoItem;
   languageData: LanguageData | undefined | null;
   branchNumber: number | undefined;
+  profileId: string;
 }
 
 const RepoCard: React.FC<RepoCardProps> = ({
@@ -13,7 +15,10 @@ const RepoCard: React.FC<RepoCardProps> = ({
   repoInfo,
   languageData,
   branchNumber,
+  profileId,
 }) => {
+  const navigate = useNavigate({ from: "/profile" });
+
   //converting the amount of languages to a percentage
   function getPercentage(num: number): string {
     if (languageData) {
@@ -24,8 +29,20 @@ const RepoCard: React.FC<RepoCardProps> = ({
     }
   }
 
+  const repoId = repoInfo.name;
+
+  function handleClick() {
+    navigate({
+      to: `/profile/${profileId}/${repoId}`,
+      params: { profileId, repoId },
+    });
+  }
+
   return (
-    <div className="w-full h-fit bg-off-white rounded-xl shadow-4xl p-3 flex flex-col justify-center text-dark-text">
+    <div
+      className="w-full h-fit bg-off-white rounded-xl shadow-4xl p-3 flex flex-col justify-center text-dark-text"
+      onClick={handleClick}
+    >
       <div className="flex justify-between items-center mb-1">
         <div className="flex justify-center items-center">
           <svg

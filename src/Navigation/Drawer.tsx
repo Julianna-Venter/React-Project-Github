@@ -2,7 +2,7 @@ import { cilSearch } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import { Link } from "@tanstack/react-router";
 import { Route } from "../routes";
-import { useUserStore } from "../userForm/store";
+import { useUserStore } from "../userForm/Services/store";
 
 interface RouteParams {
   profileId: string;

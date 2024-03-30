@@ -74,3 +74,7 @@ export interface LanguageObjectItem {
   repoName: string;
   languageData: LanguageData;
 }
+
+export interface RouteParams {
+  profileId: string;
+}

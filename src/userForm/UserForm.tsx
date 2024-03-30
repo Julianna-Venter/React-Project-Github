@@ -7,7 +7,7 @@ import Select, { SingleValue } from "react-select";
 import { Option } from "../models/interfaces";
 import Drawer from "../navigation/Drawer";
 import { getUsers } from "./Api/userFormApi";
-import { useUserStore } from "./store";
+import { useUserStore } from "./Services/store";
 
 function UserForm() {
   const navigate = useNavigate({ from: "/profile" });

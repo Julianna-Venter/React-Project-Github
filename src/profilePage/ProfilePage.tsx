@@ -15,7 +15,12 @@ import {
   LanguagesLoader,
   RepoCardLoader,
 } from "../edgeCases/Loaders";
-import { CommitData, LanguageData, RepoItem } from "../models/interfaces";
+import {
+  CommitData,
+  LanguageData,
+  RepoItem,
+  RouteParams,
+} from "../models/interfaces";
 import Drawer from "../navigation/Drawer";
 import { Route } from "../routes";
 import {
@@ -30,10 +35,6 @@ import QuickStats from "./QuickStats";
 import RepoCard from "./RepoCard";
 import StatsCarousel from "./StatsCarousel";
 import StatsRadial from "./StatsRadial";
-
-interface RouteParams {
-  profileId: string;
-}
 
 function ProfilePage() {
   const navigate = useNavigate({ from: "/" });
@@ -311,6 +312,7 @@ function ProfilePage() {
                     repoInfo={repo}
                     branchNumber={returnBranches(repo.name)}
                     languageData={returnLanguages(repo.name)}
+                    profileId={profileId}
                   />
                 ))
               ) : (
