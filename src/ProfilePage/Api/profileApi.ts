@@ -7,12 +7,14 @@ import {
   RepoItem,
 } from "../../models/interfaces";
 
+const baseURL = "https://api.github.com";
+
 export const getCommits = async (full_name: string): Promise<CommitItem[]> => {
   if (!full_name) {
     return [];
   }
 
-  const commitsUrl = `https://api.github.com/repos/${full_name}/commits`;
+  const commitsUrl = `${baseURL}/repos/${full_name}/commits`;
   const commitsData = await getPaginatedData(commitsUrl);
 
   const newCommits = commitsData.map((commit: CommitItem) => ({
@@ -31,7 +33,7 @@ export const getLanguages = async (
 ): Promise<LanguageData | undefined> => {
   if (repoInfo) {
     const res = await octokit.request(
-      `GET https://api.github.com/repos/${repoInfo.full_name}/languages`
+      `GET ${baseURL}/repos/${repoInfo.full_name}/languages`
     );
     if (res.status === 200) {
       const languages = res.data;
@@ -48,7 +50,7 @@ export const getBranches = async (full_name: string): Promise<BranchInfo[]> => {
     return [];
   }
 
-  const branchesUrl = `https://api.github.com/repos/${full_name}/branches`;
+  const branchesUrl = `${baseURL}/repos/${full_name}/branches`;
   const branchesData = await getPaginatedData(branchesUrl);
 
   const newBranches = branchesData.map((branch: BranchInfo) => ({
@@ -66,7 +68,7 @@ export const getStats = async (
     return 0;
   }
 
-  const starredUrl = `https://api.github.com/users/${username}/starred`;
+  const starredUrl = `${baseURL}/users/${username}/starred`;
   const starredData = await getPaginatedData(starredUrl);
 
   const stars = starredData.length;
@@ -78,7 +80,7 @@ export const getRepos = async (profileName: string): Promise<RepoItem[]> => {
     return [];
   }
 
-  const reposUrl = `https://api.github.com/users/${profileName}/repos?sort=updated`;
+  const reposUrl = `${baseURL}/users/${profileName}/repos?sort=updated`;
   const reposData = await getPaginatedData(reposUrl);
 
   const newRepos = reposData.map((repo: RepoItem) => ({
@@ -107,9 +109,7 @@ export const getRepos = async (profileName: string): Promise<RepoItem[]> => {
 };
 
 export const getProfile = async (profileName: string): Promise<ProfileItem> => {
-  const res = await octokit.request(
-    `GET https://api.github.com/users/${profileName}`
-  );
+  const res = await octokit.request(`GET ${baseURL}/users/${profileName}`);
 
   const profile = {
     name: res.data.name,

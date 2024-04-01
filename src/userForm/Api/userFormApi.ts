@@ -3,7 +3,6 @@
 import { octokit } from "../../../environment/apiKey";
 import { Option } from "../../models/interfaces";
 
-//populate the options array with the fetched data
 export const getUsers = async (
   searchTerm: string | null
 ): Promise<Option[] | undefined> => {
