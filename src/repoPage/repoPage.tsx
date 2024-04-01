@@ -366,7 +366,3 @@ function RepoPage() {
 }
 
 export default RepoPage;
-
-function getCollabs(profileId: string, repoId: string): any {
-  throw new Error("Function not implemented.");
-}
