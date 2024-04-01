@@ -1,7 +1,7 @@
 export function HeaderLoader() {
   return (
     <>
-      <div className="flex items-center gap-10">
+      <div className="flex items-center gap-10 flex-col lg:flex-row">
         <div>
           <div className="avatar absolute mr-20 lg:mr-0 h-[19rem] items-center">
             <div className="w-48 h-48 rounded-full shadow-3xl lg:w-60 lg:h-60 skeleton"></div>

@@ -28,6 +28,7 @@ const StatsRadial: React.FC<RadialProps> = ({ result }) => {
             return (
               <div key={language} className={`text-${color}`}>
                 <div
+                  aria-label="radial-progress"
                   className={`carousel-item radial-progress bg-transparent text-primary-content border-2`}
                   style={
                     {

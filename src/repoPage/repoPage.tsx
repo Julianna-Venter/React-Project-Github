@@ -54,16 +54,29 @@ function RepoPage() {
     queryFn: () => getClosedPulls(profileId, repoId),
   });
 
+  let openIssues = 0;
+  let closedIssues = 0;
+  let openPulls = 0;
+  let closedPulls = 0;
+
   if (openPullsData && !closedPullsData) {
     closedPullsData = 0;
+    openPulls = openPullsData;
+    closedPulls = closedPullsData;
   } else if (!openPullsData && closedPullsData) {
     openPullsData = 0;
+    openPulls = openPullsData;
+    closedPulls = closedPullsData;
   }
 
   if (openIssuesData && !closedIssuesData) {
     closedIssuesData = 0;
+    openIssues = openIssuesData;
+    closedIssues = closedIssuesData;
   } else if (!openIssuesData && closedIssuesData) {
     openIssuesData = 0;
+    openIssues = openIssuesData;
+    closedIssues = closedIssuesData;
   }
 
   let { data: collabData } = useQuery({
@@ -154,6 +167,7 @@ function RepoPage() {
                     Contributions Over Time
                   </h2>
                   <LineChart
+                    aria-label="Contributions Over Time"
                     width={chartWidth}
                     height={300}
                     series={[{ data: dataYAxis, area: true, showMark: false }]}
@@ -165,7 +179,10 @@ function RepoPage() {
                     }}
                   />
                   <div>
-                    <label className="text-sm text-lighter-text">
+                    <label
+                      className="text-sm text-lighter-text"
+                      aria-label="start and end date"
+                    >
                       <span className="font-bold">{startDate}</span> —{" "}
                       <span className="font-bold">{endDate}</span>
                     </label>
@@ -181,23 +198,30 @@ function RepoPage() {
                         <li
                           key={collab.login}
                           className="flex gap-5 items-center text-dark-text "
+                          aria-label="collaborator item"
                         >
                           {collab.avatar_url ? (
                             <img
+                              aria-label="avatar image"
                               src={collab.avatar_url}
-                              alt={collab.login}
+                              alt={`${collab.login} avatar image`}
                               className="rounded-full h-12 w-12"
                             />
                           ) : (
                             <div className="avatar placeholder">
                               <div className="bg-neutral text-neutral-content rounded-full h-12 w-12">
-                                <span className="text-lg">
+                                <span
+                                  className="text-lg"
+                                  aria-label="user avatar alternative"
+                                >
                                   {collab.login.substring(0, 1)}
                                 </span>
                               </div>
                             </div>
                           )}
-                          <span className="text-lg">{collab.login}</span>
+                          <span className="text-lg" aria-label="username">
+                            {collab.login}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -207,7 +231,12 @@ function RepoPage() {
 
               <div className="grid lg:grid-cols-2 gap-4">
                 <div className="p-4 flex flex-col justify-center items-center">
-                  <h2 className="text-lg font-semibold mb-2">Issues</h2>
+                  <h2
+                    className="text-lg font-semibold mb-2"
+                    aria-label="Issues pie chart"
+                  >
+                    Issues
+                  </h2>
                   {(openIssuesData !== undefined ||
                     closedIssuesData !== undefined) &&
                   (openIssuesData !== 0 || closedIssuesData !== 0) &&
@@ -257,7 +286,12 @@ function RepoPage() {
                   )}
                 </div>
                 <div className="p-4 flex flex-col justify-center items-center">
-                  <h2 className="text-lg font-semibold mb-2">Pull Requests</h2>
+                  <h2
+                    className="text-lg font-semibold mb-2"
+                    aria-label="Pull requests pie chart"
+                  >
+                    Pull Requests
+                  </h2>
                   {(openPullsData !== undefined ||
                     closedPullsData !== undefined) &&
                   (openPullsData !== 0 || closedPullsData !== 0) &&
@@ -310,7 +344,10 @@ function RepoPage() {
                 </div>
               </div>
 
-              <div className="flex gap-5 mb-10">
+              <div
+                className="flex gap-5 mb-10"
+                aria-label="Open/Cloed chart key"
+              >
                 <div className="flex gap-2">
                   <div className="h-5 w-5 bg-secondary-orange"></div>
                   <label className="text-sm">Open</label>
@@ -327,21 +364,30 @@ function RepoPage() {
             >
               <div className="flex flex-col gap-2">
                 {mainData && Object.keys(mainData).length !== 0 && (
-                  <div className="flex flex-col mb-5">
+                  <div
+                    className="flex flex-col mb-5"
+                    aria-label="main branch info"
+                  >
                     <div className="flex justify-between items-center">
                       <h2 className="text-xl font-semibold">Main Branch</h2>
                       {mainData && mainData.protected ? (
-                        <div className="badge badge-outline badge-error">
+                        <div className="badge badge-outline border-[1.5px] border-red-600 text-red-600 font-semibold">
                           Protected
                         </div>
                       ) : (
-                        <div className="badge badge-outline badge-info">
+                        <div
+                          aria-label="protected status"
+                          className="badge badge-outline border-[1.5px] border-cyan-700 text-cyan-700 font-semibold"
+                        >
                           Not Protected
                         </div>
                       )}
                     </div>
                     {mainData && (
-                      <label className="text-sm text-lighter-text">
+                      <label
+                        aria-label="last update of main branch"
+                        className="text-sm text-lighter-text"
+                      >
                         Last Updated:{" "}
                         {mainData?.commit.commit.author.date.substring(0, 10)}
                       </label>
@@ -349,7 +395,10 @@ function RepoPage() {
                   </div>
                 )}
                 <div className="flex justify-between items-center">
-                  <h2 className="text-lg font-semibold">
+                  <h2
+                    className="text-lg font-semibold"
+                    aria-label="commit history"
+                  >
                     Last Activity In Repo
                   </h2>
                 </div>

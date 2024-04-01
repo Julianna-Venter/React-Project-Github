@@ -51,6 +51,7 @@ const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
                 tabIndex={0}
                 role="button"
                 className="btn btn-ghost btn-circle"
+                aria-label="open sidebar"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -229,6 +230,7 @@ const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
                     <li className="cursor-pointer flex flex-row justify-between items-center gap-2">
                       <Link
                         to="/profile/$profileId"
+                        aria-label="navigate to bookmarked user profile"
                         params={{
                           profileId: bookmarked,
                         }}
@@ -274,6 +276,7 @@ const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
                     >
                       <Link
                         to="/profile/$profileId"
+                        aria-label="navigate to user profile"
                         params={{
                           profileId: user,
                         }}
@@ -306,6 +309,7 @@ const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
           {username && (
             <Link
               to="/"
+              aria-label="navigate to search page"
               className="w-16 h-16 bg-primary-blue/20 text-primary-blue rounded-full p-4 absolute bottom-4 right-4 hover:bg-secondary-orange hover:text-white cursor-pointer"
             >
               <CIcon icon={cilSearch} />
