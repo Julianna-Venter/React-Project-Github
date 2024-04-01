@@ -43,12 +43,7 @@ function ProfilePage() {
   const profileName = profileId;
 
   //tanstack/react-query hook to fetch the users
-  const {
-    data: profileData,
-    isError: isProfileError,
-    isPending,
-    isLoading,
-  } = useQuery({
+  const { data: profileData, isError: isProfileError } = useQuery({
     queryKey: [profileId],
     queryFn: () => getProfile(profileName),
   });
@@ -194,7 +189,6 @@ function ProfilePage() {
       const index = repoData.findIndex((repo) => repo.name === repoName);
       return languagesQueries[index].data;
     } else {
-      const temp: LanguageData = {};
       //Log an error here later
       return {};
     }
@@ -205,7 +199,6 @@ function ProfilePage() {
       const index = repoData.findIndex((repo) => repo.name === repoName);
       return branchQueries[index].data?.length;
     } else {
-      const temp: LanguageData = {};
       //Log an error here later
       return 0;
     }
