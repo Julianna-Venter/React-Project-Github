@@ -306,6 +306,17 @@ function RepoPage() {
                 )}
               </div>
             </div>
+
+            <div className="flex gap-5 mb-10">
+              <div className="flex gap-2">
+                <div className="h-5 w-5 bg-secondary-orange"></div>
+                <label className="text-sm">Open</label>
+              </div>
+              <div className="flex gap-2">
+                <div className="h-5 w-5 bg-primary-blue"></div>
+                <label className="text-sm">Closed</label>
+              </div>
+            </div>
           </div>
           <div
             id="branchInfo"
