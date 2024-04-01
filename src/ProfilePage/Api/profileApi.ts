@@ -7,12 +7,12 @@ import {
   RepoItem,
 } from "../../models/interfaces";
 
-export const getCommits = async (repoInfo: RepoItem): Promise<CommitItem[]> => {
-  if (!repoInfo) {
+export const getCommits = async (full_name: string): Promise<CommitItem[]> => {
+  if (!full_name) {
     return [];
   }
 
-  const commitsUrl = `https://api.github.com/repos/${repoInfo.full_name}/commits`;
+  const commitsUrl = `https://api.github.com/repos/${full_name}/commits`;
   const commitsData = await getPaginatedData(commitsUrl);
 
   const newCommits = commitsData.map((commit: CommitItem) => ({
@@ -43,14 +43,12 @@ export const getLanguages = async (
 };
 
 //only used branches length here, but will use rest of the response in a future update
-export const getBranches = async (
-  repoInfo: RepoItem
-): Promise<BranchInfo[]> => {
-  if (!repoInfo) {
+export const getBranches = async (full_name: string): Promise<BranchInfo[]> => {
+  if (!full_name) {
     return [];
   }
 
-  const branchesUrl = `https://api.github.com/repos/${repoInfo.full_name}/branches`;
+  const branchesUrl = `https://api.github.com/repos/${full_name}/branches`;
   const branchesData = await getPaginatedData(branchesUrl);
 
   const newBranches = branchesData.map((branch: BranchInfo) => ({

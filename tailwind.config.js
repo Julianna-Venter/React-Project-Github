@@ -11,8 +11,8 @@ export default {
         "secondary-orange": "#f7a825",
         "off-white": "#f6f7f9",
         "dark-off-white": "#e3e4e5",
-        "dark-text": "#566",
-        "lighter-text": "#817e7e",
+        "dark-text": "#3a4242",
+        "lighter-text": "#566",
       },
       boxShadow: {
         "3xl": "0px 0px 5px 0px rgba(0,0,0,0.35)",

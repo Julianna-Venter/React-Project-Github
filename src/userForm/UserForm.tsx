@@ -7,7 +7,7 @@ import Select, { SingleValue } from "react-select";
 import { Option } from "../models/interfaces";
 import Drawer from "../navigation/Drawer";
 import { getUsers } from "./Api/userFormApi";
-import { useUserStore } from "./store";
+import { useUserStore } from "./Services/store";
 
 function UserForm() {
   const navigate = useNavigate({ from: "/profile" });
@@ -95,6 +95,7 @@ function UserForm() {
                     noOptionsMessage={() =>
                       (optionData ? "No results found" : "Loading...") || ""
                     }
+                    aria-label="Select a user"
                   />
                 </div>
                 <label className="text-dark-text text-sm">
@@ -102,10 +103,12 @@ function UserForm() {
                     type="checkbox"
                     name="rememberMe"
                     className="mr-4 ml-0.5 bg-dark-off-white lg:mb-8"
+                    aria-label="Remember this user"
                   />
                   Remember This User
                 </label>
                 <button
+                  aria-label="Submit the form"
                   type="submit"
                   disabled={!selectedOption || isSubmitting}
                   className={`h-10 rounded-md px-3.5 hover:bg-secondary-orange ${

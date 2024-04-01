@@ -78,3 +78,17 @@ export function CalendarLoader() {
 export function RepoCardLoader() {
   return <div className="skeleton w-[34.2rem] h-[11.4rem]"></div>;
 }
+
+export function RepoPageLoader() {
+  return (
+    <div
+      className="max-sm:skeleton bg-[#e8e4e4] w-full h-full flex flex-col rounded-2xl shadow-3xl py-5 flex-grow lg:m-5 lg:justify-center lg:items-center lg:absolute lg:pl-[320px] lg:pt-20 lg:backdrop-blur-0 lg:bg-transparent lg:rounded-none lg:shadow-none lg:pb-0 lg:pr-0"
+      id="outerProfileContainer"
+    >
+      <div
+        className="skeleton lg:h-full lg:w-11/12 flex flex-col lg:rounded-2xl lg:shadow-3xl lg:px-8 lg:py-7 lg:flex-grow lg:overflow-y-scroll lg:no-scrollbar lg:m-5 lg:items-center lg:gap-5"
+        id="InnerProfileContainer"
+      ></div>
+    </div>
+  );
+}

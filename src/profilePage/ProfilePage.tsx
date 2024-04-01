@@ -15,7 +15,12 @@ import {
   LanguagesLoader,
   RepoCardLoader,
 } from "../edgeCases/Loaders";
-import { CommitData, LanguageData, RepoItem } from "../models/interfaces";
+import {
+  CommitData,
+  LanguageData,
+  RepoItem,
+  RouteParams,
+} from "../models/interfaces";
 import Drawer from "../navigation/Drawer";
 import { Route } from "../routes";
 import {
@@ -31,10 +36,6 @@ import RepoCard from "./RepoCard";
 import StatsCarousel from "./StatsCarousel";
 import StatsRadial from "./StatsRadial";
 
-interface RouteParams {
-  profileId: string;
-}
-
 function ProfilePage() {
   const navigate = useNavigate({ from: "/" });
 
@@ -42,12 +43,7 @@ function ProfilePage() {
   const profileName = profileId;
 
   //tanstack/react-query hook to fetch the users
-  const {
-    data: profileData,
-    isError: isProfileError,
-    isPending,
-    isLoading,
-  } = useQuery({
+  const { data: profileData, isError: isProfileError } = useQuery({
     queryKey: [profileId],
     queryFn: () => getProfile(profileName),
   });
@@ -80,7 +76,7 @@ function ProfilePage() {
       repoData?.map((repoInfo) => {
         return {
           queryKey: ["branch", repoInfo.id],
-          queryFn: () => getBranches(repoInfo),
+          queryFn: () => getBranches(repoInfo.full_name),
           enabled: !!repoData,
         };
       }) ?? [],
@@ -91,7 +87,7 @@ function ProfilePage() {
       repoData?.map((repoInfo) => {
         return {
           queryKey: ["commits", repoInfo.id],
-          queryFn: () => getCommits(repoInfo),
+          queryFn: () => getCommits(repoInfo.full_name),
           enabled: !!repoData,
         };
       }) ?? [],
@@ -119,6 +115,7 @@ function ProfilePage() {
       }
     });
   }
+
   if (commitsQueries) {
     commitsQueries.forEach((queryResult) => {
       if (queryResult.isError) {
@@ -126,6 +123,7 @@ function ProfilePage() {
       }
     });
   }
+
   if (languagesQueries) {
     languagesQueries.forEach((queryResult) => {
       if (queryResult.isError) {
@@ -191,7 +189,6 @@ function ProfilePage() {
       const index = repoData.findIndex((repo) => repo.name === repoName);
       return languagesQueries[index].data;
     } else {
-      const temp: LanguageData = {};
       //Log an error here later
       return {};
     }
@@ -202,7 +199,6 @@ function ProfilePage() {
       const index = repoData.findIndex((repo) => repo.name === repoName);
       return branchQueries[index].data?.length;
     } else {
-      const temp: LanguageData = {};
       //Log an error here later
       return 0;
     }
@@ -311,6 +307,7 @@ function ProfilePage() {
                     repoInfo={repo}
                     branchNumber={returnBranches(repo.name)}
                     languageData={returnLanguages(repo.name)}
+                    profileId={profileId}
                   />
                 ))
               ) : (

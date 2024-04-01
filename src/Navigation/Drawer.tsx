@@ -1,14 +1,11 @@
 import { cilSearch } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import { Link } from "@tanstack/react-router";
+import { RouteParams } from "../models/interfaces";
 import { Route } from "../routes";
-import { useUserStore } from "../userForm/store";
+import { useUserStore } from "../userForm/Services/store";
 
-interface RouteParams {
-  profileId: string;
-}
-
-const Drawer = ({ username }: { username: string }) => {
+const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
   const { profileId } = Route.useParams<RouteParams>();
 
   const users = useUserStore((state) => state.users);
@@ -47,6 +44,7 @@ const Drawer = ({ username }: { username: string }) => {
             <label
               htmlFor="my-drawer-2"
               className="btn btn-ghost drawer-button lg:hidden p-0"
+              aria-label="open sidebar"
             >
               <div
                 id="menuIcon"
@@ -56,7 +54,7 @@ const Drawer = ({ username }: { username: string }) => {
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-dark-text"
+                  className="w-6 h-6 lg:h-8 lg:w-8 text-dark-text"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -74,7 +72,7 @@ const Drawer = ({ username }: { username: string }) => {
               id="labelsContainer"
               className="flex justify-center items-center gap-2 text-dark-text text-lg lg:ml-2"
             >
-              <label className="font-semibold">Users</label>
+              <label className="font-semibold text-sm lg:text-lg">Users</label>
 
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -91,11 +89,32 @@ const Drawer = ({ username }: { username: string }) => {
                 />
               </svg>
 
-              <label>{username}</label>
+              <label className="text-sm lg:text-lg">{username}</label>
+              {repo && (
+                <>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2.8}
+                    stroke="currentColor"
+                    className="w-4 h-4 text-lighter-text"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"
+                    />
+                  </svg>
+
+                  <label className="text-sm lg:text-lg">{repo}</label>
+                </>
+              )}
             </div>
 
             {/* bookmark */}
             <button
+              aria-label="bookmark"
               id="bookmarkIcon"
               tabIndex={0}
               role="button"
@@ -119,6 +138,7 @@ const Drawer = ({ username }: { username: string }) => {
             </button>
             {/* solid bookmark */}
             <button
+              aria-label="remove bookmark"
               id="bookmarkIconSolid"
               tabIndex={0}
               role="button"
@@ -140,6 +160,7 @@ const Drawer = ({ username }: { username: string }) => {
             </button>
             {/* closed bookmark */}
             <div
+              aria-label="already bookmarked"
               id="bookmarkIconClosed"
               tabIndex={0}
               role="button"
@@ -197,7 +218,10 @@ const Drawer = ({ username }: { username: string }) => {
           <ul>
             <li>
               <details open>
-                <summary className="font-bold text-slate-800 text-xl">
+                <summary
+                  className="font-bold text-slate-800 text-xl"
+                  aria-label="Bookmarked Users"
+                >
                   Bookmarked
                 </summary>
                 <ul className="text-lg">
@@ -236,7 +260,10 @@ const Drawer = ({ username }: { username: string }) => {
             </li>
             <li>
               <details open>
-                <summary className="font-bold text-slate-800 text-xl">
+                <summary
+                  className="font-bold text-slate-800 text-xl"
+                  aria-label="All Users"
+                >
                   Users
                 </summary>
                 <ul className="text-lg">

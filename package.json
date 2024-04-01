@@ -12,6 +12,10 @@
   "dependencies": {
     "@coreui/icons": "^3.0.1",
     "@coreui/icons-react": "^2.2.1",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.14",
+    "@mui/x-charts": "^7.1.0",
     "@tanstack/react-query": "^5.28.2",
     "@tanstack/react-router": "^1.19.13",
     "formik": "^2.4.5",

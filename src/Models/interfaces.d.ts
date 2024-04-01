@@ -51,6 +51,13 @@ export interface Commit {
   message: string;
 }
 
+export interface MainItem {
+  commit: {
+    commit: Commit;
+  };
+  protected: boolean;
+}
+
 export interface Author {
   name: string;
   date: string;
@@ -73,4 +80,30 @@ export interface CommitData {
 export interface LanguageObjectItem {
   repoName: string;
   languageData: LanguageData;
+}
+
+export interface RouteParams {
+  profileId: string;
+}
+
+export interface RepoRouteParams {
+  profileId: string;
+  repoId: string;
+}
+
+export interface CollabItem {
+  login: string;
+  avatar_url: string;
+  permissions: Permissions;
+}
+
+export interface Permissions {
+  admin: boolean;
+}
+
+export interface DataCharts {
+  id: number;
+  value: number;
+  label: string;
+  color: string;
 }
