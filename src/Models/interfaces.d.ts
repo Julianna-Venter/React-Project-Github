@@ -51,6 +51,13 @@ export interface Commit {
   message: string;
 }
 
+export interface MainItem {
+  commit: {
+    commit: Commit;
+  };
+  protected: boolean;
+}
+
 export interface Author {
   name: string;
   date: string;
@@ -99,9 +106,4 @@ export interface DataCharts {
   value: number;
   label: string;
   color: string;
-}
-
-export interface MainItem {
-  commit: Commit;
-  protected: boolean;
 }

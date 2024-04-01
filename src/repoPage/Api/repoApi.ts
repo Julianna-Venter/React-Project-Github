@@ -102,7 +102,6 @@ export const getMain = async (
 
     if (res.status === 200) {
       const { commit, protected: isProtected } = res.data;
-
       return {
         commit,
         protected: isProtected,

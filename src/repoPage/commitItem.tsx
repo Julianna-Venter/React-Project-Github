@@ -2,8 +2,8 @@ import { CommitItem } from "../models/interfaces";
 
 function commitItem(commitItem: CommitItem) {
   return (
-    <div className="w-full flex flex-col xl:grid xl:grid-cols-4 border-[1.5px] border-solid border-lighter-text/30 p-3 rounded-md gap-5">
-      <label className="col-span-2">{commitItem.commit.commit.message}</label>
+    <div className="w-full flex flex-col xl:grid xl:grid-cols-4 border-[1.5px] border-solid border-lighter-text/30 p-3 rounded-md gap-5 items-center">
+      <label className="col-span-2">{commitItem.commit.message}</label>
       <label className="font-light">
         <div className="flex gap-2">
           <div className="w-6 h-6">
@@ -20,12 +20,10 @@ function commitItem(commitItem: CommitItem) {
               />
             </svg>
           </div>
-          <span>{commitItem.commit.commit.author.name}</span>
+          <span>{commitItem.commit.author.name}</span>
         </div>
       </label>
-      <label className="font-light">
-        {commitItem.commit.commit.author.date}
-      </label>
+      <label className="font-light">{commitItem.commit.author.date}</label>
     </div>
   );
 }
