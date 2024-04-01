@@ -370,7 +370,3 @@ export default RepoPage;
 function getCollabs(profileId: string, repoId: string): any {
   throw new Error("Function not implemented.");
 }
-//TODO:
-//1. the existing commits in profile fetch must only give the number you need. Don't get all the data
-//2. do a new repo fetch for the data you need
-//3. You can remove the branches in profile one as well, and only have it return the number
