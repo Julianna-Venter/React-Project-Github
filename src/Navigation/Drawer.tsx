@@ -44,6 +44,7 @@ const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
             <label
               htmlFor="my-drawer-2"
               className="btn btn-ghost drawer-button lg:hidden p-0"
+              aria-label="open sidebar"
             >
               <div
                 id="menuIcon"
@@ -113,6 +114,7 @@ const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
 
             {/* bookmark */}
             <button
+              aria-label="bookmark"
               id="bookmarkIcon"
               tabIndex={0}
               role="button"
@@ -136,6 +138,7 @@ const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
             </button>
             {/* solid bookmark */}
             <button
+              aria-label="remove bookmark"
               id="bookmarkIconSolid"
               tabIndex={0}
               role="button"
@@ -157,6 +160,7 @@ const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
             </button>
             {/* closed bookmark */}
             <div
+              aria-label="already bookmarked"
               id="bookmarkIconClosed"
               tabIndex={0}
               role="button"
@@ -214,7 +218,10 @@ const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
           <ul>
             <li>
               <details open>
-                <summary className="font-bold text-slate-800 text-xl">
+                <summary
+                  className="font-bold text-slate-800 text-xl"
+                  aria-label="Bookmarked Users"
+                >
                   Bookmarked
                 </summary>
                 <ul className="text-lg">
@@ -253,7 +260,10 @@ const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
             </li>
             <li>
               <details open>
-                <summary className="font-bold text-slate-800 text-xl">
+                <summary
+                  className="font-bold text-slate-800 text-xl"
+                  aria-label="All Users"
+                >
                   Users
                 </summary>
                 <ul className="text-lg">

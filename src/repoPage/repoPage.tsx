@@ -213,6 +213,7 @@ function RepoPage() {
                   <PieChart
                     series={[
                       {
+                        startAngle: 2,
                         outerRadius: 90,
                         data: [
                           {
@@ -263,7 +264,7 @@ function RepoPage() {
                     <PieChart
                       series={[
                         {
-                          startAngle: 10,
+                          startAngle: 2,
                           outerRadius: 90,
                           data: [
                             {
