@@ -81,7 +81,7 @@ function ProfilePage() {
       repoData?.map((repoInfo) => {
         return {
           queryKey: ["branch", repoInfo.id],
-          queryFn: () => getBranches(repoInfo),
+          queryFn: () => getBranches(repoInfo.full_name),
           enabled: !!repoData,
         };
       }) ?? [],
@@ -92,7 +92,7 @@ function ProfilePage() {
       repoData?.map((repoInfo) => {
         return {
           queryKey: ["commits", repoInfo.id],
-          queryFn: () => getCommits(repoInfo),
+          queryFn: () => getCommits(repoInfo.full_name),
           enabled: !!repoData,
         };
       }) ?? [],
@@ -120,6 +120,7 @@ function ProfilePage() {
       }
     });
   }
+
   if (commitsQueries) {
     commitsQueries.forEach((queryResult) => {
       if (queryResult.isError) {
@@ -127,6 +128,7 @@ function ProfilePage() {
       }
     });
   }
+
   if (languagesQueries) {
     languagesQueries.forEach((queryResult) => {
       if (queryResult.isError) {

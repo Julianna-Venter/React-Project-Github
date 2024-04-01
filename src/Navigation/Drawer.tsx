@@ -53,7 +53,7 @@ const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8 text-dark-text"
+                  className="w-6 h-6 lg:h-8 lg:w-8 text-dark-text"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -71,7 +71,7 @@ const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
               id="labelsContainer"
               className="flex justify-center items-center gap-2 text-dark-text text-lg lg:ml-2"
             >
-              <label className="font-semibold">Users</label>
+              <label className="font-semibold text-sm lg:text-lg">Users</label>
 
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -88,7 +88,7 @@ const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
                 />
               </svg>
 
-              <label>{username}</label>
+              <label className="text-sm lg:text-lg">{username}</label>
               {repo && (
                 <>
                   <svg
@@ -106,7 +106,7 @@ const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
                     />
                   </svg>
 
-                  <label>{repo}</label>
+                  <label className="text-sm lg:text-lg">{repo}</label>
                 </>
               )}
             </div>

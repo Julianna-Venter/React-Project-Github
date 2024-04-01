@@ -83,3 +83,25 @@ export interface RepoRouteParams {
   profileId: string;
   repoId: string;
 }
+
+export interface CollabItem {
+  login: string;
+  avatar_url: string;
+  permissions: Permissions;
+}
+
+export interface Permissions {
+  admin: boolean;
+}
+
+export interface DataCharts {
+  id: number;
+  value: number;
+  label: string;
+  color: string;
+}
+
+export interface MainItem {
+  commit: Commit;
+  protected: boolean;
+}
