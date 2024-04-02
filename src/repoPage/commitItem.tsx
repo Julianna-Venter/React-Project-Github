@@ -1,6 +1,17 @@
 import { CommitItem } from "../models/interfaces";
 
 function commitItem(commitItem: CommitItem) {
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const day = ("0" + date.getDate()).slice(-2);
+    const hours = ("0" + date.getHours()).slice(-2);
+    const minutes = ("0" + date.getMinutes()).slice(-2);
+
+    return `${year}-${month}-${day} | ${hours}:${minutes}`;
+  };
+
   return (
     <div className="w-full flex flex-col xl:grid xl:grid-cols-4 border-[1.5px] border-solid border-lighter-text/30 p-3 rounded-md gap-5 items-center">
       <label className="col-span-2">{commitItem.commit.message}</label>
@@ -23,7 +34,9 @@ function commitItem(commitItem: CommitItem) {
           <span>{commitItem.commit.author.name}</span>
         </div>
       </label>
-      <label className="font-light">{commitItem.commit.author.date}</label>
+      <label className="font-light">
+        {formatDate(commitItem.commit.author.date)}
+      </label>
     </div>
   );
 }
