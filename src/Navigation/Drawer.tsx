@@ -215,7 +215,7 @@ const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
           id="sideDrawer"
           className="menu p-4 w-80 min-h-full bg-off-white text-slate-700 relative"
         >
-          <ul>
+          <ul className="overflow-y-scroll no-scrollbar">
             <li>
               <details open>
                 <summary
@@ -306,7 +306,7 @@ const Drawer = ({ username, repo }: { username: string; repo?: string }) => {
           {username && (
             <Link
               to="/"
-              className="w-16 h-16 bg-primary-blue/20 text-primary-blue rounded-full p-4 absolute bottom-4 right-4 hover:bg-secondary-orange hover:text-white cursor-pointer"
+              className="w-16 h-16 mt-5 sticky self-end bg-primary-blue/20 text-primary-blue rounded-full p-4 bottom-4 right-4 hover:bg-secondary-orange hover:text-white cursor-pointer"
             >
               <CIcon icon={cilSearch} />
             </Link>
