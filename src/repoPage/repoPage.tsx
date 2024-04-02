@@ -156,7 +156,14 @@ function RepoPage() {
                   <LineChart
                     width={chartWidth}
                     height={300}
-                    series={[{ data: dataYAxis, area: true, showMark: false }]}
+                    series={[
+                      {
+                        data: dataYAxis,
+                        area: true,
+                        showMark: false,
+                        color: "#4990e2",
+                      },
+                    ]}
                     xAxis={[{ scaleType: "point", data: dataXAxis }]}
                     sx={{
                       ".MuiLineElement-root": {

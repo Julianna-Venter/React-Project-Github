@@ -13,7 +13,7 @@ function commitItem(commitItem: CommitItem) {
   };
 
   return (
-    <div className="w-full flex flex-col xl:grid xl:grid-cols-4 border-[1.5px] border-solid border-lighter-text/30 p-3 rounded-md gap-5 items-center">
+    <div className="w-full flex flex-col xl:grid xl:grid-cols-4 border-[1.5px] border-solid border-lighter-text/30 p-3 rounded-md gap-5 items-start lg:items-center">
       <label className="col-span-2">{commitItem.commit.message}</label>
       <label className="font-light">
         <div className="flex gap-2">
