@@ -7,7 +7,7 @@ export interface ProfileItem {
   login: string;
   avatar_url: string;
   name: string;
-  bio: any;
+  bio: string;
   followers: number;
   following: number;
   organizations_url: string;
