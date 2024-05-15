@@ -40,7 +40,7 @@ const RepoCard: React.FC<RepoCardProps> = ({
 
   return (
     <div
-      className="w-full h-fit bg-off-white rounded-xl shadow-4xl p-3 flex flex-col justify-center text-dark-text"
+      className="w-full h-fit bg-off-white rounded-xl shadow-4xl p-3 flex flex-col justify-center text-dark-text cursor-pointer"
       onClick={handleClick}
     >
       <div className="flex justify-between items-center mb-1">
