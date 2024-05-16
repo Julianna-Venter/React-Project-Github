@@ -76,12 +76,7 @@ export function CalendarLoader() {
 }
 
 export function RepoCardLoader() {
-  return (
-    <div
-      className="skeleton w-full
-   lg:w-[34.2rem] h-[11.4rem]"
-    ></div>
-  );
+  return <div className="skeleton w-full lg:w-[34.2rem] h-[11.4rem]"></div>;
 }
 
 export function RepoPageLoader() {
