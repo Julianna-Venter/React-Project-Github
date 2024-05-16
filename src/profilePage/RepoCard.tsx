@@ -173,7 +173,7 @@ const RepoCard: React.FC<RepoCardProps> = ({
       <div className="text-xs mt-2 self-end">
         <span className="text-dark-text">Last Updated: </span>
         <span className="text-lighter-text">
-          {repoInfo.pushed_at.substring(0, 10)}
+          {repoInfo?.pushed_at?.substring(0, 10)}
         </span>
       </div>
     </div>

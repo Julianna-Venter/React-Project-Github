@@ -330,7 +330,7 @@ function RepoPage() {
             </div>
             <div
               id="branchInfo"
-              className="bg-off-white p-5 rounded-md w-9/12 shadow-4xl text-dark-text"
+              className="bg-off-white p-5 rounded-md w-11/12 shadow-4xl text-dark-text"
             >
               <div className="flex flex-col gap-2">
                 {mainData && Object.keys(mainData).length !== 0 && (

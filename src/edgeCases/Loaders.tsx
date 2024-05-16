@@ -1,7 +1,7 @@
 export function HeaderLoader() {
   return (
     <>
-      <div className="flex items-center gap-10">
+      <div className="flex items-start lg:items-center gap-10 flex-col lg:flex-row">
         <div>
           <div className="avatar absolute mr-20 lg:mr-0 h-[19rem] items-center">
             <div className="w-48 h-48 rounded-full shadow-3xl lg:w-60 lg:h-60 skeleton"></div>
@@ -41,7 +41,7 @@ export function HeaderLoader() {
             </div>
           </div>
         </div>
-        <div className="detailsContainer flex flex-col gap-5 mt-4 lg:w-5/6">
+        <div className="detailsContainer flex flex-col gap-5 lg:mt-4 lg:w-5/6">
           <div className="w-40 h-5 skeleton rounded-md"></div>
           <div className="w-48 h-5 skeleton rounded-md"></div>
           <div className="flex gap-2">
@@ -72,11 +72,11 @@ export function LanguagesLoader() {
 }
 
 export function CalendarLoader() {
-  return <div className="skeleton w-[32rem] h-[8.2rem]"></div>;
+  return <div className="skeleton w-full lg:w-[32rem] h-[8.2rem]"></div>;
 }
 
 export function RepoCardLoader() {
-  return <div className="skeleton w-[34.2rem] h-[11.4rem]"></div>;
+  return <div className="skeleton w-full lg:w-[34.2rem] h-[11.4rem]"></div>;
 }
 
 export function RepoPageLoader() {
