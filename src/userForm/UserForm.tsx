@@ -58,7 +58,7 @@ function UserForm() {
         className="h-screen w-full flex flex-col justify-center items-center absolute lg:fixed lg:pl-[320px]"
       >
         <div
-          className="flex flex-col bg-off-white w-4/5 h-2/5 rounded-2xl shadow-3xl px-8 py-7 justify-around lg:w-3/5"
+          className="flex flex-col bg-off-white w-4/5 h-2/5 rounded-2xl shadow-3xl px-8 py-7 justify-around lg:w-1/2"
           id="formContainer"
         >
           <div className="flex flex-col gap-1.5">
@@ -98,7 +98,7 @@ function UserForm() {
                     aria-label="Select a user"
                   />
                 </div>
-                <label className="text-dark-text text-sm">
+                <label className="text-dark-text text-sm cursor-pointer">
                   <Field
                     type="checkbox"
                     name="rememberMe"

@@ -322,7 +322,7 @@ function ProfilePage() {
                         panelAttributes={panelAttributes}
                         panelColors={panelColors}
                       />
-                      <div className="flex gap-5 items-center text-dark-text text-sm self-center">
+                      <div className="flex gap-5 items-center text-dark-text text-sm self-center cursor-default">
                         <span>Less</span>
                         <div className="flex gap-2">
                           {panelColors.map((color) => (

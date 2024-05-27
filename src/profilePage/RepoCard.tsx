@@ -40,7 +40,7 @@ const RepoCard: React.FC<RepoCardProps> = ({
 
   return (
     <div
-      className="w-full h-fit bg-off-white rounded-xl shadow-4xl p-3 flex flex-col justify-center text-dark-text"
+      className="w-full h-fit bg-off-white rounded-xl shadow-4xl p-3 flex flex-col justify-center text-dark-text cursor-pointer"
       onClick={handleClick}
     >
       <div className="flex justify-between items-center mb-1">
@@ -173,7 +173,7 @@ const RepoCard: React.FC<RepoCardProps> = ({
       <div className="text-xs mt-2 self-end">
         <span className="text-dark-text">Last Updated: </span>
         <span className="text-lighter-text">
-          {repoInfo.pushed_at.substring(0, 10)}
+          {repoInfo?.pushed_at?.substring(0, 10)}
         </span>
       </div>
     </div>
