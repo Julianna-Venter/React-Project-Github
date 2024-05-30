@@ -5,7 +5,7 @@
 - Git (Repo, Commits, PRs, branches, meaningful Reviews)
 - Typescript
 - Project Layout (Directories, Separation of concerns)
-- 100% Accessability on Lighthouse
+- 100% Accessibility on Lighthouse
 - React
 - UI Design
 

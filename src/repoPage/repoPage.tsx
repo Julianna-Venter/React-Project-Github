@@ -227,13 +227,13 @@ function RepoPage() {
                           data: [
                             {
                               id: 0,
-                              value: openIssuesData, //I am aware of the typing error here, not sure how to fix it, will need advice
+                              value: openIssuesData ?? 0, //I am aware of the typing error here, not sure how to fix it, will need advice
                               label: "Open",
                               color: "#f7a825",
                             },
                             {
                               id: 1,
-                              value: closedIssuesData,
+                              value: closedIssuesData ?? 0,
                               label: "Closed",
                               color: "#4990e2",
                             },
@@ -278,13 +278,13 @@ function RepoPage() {
                             data: [
                               {
                                 id: 0,
-                                value: openPullsData,
+                                value: openPullsData ?? 0,
                                 label: "Open",
                                 color: "#f7a825",
                               },
                               {
                                 id: 1,
-                                value: closedPullsData,
+                                value: closedPullsData ?? 0,
                                 label: "Closed",
                                 color: "#4990e2",
                               },

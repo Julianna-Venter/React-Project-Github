@@ -23,7 +23,7 @@ const QuickStats = ({
         <div className="w-full h-full flex justify-center items-center">
           <div className="flex flex-col justify-center items-center">
             <span className="text-lg lg:text-xl leading-none font-semibold">
-              {repoNumber}
+              {repoNumber && repoNumber === 80 ? `${repoNumber}⁺` : repoNumber}
             </span>
             <span className="text-xs lg:text-sm">
               {repoNumber && repoNumber !== 1 ? "repos" : "repo"}
@@ -36,7 +36,9 @@ const QuickStats = ({
         <div className="w-full h-full flex justify-center items-center">
           <div className="flex flex-col justify-center items-center">
             <span className="text-lg lg:text-2xl leading-none font-semibold">
-              {commits}
+              {repoNumber && commits && repoNumber === 80
+                ? `${commits}⁺`
+                : commits}
             </span>
             <span className="text-xs lg:text-base">
               {commits && commits !== 1 ? "commits" : "commit"}

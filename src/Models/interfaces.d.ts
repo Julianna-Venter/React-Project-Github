@@ -77,11 +77,6 @@ export interface CommitData {
   [key: string]: number;
 }
 
-export interface LanguageObjectItem {
-  repoName: string;
-  languageData: LanguageData;
-}
-
 export interface RouteParams {
   profileId: string;
 }
@@ -101,9 +96,3 @@ export interface Permissions {
   admin: boolean;
 }
 
-export interface DataCharts {
-  id: number;
-  value: number;
-  label: string;
-  color: string;
-}
