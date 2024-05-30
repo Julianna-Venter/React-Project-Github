@@ -180,7 +180,7 @@ function RepoPage() {
                 </div>
                 {collabData && collabData.length > 0 && (
                   <div
-                    className={`w-full bg-off-white px-5 py-3 rounded-md lg:w-[${chartWidth}px] shadow-4xl mb-5 overflow-y-scroll no-scrollbar w-5/6 self-center`}
+                    className={`w-full bg-off-white px-5 py-3 hidden lg:block rounded-md lg:w-[${chartWidth}px] shadow-4xl mb-5 overflow-y-scroll no-scrollbar w-5/6 self-center`}
                   >
                     <h2 className="text-lg font-semibold mb-2">Contributors</h2>
                     <ul>
@@ -211,6 +211,40 @@ function RepoPage() {
                   </div>
                 )}
               </div>
+              {collabData && collabData.length > 0 && (
+                <div className="w-full flex justify-center items-center px-5">
+                  <div
+                    className={`w-full bg-off-white px-5 py-3 rounded-md lg:w-[${chartWidth}px] shadow-4xl lg:hidden my-5 overflow-y-scroll no-scrollbar`}
+                  >
+                    <h2 className="text-lg font-semibold mb-2">Contributors</h2>
+                    <ul>
+                      {collabData?.map((collab: CollabItem) => (
+                        <li
+                          key={collab.login}
+                          className="flex gap-5 items-center text-dark-text "
+                        >
+                          {collab.avatar_url ? (
+                            <img
+                              src={collab.avatar_url}
+                              alt={collab.login}
+                              className="rounded-full h-12 w-12"
+                            />
+                          ) : (
+                            <div className="avatar placeholder">
+                              <div className="bg-neutral text-neutral-content rounded-full h-12 w-12">
+                                <span className="text-lg">
+                                  {collab.login.substring(0, 1)}
+                                </span>
+                              </div>
+                            </div>
+                          )}
+                          <span className="text-lg">{collab.login}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              )}
 
               <div className="grid lg:grid-cols-2 gap-4">
                 <div className="p-4 flex flex-col justify-start items-center">
