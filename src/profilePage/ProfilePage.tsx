@@ -207,7 +207,7 @@ function ProfilePage() {
           className="lg:h-full lg:w-11/12 lg:flex lg:flex-col lg:backdrop-blur-lg lg:bg-off-white/30 lg:rounded-2xl lg:shadow-3xl lg:px-8 xl:px-32 lg:py-7 lg:flex-grow lg:overflow-y-scroll lg:no-scrollbar lg:m-5 lg:items-center lg:gap-5"
           id="InnerProfileContainer"
         >
-          {repoData && commitsNumber && profileData ? (
+          {repoData && profileData ? (
             <>
               <div
                 id="headerContainer"
@@ -307,6 +307,20 @@ function ProfilePage() {
             <div className="flex flex-col justify-center gap-10">
               <HeaderLoader /> <LanguagesLoader /> <CalendarLoader />{" "}
               <RepoCardLoader />
+            </div>
+          )}
+          {!commitsNumber && (
+            <div className="flex flex-col justify-center items-center">
+              <div className="lg:h-[14rem] lg:w-[14rem] h-[14rem] w-[14rem]">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/256/7486/7486754.png"
+                  alt="Error"
+                  className="h-full w-full object-contain"
+                />
+              </div>
+              <h2 className="lg:text-[1.4rem] text-[1.2rem]">
+                This profile has no data!
+              </h2>
             </div>
           )}
         </div>
