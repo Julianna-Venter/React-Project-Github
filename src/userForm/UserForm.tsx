@@ -4,8 +4,8 @@ import { useNavigate } from "@tanstack/react-router";
 import { Field, Form, Formik } from "formik";
 import { useState } from "react";
 import Select, { SingleValue } from "react-select";
-import { Option } from "../models/interfaces";
-import Drawer from "../navigation/Drawer";
+import { Option } from "../Models/interfaces";
+import Drawer from "../Navigation/Drawer";
 import { getUsers } from "./Api/userFormApi";
 import { useUserStore } from "./Services/store";
 

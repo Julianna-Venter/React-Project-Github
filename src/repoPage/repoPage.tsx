@@ -4,10 +4,10 @@ import { PieChart } from "@mui/x-charts/PieChart";
 import { DefaultizedPieValueType } from "@mui/x-charts";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { CollabItem, RepoRouteParams } from "../Models/interfaces";
+import Drawer from "../Navigation/Drawer";
+import { getCommits } from "../ProfilePage/Api/profileApi";
 import { RepoPageLoader } from "../edgeCases/Loaders";
-import { CollabItem, RepoRouteParams } from "../models/interfaces";
-import Drawer from "../navigation/Drawer";
-import { getCommits } from "../profilePage/Api/profileApi";
 import { Route } from "../routes";
 import {
   getClosedIssues,

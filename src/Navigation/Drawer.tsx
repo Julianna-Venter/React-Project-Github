@@ -1,7 +1,7 @@
 import { cilSearch } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import { Link } from "@tanstack/react-router";
-import { RouteParams } from "../models/interfaces";
+import { RouteParams } from "../Models/interfaces";
 import { Route } from "../routes";
 import { useUserStore } from "../userForm/Services/store";
 

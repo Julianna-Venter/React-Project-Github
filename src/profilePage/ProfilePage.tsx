@@ -6,22 +6,22 @@ import {
   panelColors,
   until,
   weekLabelAttributes,
-} from "../models/calendarHeatmap";
+} from "../Models/calendarHeatmap";
 
 import { useNavigate } from "@tanstack/react-router";
+import {
+  CommitData,
+  LanguageData,
+  RepoItem,
+  RouteParams,
+} from "../Models/interfaces";
+import Drawer from "../Navigation/Drawer";
 import {
   CalendarLoader,
   HeaderLoader,
   LanguagesLoader,
   RepoCardLoader,
 } from "../edgeCases/Loaders";
-import {
-  CommitData,
-  LanguageData,
-  RepoItem,
-  RouteParams,
-} from "../models/interfaces";
-import Drawer from "../navigation/Drawer";
 import { Route } from "../routes";
 import {
   getBranches,

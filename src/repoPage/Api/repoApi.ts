@@ -1,5 +1,5 @@
 import { octokit } from "../../../environment/apiKey";
-import { CollabItem, MainItem } from "../../models/interfaces";
+import { CollabItem, MainItem } from "../../Models/interfaces";
 
 const baseUrl = "https://api.github.com/repos/";
 
@@ -80,9 +80,7 @@ export const getContributors = async (
     permissions: collab.permissions,
   }));
 
-  const filteredCollab = newCollab.filter(
-    (collab) => collab.permissions.admin
-  );
+  const filteredCollab = newCollab.filter((collab) => collab.permissions.admin);
 
   return filteredCollab;
 };

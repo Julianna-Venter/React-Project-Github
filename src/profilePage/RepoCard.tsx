@@ -1,6 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
-import { hexColors } from "../models/data";
-import { LanguageData, RepoItem } from "../models/interfaces";
+import { hexColors } from "../Models/data";
+import { LanguageData, RepoItem } from "../Models/interfaces";
 
 interface RepoCardProps {
   repoName: string;

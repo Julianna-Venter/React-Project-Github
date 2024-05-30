@@ -1,4 +1,4 @@
-import { CommitItem } from "../models/interfaces";
+import { CommitItem } from "../Models/interfaces";
 
 function commitItem(commitItem: CommitItem) {
   const formatDate = (dateString: string) => {
