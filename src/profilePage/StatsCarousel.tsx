@@ -6,7 +6,10 @@ const StatsCarousel = ({
   following: number | undefined;
 }) => {
   return (
-    <div id="carousel" className="carousel flex gap-4 text-dark-text">
+    <div
+      id="carousel"
+      className="carousel flex gap-4 text-dark-text cursor-default"
+    >
       <div className="carousel-item">
         <div className="">
           <span>Followers</span>

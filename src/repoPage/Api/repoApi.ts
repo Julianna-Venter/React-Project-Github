@@ -81,7 +81,7 @@ export const getContributors = async (
   }));
 
   const filteredCollab = newCollab.filter(
-    (collab) => collab.permissions.admin == true
+    (collab) => collab.permissions.admin
   );
 
   return filteredCollab;

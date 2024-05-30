@@ -13,15 +13,15 @@ export const getCommits = async (full_name: string): Promise<CommitItem[]> => {
   }
 
   const commitsUrl = `https://api.github.com/repos/${full_name}/commits`;
-  const commitsData = await getPaginatedData(commitsUrl);
+  const commitsData = await getPaginatedData(commitsUrl, 250);
 
-  const newCommits = commitsData.map((commit: CommitItem) => ({
+  const newCommits = commitsData?.map((commit: CommitItem) => ({
     sha: commit.sha,
     commit: commit.commit,
     parents: commit.parents,
   }));
 
-  return newCommits;
+  return newCommits ?? [];
 };
 
 //langauges are already ordered by size in the response
@@ -34,8 +34,7 @@ export const getLanguages = async (
       `GET https://api.github.com/repos/${repoInfo.full_name}/languages`
     );
     if (res.status === 200) {
-      const languages = res.data;
-      return languages;
+      return res.data;
     }
   } else {
     return undefined;
@@ -49,14 +48,14 @@ export const getBranches = async (full_name: string): Promise<BranchInfo[]> => {
   }
 
   const branchesUrl = `https://api.github.com/repos/${full_name}/branches`;
-  const branchesData = await getPaginatedData(branchesUrl);
+  const branchesData = await getPaginatedData(branchesUrl, 99);
 
-  const newBranches = branchesData.map((branch: BranchInfo) => ({
+  const newBranches = branchesData?.map((branch: BranchInfo) => ({
     name: branch.name,
     protected: branch.protected,
   }));
 
-  return newBranches;
+  return newBranches ?? [];
 };
 
 export const getStats = async (
@@ -67,10 +66,10 @@ export const getStats = async (
   }
 
   const starredUrl = `https://api.github.com/users/${username}/starred`;
-  const starredData = await getPaginatedData(starredUrl);
+  const starredData = await getPaginatedData(starredUrl, 999);
 
-  const stars = starredData.length;
-  return stars;
+  const stars = starredData?.length;
+  return stars ?? 0;
 };
 
 export const getRepos = async (profileName: string): Promise<RepoItem[]> => {
@@ -79,9 +78,9 @@ export const getRepos = async (profileName: string): Promise<RepoItem[]> => {
   }
 
   const reposUrl = `https://api.github.com/users/${profileName}/repos?sort=updated`;
-  const reposData = await getPaginatedData(reposUrl);
+  const reposData = await getPaginatedData(reposUrl, 80);
 
-  const newRepos = reposData.map((repo: RepoItem) => ({
+  const newRepos = reposData?.map((repo: RepoItem) => ({
     id: repo.id,
     name: repo.name,
     full_name: repo.full_name,
@@ -103,7 +102,7 @@ export const getRepos = async (profileName: string): Promise<RepoItem[]> => {
     size: repo.size,
   }));
 
-  return newRepos;
+  return newRepos ?? [];
 };
 
 export const getProfile = async (profileName: string): Promise<ProfileItem> => {
@@ -126,28 +125,39 @@ export const getProfile = async (profileName: string): Promise<ProfileItem> => {
 //TODO: rewrite this with explicit typing later
 //Got these functions from the github docs
 //https://docs.github.com/en/rest/using-the-rest-api/using-pagination-in-the-rest-api?apiVersion=2022-11-28
-async function getPaginatedData(url: string) {
+async function getPaginatedData(url: string, limit: number) {
   const nextPattern = /(?<=<)([\S]*)(?=>; rel="next")/i;
   let pagesRemaining: string | boolean | undefined = true;
   let data: any[] = [];
 
   while (pagesRemaining) {
-    const response = await octokit.request(`GET ${url}`, {
-      per_page: 100,
-      headers: {
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
-    });
+    try {
+      const response = await octokit.request(`GET ${url}`, {
+        per_page: 100,
+        headers: {
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+      });
 
-    const parsedData = parseData(response.data);
-    data = [...data, ...parsedData];
+      const parsedData = parseData(response.data);
+      data = [...data, ...parsedData];
 
-    const linkHeader = response.headers.link;
+      if (data.length >= limit) {
+        data = data.slice(0, limit);
+        break;
+      }
 
-    pagesRemaining = linkHeader && linkHeader.includes(`rel=\"next\"`);
+      const linkHeader = response.headers.link;
 
-    if (pagesRemaining && linkHeader) {
-      url = linkHeader.match(nextPattern)![0];
+      pagesRemaining = linkHeader && linkHeader.includes(`rel=\"next\"`);
+
+      if (pagesRemaining && linkHeader) {
+        url = linkHeader.match(nextPattern)![0];
+      }
+    } catch (error: any) {
+      if (error.status === 409) {
+        return;
+      }
     }
   }
 
@@ -161,7 +171,7 @@ function parseData(data: any) {
   }
 
   // Some endpoints respond with 204 No Content instead of empty array
-  //   when there is no data. In that case, return an empty array.
+  // when there is no data. In that case, return an empty array.
   if (!data) {
     return [];
   }

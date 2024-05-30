@@ -131,7 +131,7 @@ function RepoPage() {
   };
 
   return (
-    <div className="h-screen w-full flex flex-col justify-center items-center p-5 gap-5 lg:p-0">
+    <div className="h-screen w-full flex flex-col justify-center items-center p-5 gap-5 lg:p-0 cursor-default">
       <Drawer username={profileId} repo={repoId} />
       {commit ? (
         <div
@@ -213,8 +213,8 @@ function RepoPage() {
               </div>
 
               <div className="grid lg:grid-cols-2 gap-4">
-                <div className="p-4 flex flex-col justify-center items-center">
-                  <h2 className="text-lg font-semibold mb-2">Issues</h2>
+                <div className="p-4 flex flex-col justify-start items-center">
+                  <h2 className="text-lg font-semibold mb-5">Issues</h2>
                   {(openIssuesData !== undefined ||
                     closedIssuesData !== undefined) &&
                   (openIssuesData !== 0 || closedIssuesData !== 0) &&
@@ -227,13 +227,13 @@ function RepoPage() {
                           data: [
                             {
                               id: 0,
-                              value: openIssuesData, //I am aware of the typing error here, not sure how to fix it, will need advice
+                              value: openIssuesData ?? 0, //I am aware of the typing error here, not sure how to fix it, will need advice
                               label: "Open",
                               color: "#f7a825",
                             },
                             {
                               id: 1,
-                              value: closedIssuesData,
+                              value: closedIssuesData ?? 0,
                               label: "Closed",
                               color: "#4990e2",
                             },
@@ -278,13 +278,13 @@ function RepoPage() {
                             data: [
                               {
                                 id: 0,
-                                value: openPullsData,
+                                value: openPullsData ?? 0,
                                 label: "Open",
                                 color: "#f7a825",
                               },
                               {
                                 id: 1,
-                                value: closedPullsData,
+                                value: closedPullsData ?? 0,
                                 label: "Closed",
                                 color: "#4990e2",
                               },
@@ -330,7 +330,7 @@ function RepoPage() {
             </div>
             <div
               id="branchInfo"
-              className="bg-off-white p-5 rounded-md w-9/12 shadow-4xl text-dark-text"
+              className="bg-off-white p-5 rounded-md w-11/12 shadow-4xl text-dark-text"
             >
               <div className="flex flex-col gap-2">
                 {mainData && Object.keys(mainData).length !== 0 && (

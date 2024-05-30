@@ -43,12 +43,7 @@ function ProfilePage() {
   const profileName = profileId;
 
   //tanstack/react-query hook to fetch the users
-  const {
-    data: profileData,
-    isError: isProfileError,
-    isPending,
-    isLoading,
-  } = useQuery({
+  const { data: profileData, isError: isProfileError } = useQuery({
     queryKey: [profileId],
     queryFn: () => getProfile(profileName),
   });
@@ -200,54 +195,6 @@ function ProfilePage() {
       return 0;
     }
   }
-  //This does not work I will have to ask for advice on how to properly implement this
-  //problem: still routes when loader is fetched (I know why, I don't know how to fix it)
-  // let timerId: NodeJS.Timeout | null = null;
-  // timerId = setTimeout(function () {
-  //   console.log("Loading...");
-  //   if (
-  //     profileData &&
-  //     repoData &&
-  //     starsData &&
-  //     commitsNumber &&
-  //     languagesQueriesData &&
-  //     timerId
-  //   ) {
-  //     console.log("Data loaded successfully");
-  //     clearTimeout(timerId);
-  //   } else if (!profileData) {
-  //     console.log("Data not loaded");
-  //     navigate({ to: "/noData" });
-  //   }
-  // }, 5000);
-
-  // useEffect(() => {
-  //   checkProfileData();
-  // }, [profileData]);
-  // let timerId: NodeJS.Timeout | null = null;
-  // const checkProfileData = () => {
-  //   if (
-  //     !profileData &&
-  //     !repoData &&
-  //     !starsData &&
-  //     !commitsNumber &&
-  //     !languagesQueriesData
-  //   ) {
-  //     timerId = setTimeout(() => {
-  //       // Check profileData again after 5 seconds
-  //       if (!profileData) {
-  //         // Display "No data" if profileData is still null after 5 seconds
-  //         console.log("No data");
-  //       } else {
-  //         // Display "We have data" if profileData is not null after 5 seconds
-  //         console.log("We have data");
-  //       }
-  //     }, 5000);
-  //   } else {
-  //     // Display "We have data" if profileData is not null
-  //     console.log("We have data");
-  //   }
-  // };
 
   return (
     <div className="h-screen w-full flex flex-col justify-center items-center p-5 gap-5 lg:p-0">
@@ -322,7 +269,7 @@ function ProfilePage() {
                         panelAttributes={panelAttributes}
                         panelColors={panelColors}
                       />
-                      <div className="flex gap-5 items-center text-dark-text text-sm self-center">
+                      <div className="flex gap-5 items-center text-dark-text text-sm self-center cursor-default">
                         <span>Less</span>
                         <div className="flex gap-2">
                           {panelColors.map((color) => (
